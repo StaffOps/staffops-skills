@@ -1,6 +1,6 @@
 # infrastructure
 
-GitOps, Helm, mesh, and cluster infrastructure patterns.
+GitOps, Helm, service mesh, and cluster infrastructure.
 
 13 skills.
 

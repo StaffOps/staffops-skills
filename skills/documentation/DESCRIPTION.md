@@ -1,6 +1,6 @@
 # documentation
 
-Technical writing, diagram, and docs-site conventions.
+Technical writing, diagrams, and docs-site conventions.
 
 5 skills.
 

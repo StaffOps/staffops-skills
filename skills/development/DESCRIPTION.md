@@ -1,6 +1,6 @@
 # development
 
-Language, framework, and instrumentation patterns for building services.
+Language, framework, and instrumentation patterns.
 
 13 skills.
 

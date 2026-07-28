@@ -1,6 +1,6 @@
 # projects
 
-Working context for specific internal repositories.
+Working context for specific repositories.
 
 1 skills.
 

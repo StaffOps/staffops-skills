@@ -1,6 +1,6 @@
 # apm-metrics
 
-Metric-by-metric diagnostic references for platform components, grounded on the chart versions actually deployed.
+Metric-by-metric diagnostic references for platform components.
 
 50 skills.
 
