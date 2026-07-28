@@ -1,0 +1,12 @@
+# Local import pipeline — NEVER commit.
+#
+# These files convert a private upstream catalog into this public one. They
+# contain the organization identifiers, account id, and workstation paths that
+# the conversion strips out, so publishing them would undo the sanitization.
+tools/build_hermes_skills.py
+tools/sanitize.py
+tools/descriptions.tsv
+
+__pycache__/
+*.pyc
+.DS_Store
