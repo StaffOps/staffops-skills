@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-139-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-140-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 139 platform engineering skills for AI coding agents, covering
+A catalog of 140 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -258,12 +258,13 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>linux</strong> (2) — Command line, filesystem, processes, systemd, and performance.</summary>
+<summary><strong>linux</strong> (3) — Command line, filesystem, processes, systemd, and performance.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `linux-command-line` | Navigate the shell with pipes, globs and job control. | `references/`, `scripts/`, `examples/` |
 | `linux-filesystem` | Manage permissions, mounts, links and disk usage. | `references/`, `scripts/` |
+| `linux-process-management` | Inspect processes, signals, limits and cgroups. | `references/`, `scripts/`, `examples/` |
 
 </details>
 
