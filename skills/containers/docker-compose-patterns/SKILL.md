@@ -146,6 +146,23 @@ not merged, except where Compose specifically documents append behavior
 (like additional `environment` entries under some configurations) — when in
 doubt, verify with `docker compose config` (below).
 
+Compose also reads a `.env` file in the project directory automatically and
+substitutes `${VAR}` / `${VAR:-default}` references anywhere in the YAML
+(not just under `environment:`) — this is separate from `env_file:`, which
+only injects variables into a specific service's container environment:
+
+```yaml
+services:
+  api:
+    image: myapp:${TAG:-latest}   # substituted from .env or the shell at parse time
+    env_file:
+      - .env.api                  # injected into the container's env, not used for substitution
+```
+
+An undefined variable in a `${VAR}` reference silently substitutes an empty
+string rather than failing the build — `docker compose config` (below)
+catches this before it becomes a confusing runtime error.
+
 ## Profiles: optional services
 
 ```yaml
@@ -258,6 +275,13 @@ resolved, removing the guesswork about merge order.
   `docker compose config` instead of assuming.
 - **Committing `compose.override.yaml` with dev-only secrets** — it loads
   automatically for everyone; keep secrets out of it or gitignore it.
+- **Adding a top-level `version:` key** — obsolete since the Compose
+  Specification merged the old 2.x/3.x schemas; the `docker compose` CLI
+  (v2) ignores it and prints a warning. Newer files should be named
+  `compose.yaml` (still recognized: `docker-compose.yaml`) with no
+  `version:` key at all.
+- **Assuming an unset `${VAR}` fails the build** — it silently substitutes
+  an empty string; check `docker compose config` for surprises.
 
 ## Reference
 

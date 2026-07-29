@@ -131,7 +131,11 @@ Docker daemon the way a single-platform build can with `--load`.
 docker build --squash -t myapp .     # experimental; merges all layers into one
 ```
 
-Squashing trades away layer-level caching entirely — every build becomes a
+`--squash` requires experimental features enabled on the daemon (or a
+builder that supports it) — it is not available out of the box on every
+Docker install; check `docker version` / `docker buildx version` for
+support before relying on it in a CI pipeline. Squashing trades away
+layer-level caching entirely — every build becomes a
 full rebuild with no incremental reuse, and shared base-image layers can no
 longer be deduplicated across images on the same host or in a registry.
 Multi-stage builds achieve the same size benefit without this trade-off in

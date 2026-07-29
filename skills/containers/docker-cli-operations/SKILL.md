@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [docker, cli, containers, volumes, networks, logs, exec]
     category: containers
-    related_skills: [dockerfile-authoring, container-runtime-debugging, docker-compose-patterns]
+    related_skills: [dockerfile-authoring, container-runtime-debugging, docker-compose-patterns, linux-process-management]
 ---
 # Docker CLI Operations
 
@@ -188,8 +188,11 @@ docker run -it --entrypoint sh myapp   # override the entrypoint to get a shell 
 
 Exit code conventions carry over directly from the process running as PID 1
 inside the container — 137 is SIGKILL (often the OOM killer, or `docker
-stop` after its grace period), 143 is SIGTERM (a normal stop). See
-`linux-process-management` for the full signal/exit-code mapping.
+stop` after its grace period), 143 is SIGTERM (a normal stop). This is the
+quick check; for the full exit-code table, shell-form `CMD` signal issues,
+and crash-loop diagnosis, see `container-runtime-debugging`. For the
+underlying signal/exit-code mapping outside Docker, see
+`linux-process-management`.
 
 ## Resource limits and why they matter
 
@@ -226,3 +229,4 @@ instead. These map directly onto cgroup v2 `memory.max` — see
 - `dockerfile-authoring` — building the images these commands run
 - `container-runtime-debugging` — deeper diagnosis when a container misbehaves
 - `docker-compose-patterns` — orchestrating multiple containers together
+- `linux-process-management` — signals, `/proc`, and cgroups underneath these commands

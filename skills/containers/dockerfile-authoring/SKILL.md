@@ -180,6 +180,28 @@ Cleaning the package cache **in the same RUN** matters — doing it in a later
 instruction adds a new layer without shrinking the earlier one; the image
 still contains the cache, just marked deleted in a subsequent layer.
 
+## ARG scope in multi-stage builds
+
+```dockerfile
+# syntax=docker/dockerfile:1
+ARG BASE_TAG=20-slim          # usable in FROM lines below, nowhere else yet
+
+FROM node:${BASE_TAG} AS builder
+ARG BASE_TAG                  # must be redeclared to use it INSIDE this stage
+RUN echo "built from node:${BASE_TAG}"
+
+FROM node:${BASE_TAG} AS runtime
+# BASE_TAG is available here for the FROM line without redeclaring,
+# but using it in a RUN/ENV below this point still needs its own ARG line.
+```
+
+An `ARG` declared before the first `FROM` is only in scope for `FROM`
+instructions themselves; each stage that needs the value in a `RUN`,
+`ENV`, or elsewhere must redeclare `ARG BASE_TAG` after its own `FROM`. A
+value that silently resolves to empty inside a later stage's `RUN` is
+almost always this — not a build-arg-passing failure at the `docker build
+--build-arg` level.
+
 ## Common instructions, used correctly
 
 ```dockerfile
@@ -200,7 +222,7 @@ CMD ["server.js"]
 
 | Directive | Notes |
 | --- | --- |
-| `ARG` | Build-time only, not present in the running container |
+| `ARG` | Build-time only, not present in the running container; scope is per-stage (see below) |
 | `ENV` | Persists into the running container; visible via `docker inspect` |
 | `ENTRYPOINT` vs `CMD` | `ENTRYPOINT` is the fixed command; `CMD` supplies default arguments to it, and is fully replaceable at `docker run` |
 | `HEALTHCHECK` | Lets `docker ps` and orchestrators see liveness without an external prober |
@@ -221,6 +243,9 @@ CMD ["server.js"]
   potentially secrets from old commits into the build context.
 - **Multi-stage build where the final `FROM` still uses the builder image**
   — defeats the entire point; verify the last stage is genuinely minimal.
+- **Using a global `ARG` inside a stage without redeclaring it** — it's in
+  scope for `FROM` lines only until re-declared with `ARG` after that
+  stage's own `FROM`; otherwise it silently resolves to empty.
 
 ## Verification
 

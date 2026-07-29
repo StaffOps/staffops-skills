@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [cloudfront, patterns, aws]
     category: aws
-    related_skills: []
+    related_skills: [route53-patterns, iam-patterns, terraform-modules]
 ---
 # AWS CloudFront Patterns
 

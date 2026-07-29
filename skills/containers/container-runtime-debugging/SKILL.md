@@ -124,9 +124,13 @@ cat /sys/fs/cgroup/system.slice/docker-<id>.scope/cpu.stat        # throttling
 ```
 
 The container's actual cgroup ID (the full 64-char one) is in `docker
-inspect -f '{{.Id}}'`. See `linux-process-management`'s cgroups v2 material
-for reading these files — the same mechanism, just reached through Docker's
-path convention instead of systemd's `system.slice`.
+inspect -f '{{.Id}}'`. The `system.slice/docker-<id>.scope` path above
+assumes the default `systemd` cgroup driver; with the older `cgroupfs`
+driver the same files live under `/sys/fs/cgroup/docker/<id>/` instead —
+check `docker info -f '{{.CgroupDriver}}'` if the systemd path doesn't
+exist. See `linux-process-management`'s cgroups v2 material for reading
+these files — the same mechanism, just reached through Docker's path
+convention instead of systemd's `system.slice`.
 
 A container that's slow rather than crashed is worth checking for CPU
 throttling (`cpu.stat`'s `nr_throttled`) before assuming an application bug
@@ -166,8 +170,10 @@ docker inspect myapp                        # config, mounts, env -- no shell ne
 ```
 
 For anything requiring an interactive look inside a shell-less container,
-attach an ephemeral debug container sharing its namespaces (Docker 23+ /
-BuildKit; the equivalent of `kubectl debug` for Kubernetes):
+attach an ephemeral debug container sharing its namespaces (`--pid=container:`
+and `--network=container:` have worked since Docker 1.12; this is a
+long-standing pattern, not a new one — the rough equivalent of `kubectl
+debug` for Kubernetes):
 
 ```bash
 docker run -it --rm --pid=container:myapp --network=container:myapp \

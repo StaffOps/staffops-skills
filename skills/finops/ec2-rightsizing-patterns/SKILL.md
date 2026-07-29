@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [ec2, rightsizing, patterns, finops]
     category: finops
-    related_skills: []
+    related_skills: [cost-explorer, savings-plans-strategy, eks-management, karpenter-consolidation, scaleops-metrics]
 ---
 # EC2 Right-Sizing Patterns
 
@@ -87,13 +87,13 @@ Karpenter handles right-sizing at the **node level** automatically:
 ### Karpenter consolidation policy (<org>)
 
 ```yaml
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: default
 spec:
   disruption:
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 30s
 ```
 
@@ -235,7 +235,7 @@ Average CPU utilization over 14 days?
 ### Karpenter NodePool configuration
 
 ```yaml
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: general
@@ -259,9 +259,11 @@ spec:
           operator: In
           values: ["spot", "on-demand"]
       nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
         name: bottlerocket
   disruption:
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 30s
   limits:
     cpu: "1000"
@@ -322,5 +324,5 @@ LIMIT 30;
 - AWS Compute Optimizer: https://docs.aws.amazon.com/compute-optimizer/
 - Karpenter consolidation: https://karpenter.sh/docs/concepts/disruption/
 - ScaleOps: https://www.scaleops.com/
-- Related skills: `cost-explorer`, `savings-plans-strategy`, `eks-management`
+- Related skills: `cost-explorer`, `savings-plans-strategy`, `eks-management`, `karpenter-consolidation`, `scaleops-metrics`
 - Related steering: `k8s-best-practices` (resource requests mandatory)

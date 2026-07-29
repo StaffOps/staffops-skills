@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [savings, plans, strategy, finops]
     category: finops
-    related_skills: [alerting-strategy, multicluster-label-strategy]
+    related_skills: [cost-explorer, eks-management, ec2-rightsizing-patterns, rds-patterns]
 ---
 # Savings Plans Strategy
 
@@ -213,6 +213,14 @@ Compute SP applies to:
 
 EC2 Instance SP would lock to a specific family (e.g., `m6g` in `us-east-1`). Since Karpenter diversifies across families, **Compute SP is the <org> default**.
 
+### Organization-wide sharing (showback/chargeback impact)
+
+By default, a Savings Plan purchased in the **management/payer account** applies its discount to matching usage in **any linked account** in the AWS Organization, in the order AWS chooses (not necessarily the purchasing account first). This has direct FinOps implications:
+
+- **Showback distortion**: a team's account may show artificially low compute cost because another account's SP silently covered it — CostCenter-level chargeback must reconcile against `savings_plan_savings_plan_effective_cost` in CUR, not just `line_item_unblended_cost`.
+- **Opt-out**: an individual linked account can be excluded from benefiting from shared SPs (Billing Preferences → "Savings Plans and RI discount sharing") — useful when a subsidiary or cost-isolated workload must not blend discounts with the rest of the org.
+- **<org> default**: SP sharing stays **enabled** org-wide; chargeback is reconciled centrally via CUR rather than per-account opt-out, since Compute SPs are centrally purchased against fleet-wide baseline.
+
 ### Renewal calendar
 
 Track SP expiration dates. Set reminders 60 days before expiry:
@@ -269,5 +277,5 @@ Before buying any SP:
 
 - AWS Savings Plans docs: https://docs.aws.amazon.com/savingsplans/
 - Cost Explorer SP recommendations: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-savings-plans.html
-- Related skills: `cost-explorer`, `eks-management`, `ec2-rightsizing-patterns`
+- Related skills: `cost-explorer`, `eks-management`, `ec2-rightsizing-patterns`, `rds-patterns`
 - Related steering: `aws-tag-policies` (cost allocation)
