@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-157-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-161-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 157 platform engineering skills for AI coding agents, covering
+A catalog of 161 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -345,7 +345,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>security</strong> (7) — Supply chain, hardening, compliance, and vulnerability management.</summary>
+<summary><strong>security</strong> (11) — Supply chain, hardening, compliance, and vulnerability management.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -354,8 +354,12 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `container-package-melange` | Build custom APK packages with melange. | — |
 | `dependency-track-integration` | Upload SBOMs and manage projects via API. | — |
 | `golden-ami-creation` | Build hardened AMIs with Packer and Ansible. | — |
+| `linux-hardening` | Apply baseline OS hardening: sysctl, PAM, mounts, kernel. | — |
+| `linux-security-auditing` | Audit a Linux host for common misconfigurations. | — |
 | `sbom-vulnerability-management` | Generate SBOMs and triage vulnerabilities. | — |
+| `secrets-handling-shell` | Avoid leaking secrets through shell history, env and logs. | — |
 | `security-hub-findings-mgmt` | Triage and remediate Security Hub findings. | — |
+| `ssh-hardening` | Configure SSH for key-only, restricted, auditable access. | — |
 
 </details>
 
