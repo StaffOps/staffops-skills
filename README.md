@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-148-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-153-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 148 platform engineering skills for AI coding agents, covering
+A catalog of 153 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -294,6 +294,19 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `linux-process-management` | Inspect processes, signals, limits and cgroups. | `references/`, `scripts/`, `examples/` |
 | `systemd-services` | Write, debug and manage systemd units and timers. | `references/`, `scripts/`, `examples/` |
 | `ubuntu-administration` | Manage packages, users, network and updates on Ubuntu. | `references/`, `scripts/` |
+
+</details>
+
+<details>
+<summary><strong>networking</strong> (5) — TCP/IP, DNS, TLS, firewalls, and packet-level debugging.</summary>
+
+| Skill | Description | Includes |
+| --- | --- | --- |
+| `dns-troubleshooting` | Diagnose DNS resolution failures with dig and resolvectl. | — |
+| `linux-firewall` | Write and debug nftables/iptables firewall rules. | — |
+| `network-troubleshooting-tools` | Use ss, tcpdump, curl and traceroute to diagnose issues. | — |
+| `tcp-ip-fundamentals` | Understand TCP handshakes, states and packet flow. | — |
+| `tls-troubleshooting` | Diagnose certificate chains, expiry and handshake failures. | — |
 
 </details>
 
