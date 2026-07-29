@@ -1,0 +1,61 @@
+# webapp.service — a complete, hardened service unit.
+#
+# Demonstrates every convention from the skill: explicit dependency vs
+# ordering, a restart policy with a circuit breaker, resource limits mapped
+# to cgroup v2, and the sandboxing directives that cost nothing to add.
+#
+# Install:
+#   sudo cp webapp.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now webapp.service
+#
+# Verify:
+#   systemd-analyze verify webapp.service
+#   systemd-analyze security webapp.service
+
+[Unit]
+Description=Example web application
+Documentation=https://example.com/docs/webapp
+After=network-online.target
+Wants=network-online.target
+# StartLimit* lives in [Unit], not [Service] -- a common mistake that
+# systemd silently ignores (`systemd-analyze verify` flags it as an
+# "Unknown key name" warning rather than a hard error).
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+Type=notify
+User=webapp
+Group=webapp
+WorkingDirectory=/opt/webapp
+ExecStart=/opt/webapp/bin/server --config /etc/webapp/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Restart on failure, but stop trying after 5 crashes in 60 seconds instead
+# of looping forever and flooding the journal.
+Restart=on-failure
+RestartSec=2
+
+TimeoutStartSec=30
+TimeoutStopSec=15
+
+# Resource control -- these map directly onto cgroup v2 memory.max,
+# memory.high and cpu.max for this unit's cgroup.
+MemoryMax=1G
+MemoryHigh=900M
+CPUQuota=150%
+TasksMax=256
+
+# Hardening: costs nothing, meaningfully reduces blast radius.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/var/lib/webapp
+
+[Install]
+WantedBy=multi-user.target

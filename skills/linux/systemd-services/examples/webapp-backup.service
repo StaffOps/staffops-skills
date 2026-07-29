@@ -1,0 +1,16 @@
+# webapp-backup.service — the job triggered by webapp-backup.timer.
+#
+# Type=oneshot: runs to completion and exits; systemd does not expect a
+# long-running process. Do not `enable` or `start` this unit directly for
+# routine operation -- enable the timer instead. It IS fine to run it
+# directly for a manual/on-demand backup: `systemctl start webapp-backup.service`.
+
+[Unit]
+Description=Backup webapp data
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=webapp
+ExecStart=/opt/webapp/bin/backup.sh
+TimeoutStartSec=600

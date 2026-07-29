@@ -1,0 +1,31 @@
+# webapp-backup.timer — nightly backup, cron replacement.
+#
+# Pairs with webapp-backup.service (same basename). Demonstrates the timer
+# directives that a cron job cannot give you: catch-up after downtime,
+# jitter across a fleet, and automatic journal logging.
+#
+# Install:
+#   sudo cp webapp-backup.timer webapp-backup.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now webapp-backup.timer   # enable the TIMER, not the service
+#
+# Verify:
+#   systemctl list-timers webapp-backup.timer
+#   systemd-analyze calendar '*-*-* 02:00:00'
+
+[Unit]
+Description=Run webapp backup nightly
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+
+# If the machine was off at 02:00, run the missed backup as soon as it is
+# back up. Plain cron silently skips a missed run instead.
+Persistent=true
+
+# Spread load if this unit is deployed across many hosts with the same
+# schedule -- each instance picks a random offset up to 5 minutes.
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
