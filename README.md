@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-161-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-166-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 161 platform engineering skills for AI coding agents, covering
+A catalog of 166 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -218,7 +218,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>development</strong> (13) — Language, framework, and instrumentation patterns.</summary>
+<summary><strong>development</strong> (18) — Language, framework, and instrumentation patterns.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -230,9 +230,14 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `grpc-distributed-tracing` | Propagate trace context across gRPC languages. | — |
 | `mcp-server-development` | Build MCP servers with tools, resources and prompts. | — |
 | `prophet-isolation-forest-patterns` | Forecast and detect outliers with Prophet. | — |
+| `python-cli-tools` | Build distributable CLIs with Click or Typer. | — |
 | `python-fastapi-patterns` | Build FastAPI services, deps and validation. | — |
 | `python-grpc-aio` | Build async Python gRPC servers and clients. | — |
 | `python-otel-patterns` | Instrument Python traces, metrics and logs. | — |
+| `python-packaging` | Package Python projects with pyproject.toml and venvs. | — |
+| `python-performance` | Profile and speed up Python: cProfile, GIL, async. | — |
+| `python-scripting` | Write robust Python scripts: argparse, pathlib, subprocess. | — |
+| `python-testing` | Write pytest fixtures, mocks and parametrized tests. | — |
 | `secrets-management-dotnet` | Load secrets into .NET configuration safely. | — |
 | `telemetry-standard` | Adopt the shared OTel helper for .NET and Python. | — |
 
