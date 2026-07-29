@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-141-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-142-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 141 platform engineering skills for AI coding agents, covering
+A catalog of 142 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -67,13 +67,26 @@ skill format expects:
 skills/<category>/<name>/
 ├── SKILL.md          the skill itself, kept navigable (~200 lines)
 ├── references/       long-form tables and specifications
-├── scripts/          runnable helpers, shellcheck-clean
-└── examples/         complete, working end-to-end cases
+├── scripts/          runnable helpers, shellcheck-clean (where present)
+└── examples/         worked examples (where present)
 ```
 
-Everything under `scripts/` and `examples/` in this repository is linted with
-`shellcheck` and `shfmt` and executed as part of authoring — the `bats` suites
-in `skills/shell/` run green against the scripts they test.
+Only `SKILL.md` is required. `references/`, `scripts/`, and `examples/` are
+added when they earn their place, not as a template to fill in for every
+skill — see **Depth varies by skill** below.
+
+**Depth varies by skill, intentionally.** A handful of early skills
+(`skills/shell/`, and `linux-command-line`, `linux-filesystem`,
+`linux-process-management`, `systemd-services` in `skills/linux/`) go all
+the way: `scripts/` and `examples/` there are shellcheck/shfmt-clean and were
+executed against a real Ubuntu 24.04 container (including one running actual
+systemd as PID 1) during authoring — verification caught and fixed several
+real bugs along the way, documented in the commit history. That depth is
+valuable but expensive, and is being treated as an option to expand into
+later rather than a bar every skill must clear immediately. Most skills in
+this catalog prioritize clear concepts, accurate specifics, and a few basic
+inline examples over exhaustively tested tooling. Contributions that add
+`scripts/`/`examples/` depth to an existing skill are welcome.
 
 The 60-character description limit is deliberate: an agent loads every skill's
 frontmatter into context at all times and only expands the body on demand. Long
@@ -258,7 +271,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>linux</strong> (4) — Command line, filesystem, processes, systemd, and performance.</summary>
+<summary><strong>linux</strong> (5) — Command line, filesystem, processes, systemd, and performance.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -266,6 +279,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `linux-filesystem` | Manage permissions, mounts, links and disk usage. | `references/`, `scripts/` |
 | `linux-process-management` | Inspect processes, signals, limits and cgroups. | `references/`, `scripts/`, `examples/` |
 | `systemd-services` | Write, debug and manage systemd units and timers. | `references/`, `scripts/`, `examples/` |
+| `ubuntu-administration` | Manage packages, users, network and updates on Ubuntu. | `references/`, `scripts/` |
 
 </details>
 
