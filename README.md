@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-153-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-157-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 153 platform engineering skills for AI coding agents, covering
+A catalog of 157 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -384,6 +384,18 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `root-cause-analysis` | Correlate signals to prove root cause. | — |
 | `runbook-authoring` | Write actionable operational runbooks. | — |
 | `sla-slo-design` | Define SLIs, SLOs and reliability targets. | — |
+
+</details>
+
+<details>
+<summary><strong>troubleshooting</strong> (4) — Systematic diagnosis across systems, network, and logs.</summary>
+
+| Skill | Description | Includes |
+| --- | --- | --- |
+| `disk-and-memory-issues` | Diagnose OOM kills, leaks, disk pressure and swap. | — |
+| `incident-triage-linux` | Triage a live Linux incident quickly and safely. | — |
+| `linux-troubleshooting-methodology` | Apply a systematic approach to diagnosing Linux issues. | — |
+| `log-analysis` | Extract signal from logs with grep, awk and journalctl. | — |
 
 </details>
 
