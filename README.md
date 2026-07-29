@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-143-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-148-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 143 platform engineering skills for AI coding agents, covering
+A catalog of 148 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -201,6 +201,19 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `rds-patterns` | Design RDS sizing, failover and backup strategy. | — |
 | `route53-patterns` | Design Route 53 zones, records and health checks. | — |
 | `security-hub-patterns` | Configure Security Hub standards and aggregation. | — |
+
+</details>
+
+<details>
+<summary><strong>containers</strong> (5) — Docker, Compose, image building, and runtime debugging.</summary>
+
+| Skill | Description | Includes |
+| --- | --- | --- |
+| `container-image-optimization` | Shrink image size and speed up builds and pulls. | — |
+| `container-runtime-debugging` | Debug crashing, hanging or misbehaving containers. | — |
+| `docker-cli-operations` | Run, inspect and debug containers with the Docker CLI. | — |
+| `docker-compose-patterns` | Compose multi-container apps with healthchecks and profiles. | — |
+| `dockerfile-authoring` | Write small, cacheable, secure Dockerfiles. | — |
 
 </details>
 
