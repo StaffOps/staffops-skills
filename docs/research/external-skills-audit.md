@@ -6,16 +6,25 @@ scratch directory and analyzed (survey-level for the "unsure" list, full deep-di
 from any source repo — everything below is analysis to guide an independent rewrite, with
 source attribution kept for each item.
 
-## Resume point (last updated 2026-07-31, mid-session, tier 1 complete)
+## Resume point (last updated 2026-08-01, mid-session, tier 1 shipped, tier 2 in flight)
 
-**Tier 1 is fully done and validated** (all 4 items). The `git-guardrails` rework agent
-hit this account's monthly API spend limit mid-run (visible as a `failed` task
-notification) but a subsequent run of the same task completed successfully — treat any
-future "hit spend limit" notification as a real signal to slow down and check in with the
-user, not just retry silently. Given that signal fired once already in this session,
-**tier 2 was deliberately not auto-started** — check with the user before dispatching more
-build agents, and consider doing lightweight validation directly (Bash, no subagent) where
-feasible instead of always spawning a second agent, to conserve spend.
+**Tier 1 is fully done, validated, and committed** (commit `e197542` on `main`, not yet
+pushed to `origin/main`). The `git-guardrails` rework agent hit this account's monthly API
+spend limit mid-run once (visible as a `failed` task notification) but a subsequent run of
+the same task completed successfully — treat any future "hit spend limit" notification as
+a real signal to slow down and check in with the user, not just retry silently; where
+feasible, validate directly via Bash instead of spawning a second agent, to conserve spend
+(this is how `git-guardrails`' final re-validation was done, at zero extra agent cost).
+
+**Tier 2 (items 5-9) is now in flight**, dispatched after the user said "commit e segue."
+All 5 build agents were launched in parallel. Two of the five write to shared files that a
+different tier-2 agent may also touch (`skills/development/DESCRIPTION.md` is edited by
+both item 5 `interactive-debugging` and item 8 `frontend-design`; `skills/workflows/DESCRIPTION.md`
+is edited by item 9 `skill-authoring` alone this round) — each agent was instructed to
+re-read the file fresh immediately before editing rather than overwrite, but this is worth
+double-checking for a lost update once both land. Item 6 (`mcp-server-development`
+enrichment) is an in-place edit of an existing skill, not a new directory — diff it
+carefully rather than assuming untracked files mean nothing changed.
 
 Working method: one subagent builds an item, a different subagent (or the orchestrator
 directly, via Bash) independently validates it (runs `tools/validate_skills.py` itself,
@@ -57,11 +66,11 @@ build) · `validated` (a second, independent agent confirmed it meets `CONTRIBUT
 
 | # | Item | Source | Target path | Status |
 |---|------|--------|-------------|--------|
-| 5 | Interactive debugging (DAP) | AlmogBaku/debug-skill | `skills/development/interactive-debugging/` | pending |
-| 6 | MCP server quality/eval methodology | anthropics/skills `mcp-builder` | enrich existing `skills/development/mcp-server-development/` | pending |
-| 7 | PDF operations | anthropics/skills `pdf` | `skills/documentation/pdf-operations/` (or new category — decide at build time) | pending |
-| 8 | Distinctive frontend/visual design | anthropics/skills `frontend-design` | new category or `skills/development/` — decide at build time | pending |
-| 9 | Skill authoring meta-skill | anthropics/skills `skill-creator` | `skills/workflows/skill-authoring/` (references item 3, does not duplicate the eval harness) | pending |
+| 5 | Interactive debugging (DAP) | AlmogBaku/debug-skill | `skills/development/interactive-debugging/` | validated (1 finding fixed: a `kubectl debug` example wrongly attributed PID-namespace sharing to `--share-processes`, which only applies to the unrelated `--copy-to` workflow — corrected to attribute it to `--target` and dropped the no-op flag; all other technical claims, incl. exact truncation numbers cross-checked against cached upstream source, held up) |
+| 6 | MCP server quality/eval methodology | anthropics/skills `mcp-builder` | enrich existing `skills/development/mcp-server-development/` | validated (0 findings; version bumped 1.0.0 to 1.1.0; new sections integrate cleanly, all new related_skills cross-references verified accurate) |
+| 7 | PDF operations | anthropics/skills `pdf` | `skills/documentation/pdf-operations/` | validated (3 findings fixed: dead/unreachable code in `cmd_encrypt` gave a misleading error on an already-encrypted input — refactored `_load_reader` into a password-requiring path and a plain `_open_pdf_reader` probe so `encrypt` can check `.is_encrypted` without tripping the password gate; two dangling `references/*.md` pointers in the script's own docstrings corrected to point at the real SKILL.md sections; `decrypt` on an already-unencrypted input now prints a note instead of silently no-op copying) |
+| 8 | Distinctive frontend/visual design | anthropics/skills `frontend-design` | `skills/development/frontend-design/` | validated (1 licensing/attribution finding fixed: two examples were near-verbatim from the Apache-2.0 original despite the skill's own "wording is original" claim — rewritten with genuinely different examples and the claim corrected to describe what's actually new; plus 3 script bugs fixed: `distinct_accent_colors` field renamed to `distinct_hex_colors` to match what it measures, `lint-tokens.py`'s hex regex extended to catch 8-digit alpha hex so a cliche color with an alpha suffix isn't missed, `--help`/missing-file handling separated from lint-warning exit code per this catalog's own `contrast-check.py` convention; contrast-ratio math independently re-verified as correct) |
+| 9 | Skill authoring meta-skill | anthropics/skills `skill-creator` | `skills/workflows/skill-authoring/` (references item 3, does not duplicate the eval harness) | validated (3 findings fixed: a fabricated claim folding `ubuntu-administration` into README's "tested in a real Ubuntu container" tier — corrected to name only the skills README actually lists there; overstated what `validate_skills.py` mechanically checks re: "reads as one sentence" — reworded to distinguish the mechanical check from the style expectation; added a pointer to `tools/generate_catalog.py`, the actual canonical way to regenerate `DESCRIPTION.md`/README, which this whole session's build agents had been hand-editing instead of running) |
 
 ### Tier 3 — needs a scope decision before building
 

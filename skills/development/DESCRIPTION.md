@@ -2,14 +2,16 @@
 
 Language, framework, and instrumentation patterns.
 
-18 skills.
+20 skills.
 
 - **agent-platform-design** — Design autonomous agent execution and guardrails.
 - **anomaly-detection-deep** — Choose detection algorithms and tune false positives.
 - **dotnet-async-patterns** — Write async .NET workers, channels and pipelines.
 - **dotnet-otel-patterns** — Instrument .NET workers, spans and debug tracing.
+- **frontend-design** — Design distinctive UI and avoid common AI-generated cliches. _(references/, scripts/)_
 - **go-patterns** — Write idiomatic Go services, context and gRPC.
 - **grpc-distributed-tracing** — Propagate trace context across gRPC languages.
+- **interactive-debugging** — Drive a real debugger from the shell via DAP. _(references/)_
 - **mcp-server-development** — Build MCP servers with tools, resources and prompts.
 - **prophet-isolation-forest-patterns** — Forecast and detect outliers with Prophet.
 - **python-cli-tools** — Build distributable CLIs with Click or Typer.

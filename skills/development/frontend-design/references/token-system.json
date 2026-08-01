@@ -1,0 +1,93 @@
+{
+  "_comment": "Copy this file per design pass. Fill every field before writing any code. Delete this comment key when you save your copy.",
+
+  "brief_summary": "<one sentence: the concrete subject, its audience, and the page's single job>",
+
+  "colors": [
+    {
+      "name": "<short token name, e.g. ink>",
+      "hex": "#000000",
+      "role": "<e.g. primary text | background | surface | border | accent (used once) | accent-secondary>"
+    },
+    {
+      "name": "<...>",
+      "hex": "#000000",
+      "role": "<...>"
+    },
+    {
+      "name": "<...>",
+      "hex": "#000000",
+      "role": "<...>"
+    },
+    {
+      "name": "<...>",
+      "hex": "#000000",
+      "role": "<...>"
+    }
+  ],
+  "_colors_note": "4-6 entries total. Exactly one entry should carry role 'accent' unless the brief explicitly asks for a multi-accent system -- see the restraint doctrine in SKILL.md.",
+
+  "typefaces": [
+    {
+      "family": "<display face name>",
+      "role": "display",
+      "fallback_stack": "<font-family fallback list, e.g. 'Georgia, serif'>",
+      "used_for": "<where this face appears: headline, hero number, etc.>"
+    },
+    {
+      "family": "<body face name>",
+      "role": "body",
+      "fallback_stack": "<e.g. 'system-ui, sans-serif'>",
+      "used_for": "<paragraph text, labels, nav>"
+    },
+    {
+      "family": "<optional utility/mono face name>",
+      "role": "utility",
+      "fallback_stack": "<e.g. 'ui-monospace, monospace'>",
+      "used_for": "<captions, data, code, timestamps -- omit this entry if the brief has no such content>"
+    }
+  ],
+  "_typefaces_note": "Minimum 2 roles (display, body). Add the third only if the content actually has captions/data/code. The display and body face should not be the pairing you would reach for on any other brief -- name the specific reason this pairing fits this subject.",
+
+  "layout_concept": {
+    "prose": "<one sentence describing the structural idea, e.g. 'a single scrolling ledger of entries, each full-bleed, no shared grid'>",
+    "ascii_wireframe": "+----------------------------------+\n|  eyebrow                          |\n|  HEADLINE spanning two lines      |\n|  supporting line                  |\n+----------------------------------+\n|  [signature element]              |\n+----------------------------------+\n|  section  |  section  |  section  |\n+----------------------------------+"
+  },
+
+  "signature_element": {
+    "description": "<the one element this page will be remembered by>",
+    "why_this_brief": "<why this specific element embodies this subject, not a generic hero pattern>"
+  },
+
+  "self_critique": {
+    "would_i_default_to_this_for_any_similar_brief": "<yes/no, with the reasoning -- if yes, revise before continuing>",
+    "cliches_checked": {
+      "warm_cream_serif_terracotta": false,
+      "near_black_single_neon_accent": false,
+      "broadsheet_hairline_columns": false,
+      "default_shadcn_tailwind_look": false,
+      "generic_purple_blue_gradient_blobs": false,
+      "generic_outline_icon_set_everywhere": false
+    },
+    "revision_notes": "<what changed after this critique pass, or 'none needed' with why>"
+  },
+
+  "contrast_checks": [
+    {
+      "foreground": "#000000",
+      "background": "#000000",
+      "usage": "<e.g. body text on background>",
+      "required_ratio": "4.5:1",
+      "computed_ratio": 0.0,
+      "pass": false
+    }
+  ],
+  "_contrast_note": "One row per foreground/background pairing that carries real text or a UI component. Use scripts/contrast-check.py to compute computed_ratio and pass before finalizing the palette.",
+
+  "objective_lint": {
+    "distinct_font_families": 0,
+    "distinct_hex_colors": 0,
+    "cliche_hex_values_found": []
+  },
+  "_objective_lint_note": "Fill this in by running scripts/lint-tokens.py against the built CSS/token output, not by hand -- see SKILL.md's objective lint pass section."
+}

@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-166-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-174-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 166 platform engineering skills for AI coding agents, covering
+A catalog of 174 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -218,7 +218,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>development</strong> (18) — Language, framework, and instrumentation patterns.</summary>
+<summary><strong>development</strong> (20) — Language, framework, and instrumentation patterns.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -226,8 +226,10 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `anomaly-detection-deep` | Choose detection algorithms and tune false positives. | — |
 | `dotnet-async-patterns` | Write async .NET workers, channels and pipelines. | — |
 | `dotnet-otel-patterns` | Instrument .NET workers, spans and debug tracing. | — |
+| `frontend-design` | Design distinctive UI and avoid common AI-generated cliches. | `references/`, `scripts/` |
 | `go-patterns` | Write idiomatic Go services, context and gRPC. | — |
 | `grpc-distributed-tracing` | Propagate trace context across gRPC languages. | — |
+| `interactive-debugging` | Drive a real debugger from the shell via DAP. | `references/` |
 | `mcp-server-development` | Build MCP servers with tools, resources and prompts. | — |
 | `prophet-isolation-forest-patterns` | Forecast and detect outliers with Prophet. | — |
 | `python-cli-tools` | Build distributable CLIs with Click or Typer. | — |
@@ -244,7 +246,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>documentation</strong> (5) — Technical writing, diagrams, and docs-site conventions.</summary>
+<summary><strong>documentation</strong> (6) — Technical writing, diagrams, and docs-site conventions.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -253,6 +255,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `diagram-patterns` | Choose Mermaid, drawio or ASCII for diagrams. | — |
 | `markdown-docs` | Write structured, reviewable Markdown docs. | — |
 | `mkdocs-conventions` | Configure MkDocs Material sites and navigation. | — |
+| `pdf-operations` | Extract, merge, split, watermark, OCR, and fill PDF forms. | `references/`, `scripts/` |
 
 </details>
 
@@ -397,7 +400,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>troubleshooting</strong> (4) — Systematic diagnosis across systems, network, and logs.</summary>
+<summary><strong>troubleshooting</strong> (5) — Systematic diagnosis across systems, network, and logs.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -405,21 +408,26 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `incident-triage-linux` | Triage a live Linux incident quickly and safely. | — |
 | `linux-troubleshooting-methodology` | Apply a systematic approach to diagnosing Linux issues. | — |
 | `log-analysis` | Extract signal from logs with grep, awk and journalctl. | — |
+| `systematic-debugging` | Investigate root cause before proposing any fix. | `references/`, `scripts/`, `examples/` |
 
 </details>
 
 <details>
-<summary><strong>workflows</strong> (8) — Team conventions and delivery workflows.</summary>
+<summary><strong>workflows</strong> (12) — Team conventions and delivery workflows.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `conventional-commits` | Write Conventional Commits and changelogs. | — |
 | `git-advanced` | Rebase, bisect and recover Git history safely. | — |
+| `git-guardrails` | Block destructive git commands before Claude runs them. | `references/`, `scripts/` |
 | `gitops-environment-onboard` | Onboard a service into the GitOps pipeline. | — |
 | `how-this-agent-works` | Understand this agent's skills and steering. | — |
 | `jira-conventions` | Write Jira issues with consistent conventions. | — |
 | `local-reference-docs` | Find vendored reference docs offline. | — |
 | `pipeline-template-apps` | Wire apps into the shared CI/CD templates. | — |
+| `session-handoff` | Hand off an incident or migration to the next on-call shift. | `references/` |
+| `skill-authoring` | Structure and validate a new catalog skill before it ships. | — |
+| `skill-eval-harness` | Run paired, budget-capped evals to validate a skill change. | `references/`, `scripts/` |
 | `spec-writing` | Write requirements, design and task specs. | — |
 
 </details>
