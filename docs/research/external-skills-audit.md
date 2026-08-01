@@ -82,13 +82,67 @@ build) · `validated` (a second, independent agent confirmed it meets `CONTRIBUT
 | 8 | Distinctive frontend/visual design | anthropics/skills `frontend-design` | `skills/development/frontend-design/` | validated (1 licensing/attribution finding fixed: two examples were near-verbatim from the Apache-2.0 original despite the skill's own "wording is original" claim — rewritten with genuinely different examples and the claim corrected to describe what's actually new; plus 3 script bugs fixed: `distinct_accent_colors` field renamed to `distinct_hex_colors` to match what it measures, `lint-tokens.py`'s hex regex extended to catch 8-digit alpha hex so a cliche color with an alpha suffix isn't missed, `--help`/missing-file handling separated from lint-warning exit code per this catalog's own `contrast-check.py` convention; contrast-ratio math independently re-verified as correct) |
 | 9 | Skill authoring meta-skill | anthropics/skills `skill-creator` | `skills/workflows/skill-authoring/` (references item 3, does not duplicate the eval harness) | validated (3 findings fixed: a fabricated claim folding `ubuntu-administration` into README's "tested in a real Ubuntu container" tier — corrected to name only the skills README actually lists there; overstated what `validate_skills.py` mechanically checks re: "reads as one sentence" — reworded to distinguish the mechanical check from the style expectation; added a pointer to `tools/generate_catalog.py`, the actual canonical way to regenerate `DESCRIPTION.md`/README, which this whole session's build agents had been hand-editing instead of running) |
 
-### Tier 3 — needs a scope decision before building
+### Tier 3 — scoped by the user on 2026-08-01, now building
 
-| # | Item | Source | Open question | Status |
-|---|------|--------|----------------|--------|
-| 10 | LinkedIn automation idea (backend-agnostic) | Linked-API/linkedin-skills (`linkedin`, `linkedin-growth`) | Accept the paid-API dependency, or only build the vendor-agnostic backend interface + state machine? | needs-decision |
-| 11 | Organizer family (image/invoice/file) + skill-share | ComposioHQ/awesome-claude-skills | These are prose-only stubs upstream — rebuilding means writing real implementations from scratch, not improving existing code. Worth the effort? | needs-decision |
-| 12 | AI/LLM-ops + AI-security gap-fill | BagelHole/DevOps-Security-Agent-Skills `ai/` subtrees (~17 skills) | Which of the 17 are actually relevant to this org's stack? | needs-decision |
+Decisions made (via AskUserQuestion): linkedin-skills builds only the vendor-agnostic
+backend interface, no default vendor/paid dependency. The organizer family builds all 4
+with real implementations, not prose stubs. AI/LLM-ops gap-fill builds all 17 skills found
+in `DevOps-Security-Agent-Skills`' `devops/ai/` and `security/ai/` subtrees. This is
+roughly 2.5x the volume of tiers 1+2 combined (22 items vs. 9) — being built in smaller
+batches (not all-parallel like tiers 1-2) given tier 1 already hit this account's monthly
+API spend limit once at lower volume. Same build-then-independently-validate process as
+tiers 1-2 for every item; do not skip validation just because the batch is larger.
+
+#### 10. LinkedIn backend-agnostic interface
+
+| Item | Source | Target path | Status |
+|------|--------|-------------|--------|
+| Generic `LinkedInBackend` adapter interface + SQLite state machine (accounts/leads/runs, runway-balanced assignment, liveness-locked scheduler, temporal-pattern error disambiguation, cross-account retry) — no default vendor, Linked API not included as a dependency | Linked-API/linkedin-skills (`linkedin`, `linkedin-growth`) | `skills/development/linkedin-automation-interface/` (name tentative, adjust at build time) | pending |
+
+#### 11. Organizer family (4 skills, real implementations)
+
+| Item | Source | Target path | Status |
+|------|--------|-------------|--------|
+| image-enhancer (real upscale/sharpen backend, objective quality metric, no fabricated example output) | ComposioHQ/awesome-claude-skills `image-enhancer` | `skills/documentation/image-enhancer/` or similar (decide category at build time — this is general file tooling, not clearly platform-engineering; note this at build time) | pending |
+| invoice-organizer (real extraction incl. OCR fallback, confidence scoring, fixed CSV schema, real watcher script) | ComposioHQ/awesome-claude-skills `invoice-organizer` | `skills/documentation/invoice-organizer/` or similar | pending |
+| file-organizer (real undo-log/manifest, default excludes for `.git`/`node_modules`/`.venv`, sha256 not md5, open-file/in-use detection) | ComposioHQ/awesome-claude-skills `file-organizer` | `skills/documentation/file-organizer/` or similar | pending |
+| skill-share (real scaffold template, real validator, real zip packaging, vendor-agnostic "announce" step instead of hardcoded Slack/Rube) | ComposioHQ/awesome-claude-skills `skill-share` | `skills/workflows/skill-share/` — should reference `skill-authoring` (item 9) for the structural/validation part rather than duplicate it | pending |
+
+#### 12. AI/LLM-ops + AI-security gap-fill (17 skills, new `ai` category)
+
+Proposing a new top-level category `skills/ai/` for these — 17 skills is enough coherent
+volume to justify one rather than scattering them across `development`/`security`, and it
+keeps those two categories from being diluted by a distinct sub-domain. Confirm this reads
+right once a few are built; not locked in.
+
+| # | Skill | Source path (`DevOps-Security-Agent-Skills/`) | Target | Status |
+|---|-------|-----------------------------------------------|--------|--------|
+| 12.1 | agent-evals | `devops/ai/agent-evals` | `skills/ai/agent-evals/` | pending |
+| 12.2 | agent-observability | `devops/ai/agent-observability` | `skills/ai/agent-observability/` | pending |
+| 12.3 | ai-pipeline-orchestration | `devops/ai/ai-pipeline-orchestration` | `skills/ai/ai-pipeline-orchestration/` | pending |
+| 12.4 | ai-sre-incident-response | `devops/ai/ai-sre-incident-response` | `skills/ai/ai-sre-incident-response/` | pending |
+| 12.5 | llm-caching | `devops/ai/llm-caching` | `skills/ai/llm-caching/` | pending |
+| 12.6 | llm-cost-optimization | `devops/ai/llm-cost-optimization` | `skills/ai/llm-cost-optimization/` | pending |
+| 12.7 | llmops-platform-engineering | `devops/ai/llmops-platform-engineering` | `skills/ai/llmops-platform-engineering/` | pending |
+| 12.8 | model-registry-governance | `devops/ai/model-registry-governance` | `skills/ai/model-registry-governance/` | pending |
+| 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | pending |
+| 12.10 | ai-agent-security | `security/ai/ai-agent-security` | `skills/ai/ai-agent-security/` | pending |
+| 12.11 | ai-coding-agent-guardrails | `security/ai/ai-coding-agent-guardrails` | `skills/ai/ai-coding-agent-guardrails/` | pending |
+| 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | pending |
+| 12.13 | ai-security-hardening | `security/ai/ai-security-hardening` | `skills/ai/ai-security-hardening/` | pending |
+| 12.14 | llm-app-security | `security/ai/llm-app-security` | `skills/ai/llm-app-security/` | pending |
+| 12.15 | mcp-server-security | `security/ai/mcp-server-security` | `skills/ai/mcp-server-security/` | pending |
+| 12.16 | model-supply-chain-security | `security/ai/model-supply-chain-security` | `skills/ai/model-supply-chain-security/` | pending |
+| 12.17 | prompt-injection-defense | `security/ai/prompt-injection-defense` | `skills/ai/prompt-injection-defense/` | pending |
+
+Note: the source repo's originals are uniformly terse (1-3 sentences, no version pinning,
+no org-specific grounding) per the original survey — treat them as topic scaffolding to
+ground with real specifics (actual OTel/eval-harness/K8s conventions this catalog already
+has), not as content to lightly reword. Cross-reference existing skills aggressively:
+`mcp-server-security` should build on `mcp-server-development`'s existing security section
+rather than duplicate it; `ai-agent-security`/`prompt-injection-defense` should reference
+`agent-platform-design`; `agent-evals`/`rag-observability-evals` should reference
+`skill-eval-harness`'s harness mechanics rather than inventing a second one.
 
 ### Also flagged (from the "unsure" survey, lower priority, not yet scheduled)
 
