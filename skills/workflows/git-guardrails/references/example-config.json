@@ -1,0 +1,7 @@
+{
+  "disable_rules": ["tag-delete-local"],
+  "allow_patterns": [
+    "^git clean -fdx build/dist/?$",
+    "^git branch -D spike/.*$"
+  ]
+}
