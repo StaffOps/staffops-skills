@@ -6,25 +6,35 @@ scratch directory and analyzed (survey-level for the "unsure" list, full deep-di
 from any source repo — everything below is analysis to guide an independent rewrite, with
 source attribution kept for each item.
 
-## Resume point (last updated 2026-08-01, mid-session, tier 1 shipped, tier 2 in flight)
+## Resume point (last updated 2026-08-01, mid-session, tiers 1 and 2 shipped)
 
-**Tier 1 is fully done, validated, and committed** (commit `e197542` on `main`, not yet
-pushed to `origin/main`). The `git-guardrails` rework agent hit this account's monthly API
-spend limit mid-run once (visible as a `failed` task notification) but a subsequent run of
-the same task completed successfully — treat any future "hit spend limit" notification as
-a real signal to slow down and check in with the user, not just retry silently; where
-feasible, validate directly via Bash instead of spawning a second agent, to conserve spend
-(this is how `git-guardrails`' final re-validation was done, at zero extra agent cost).
+**Tiers 1 and 2 are both fully done, validated, fixed, and committed** — commit `e197542`
+(tier 1: systematic-debugging, session-handoff, skill-eval-harness, git-guardrails) and
+commit `3b61f17` (tier 2: interactive-debugging, frontend-design, pdf-operations,
+skill-authoring, plus the mcp-server-development enrichment) on `main`, not yet pushed to
+`origin/main`. All 9 items caught at least one real, independently-verified issue during
+validation (never a rubber stamp) and all were fixed and re-verified before committing —
+see the table below for exactly what each fix was. `README.md` and the touched
+`DESCRIPTION.md` files were regenerated via `tools/generate_catalog.py` (the catalog's own
+canonical generator, discovered mid-session — earlier build agents had been hand-editing
+`DESCRIPTION.md` instead, which the `skill-authoring` skill itself now tells future authors
+not to do).
 
-**Tier 2 (items 5-9) is now in flight**, dispatched after the user said "commit e segue."
-All 5 build agents were launched in parallel. Two of the five write to shared files that a
-different tier-2 agent may also touch (`skills/development/DESCRIPTION.md` is edited by
-both item 5 `interactive-debugging` and item 8 `frontend-design`; `skills/workflows/DESCRIPTION.md`
-is edited by item 9 `skill-authoring` alone this round) — each agent was instructed to
-re-read the file fresh immediately before editing rather than overwrite, but this is worth
-double-checking for a lost update once both land. Item 6 (`mcp-server-development`
-enrichment) is an in-place edit of an existing skill, not a new directory — diff it
-carefully rather than assuming untracked files mean nothing changed.
+Two operational notes worth carrying forward: (1) the `git-guardrails` rework agent hit
+this account's monthly API spend limit mid-run once during tier 1 — treat any future "hit
+spend limit" notification as a signal to slow down and check in with the user, and prefer
+direct Bash verification over spawning another agent when the check is a small, concrete
+re-run rather than an open-ended review (this is how several tier-2 fixes were verified,
+at zero extra agent cost); (2) before staging any commit in this repo, diff every
+`DESCRIPTION.md`/`README.md` change line by line — `tools/generate_catalog.py` reads from
+the *working tree*, so it will pick up any pre-existing, unrelated uncommitted changes to
+other skills' frontmatter if they happen to be sitting in the tree when it runs. Both
+commits in this effort were checked this way before staging and came back clean, but do
+not skip that check on a future run.
+
+**Tier 3 (items 10-12) still needs a scope decision from the user before building anything**
+— see the table below for the open question on each. Do not default into a scope choice
+without asking.
 
 Working method: one subagent builds an item, a different subagent (or the orchestrator
 directly, via Bash) independently validates it (runs `tools/validate_skills.py` itself,
