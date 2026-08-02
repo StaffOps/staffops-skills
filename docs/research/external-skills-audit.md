@@ -128,7 +128,7 @@ right once a few are built; not locked in.
 | 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | pending |
 | 12.10 | ai-agent-security | `security/ai/ai-agent-security` | `skills/ai/ai-agent-security/` | validated (1 finding fixed: mischaracterized git-guardrails as having a confirmation tier for "the rest" of destructive ops — it's actually a strict deny-by-default binary gate; corrected in two spots, plus a grammar typo) |
 | 12.11 | ai-coding-agent-guardrails | `security/ai/ai-coding-agent-guardrails` | `skills/ai/ai-coding-agent-guardrails/` | pending |
-| 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | pending (first attempt hit a Claude Code session limit mid-build with no file written; retrying) |
+| 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | validated (0 findings in the file itself; independent reviewer reproduced the harness-integration claim from scratch and confirmed READY TO SHIP; only note was that the builder's own report overstated what was checked into the repo vs. its scratch testing, not a defect in the skill) |
 | 12.13 | ai-security-hardening | `security/ai/ai-security-hardening` | `skills/ai/ai-security-hardening/` | pending |
 | 12.14 | llm-app-security | `security/ai/llm-app-security` | `skills/ai/llm-app-security/` | pending |
 | 12.15 | mcp-server-security | `security/ai/mcp-server-security` | `skills/ai/mcp-server-security/` | validated (2 minor findings fixed on retry: "four attackers" intro contradicted its own 5-row threat model table, awkward anti-pattern sentence fragment; also fixed prompt-injection-defense's now-stale "once that skill lands" reference to this skill) |
