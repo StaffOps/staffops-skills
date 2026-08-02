@@ -126,14 +126,14 @@ right once a few are built; not locked in.
 | 12.7 | llmops-platform-engineering | `devops/ai/llmops-platform-engineering` | `skills/ai/llmops-platform-engineering/` | pending |
 | 12.8 | model-registry-governance | `devops/ai/model-registry-governance` | `skills/ai/model-registry-governance/` | pending |
 | 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | pending |
-| 12.10 | ai-agent-security | `security/ai/ai-agent-security` | `skills/ai/ai-agent-security/` | pending |
+| 12.10 | ai-agent-security | `security/ai/ai-agent-security` | `skills/ai/ai-agent-security/` | validated (1 finding fixed: mischaracterized git-guardrails as having a confirmation tier for "the rest" of destructive ops — it's actually a strict deny-by-default binary gate; corrected in two spots, plus a grammar typo) |
 | 12.11 | ai-coding-agent-guardrails | `security/ai/ai-coding-agent-guardrails` | `skills/ai/ai-coding-agent-guardrails/` | pending |
-| 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | pending |
+| 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | pending (first attempt hit a Claude Code session limit mid-build with no file written; retrying) |
 | 12.13 | ai-security-hardening | `security/ai/ai-security-hardening` | `skills/ai/ai-security-hardening/` | pending |
 | 12.14 | llm-app-security | `security/ai/llm-app-security` | `skills/ai/llm-app-security/` | pending |
-| 12.15 | mcp-server-security | `security/ai/mcp-server-security` | `skills/ai/mcp-server-security/` | pending |
+| 12.15 | mcp-server-security | `security/ai/mcp-server-security` | `skills/ai/mcp-server-security/` | pending (first attempt hit a Claude Code session limit mid-build with no file written; retrying) |
 | 12.16 | model-supply-chain-security | `security/ai/model-supply-chain-security` | `skills/ai/model-supply-chain-security/` | pending |
-| 12.17 | prompt-injection-defense | `security/ai/prompt-injection-defense` | `skills/ai/prompt-injection-defense/` | pending |
+| 12.17 | prompt-injection-defense | `security/ai/prompt-injection-defense` | `skills/ai/prompt-injection-defense/` | validated (2 findings fixed: stale "once ai-agent-security lands" framing when that skill already existed — updated to present tense and added to related_skills; misattributed an agent-platform-design table entry that actually lives in a different section) |
 
 Note: the source repo's originals are uniformly terse (1-3 sentences, no version pinning,
 no org-specific grounding) per the original survey — treat them as topic scaffolding to
