@@ -6,31 +6,61 @@ scratch directory and analyzed (survey-level for the "unsure" list, full deep-di
 from any source repo — everything below is analysis to guide an independent rewrite, with
 source attribution kept for each item.
 
-## Resume point (last updated 2026-08-01, mid-session, tiers 1 and 2 shipped)
+## Resume point (last updated 2026-08-01, mid-session, tiers 1-2 shipped, tier 3 in flight)
 
 **Tiers 1 and 2 are both fully done, validated, fixed, and committed** — commit `e197542`
 (tier 1: systematic-debugging, session-handoff, skill-eval-harness, git-guardrails) and
 commit `3b61f17` (tier 2: interactive-debugging, frontend-design, pdf-operations,
-skill-authoring, plus the mcp-server-development enrichment) on `main`, not yet pushed to
-`origin/main`. All 9 items caught at least one real, independently-verified issue during
-validation (never a rubber stamp) and all were fixed and re-verified before committing —
-see the table below for exactly what each fix was. `README.md` and the touched
-`DESCRIPTION.md` files were regenerated via `tools/generate_catalog.py` (the catalog's own
-canonical generator, discovered mid-session — earlier build agents had been hand-editing
-`DESCRIPTION.md` instead, which the `skill-authoring` skill itself now tells future authors
-not to do).
+skill-authoring, plus the mcp-server-development enrichment) on `main`. All 9 items caught
+at least one real, independently-verified issue during validation (never a rubber stamp)
+and all were fixed and re-verified before committing — see the table below for exactly
+what each fix was.
 
-Two operational notes worth carrying forward: (1) the `git-guardrails` rework agent hit
-this account's monthly API spend limit mid-run once during tier 1 — treat any future "hit
-spend limit" notification as a signal to slow down and check in with the user, and prefer
+**Tier 3, item 12 (the 17 `skills/ai/` skills) is in progress: 8 of 17 done**, in two
+batches of 4, each committed separately — commit `e888a13`+`ffb5fd2`+`839d68d` (batch 1:
+ai-agent-security, prompt-injection-defense, mcp-server-security, ai-red-teaming — the
+security-focused cluster) and commit `2c708c9` (batch 2: agent-evals, agent-observability,
+llm-caching, llm-cost-optimization — the LLM-ops-fundamentals cluster). Items 10 (linkedin
+interface) and 11 (organizer family, 4 skills) have not been started yet.
+
+**A recurring, expected pattern across both `skills/ai/` batches**: skills built
+concurrently in the same batch routinely cite each other, and whichever one finishes first
+correctly says "sibling X doesn't exist yet" (accurate at the moment it checked) — then the
+sibling lands moments later and that claim goes stale. This is not a build defect, it's a
+race condition inherent to building interdependent skills in parallel. The fix pattern that
+worked: let each batch's independent validators run first and flag every stale/missing
+cross-reference precisely (they're very good at this — see e.g. how the batch-2 validators
+pinpointed exact line numbers in `llm-cost-optimization` for all 5 stale claims), then do
+ONE consolidated fix pass across the whole batch at the end (cheaper than re-dispatching a
+build agent per file), then re-run `tools/validate_skills.py` once, then commit the whole
+batch together. Expect to repeat this for every future batch in this 17-skill run.
+
+Three operational notes worth carrying forward: (1) the `git-guardrails` rework agent hit
+this account's monthly API spend limit mid-run once during tier 1, and separately a batch
+of 4 parallel tier-3 build agents partially hit a *session* limit (a different, shorter-cycle
+cap) mid-batch, losing 2 of 4 builds with no file written — both are signals to slow down,
+check `skills/ai/` and `git status` for what actually landed before re-dispatching anything
+(never assume a "failed" notification means zero side effects, and never assume a
+"completed" notification means nothing was lost either), and prefer smaller/sequential
+batches after a limit hit rather than immediately retrying the same parallelism; (2) prefer
 direct Bash verification over spawning another agent when the check is a small, concrete
-re-run rather than an open-ended review (this is how several tier-2 fixes were verified,
-at zero extra agent cost); (2) before staging any commit in this repo, diff every
-`DESCRIPTION.md`/`README.md` change line by line — `tools/generate_catalog.py` reads from
-the *working tree*, so it will pick up any pre-existing, unrelated uncommitted changes to
-other skills' frontmatter if they happen to be sitting in the tree when it runs. Both
-commits in this effort were checked this way before staging and came back clean, but do
-not skip that check on a future run.
+re-run rather than an open-ended review — this is how several fixes in this effort were
+verified at zero extra agent cost, including reproducing exact CLI output byte-for-byte to
+catch a builder's claimed-verbatim quote that had silently substituted `--` for `—`; (3)
+before staging any commit in this repo, diff every `DESCRIPTION.md`/`README.md` change line
+by line if `tools/generate_catalog.py` was run — it reads from the *working tree* and will
+pick up unrelated pre-existing uncommitted changes if they're sitting there. The `skills/ai/`
+category's `DESCRIPTION.md` has been deliberately left un-generated until the full batch of
+17 lands, to avoid regenerating it 17 times and to avoid races between concurrent builders
+touching it — generate it once, at the very end of item 12, not per-batch.
+
+**If the `/tmp` scratchpad with cloned source repos is gone in a future session** (it will
+be — it's session-scoped and already had to be re-cloned once this session): three source
+repos still matter for the rest of tier 3 — `BagelHole/DevOps-Security-Agent-Skills` (item
+12, the remaining 9 `skills/ai/` skills), `Linked-API/linkedin-skills` (item 10), and
+`ComposioHQ/awesome-claude-skills` (item 11, the organizer family). Re-clone only those
+three, not all 12 from the original research phase — the "Full research report" section
+below already has everything needed from the other 9.
 
 **Tier 3 (items 10-12) still needs a scope decision from the user before building anything**
 — see the table below for the open question on each. Do not default into a scope choice
@@ -117,12 +147,12 @@ right once a few are built; not locked in.
 
 | # | Skill | Source path (`DevOps-Security-Agent-Skills/`) | Target | Status |
 |---|-------|-----------------------------------------------|--------|--------|
-| 12.1 | agent-evals | `devops/ai/agent-evals` | `skills/ai/agent-evals/` | pending |
-| 12.2 | agent-observability | `devops/ai/agent-observability` | `skills/ai/agent-observability/` | pending |
+| 12.1 | agent-evals | `devops/ai/agent-evals` | `skills/ai/agent-evals/` | validated (1 finding fixed: a fabricated quote in quotation marks attributed to `skill-authoring` that doesn't appear there, replaced with an accurate real quote; plus a cosmetic double-hyphen-vs-em-dash mismatch in a claimed-verbatim CLI output, re-verified against the real command) |
+| 12.2 | agent-observability | `devops/ai/agent-observability` | `skills/ai/agent-observability/` | validated (0 findings in content -- cross-referenced ~9 existing skills, every specific quote/metric-name verified accurate; 1 stale cross-reference to llm-cost-optimization fixed in a follow-up pass once that sibling landed) |
 | 12.3 | ai-pipeline-orchestration | `devops/ai/ai-pipeline-orchestration` | `skills/ai/ai-pipeline-orchestration/` | pending |
 | 12.4 | ai-sre-incident-response | `devops/ai/ai-sre-incident-response` | `skills/ai/ai-sre-incident-response/` | pending |
-| 12.5 | llm-caching | `devops/ai/llm-caching` | `skills/ai/llm-caching/` | pending |
-| 12.6 | llm-cost-optimization | `devops/ai/llm-cost-optimization` | `skills/ai/llm-cost-optimization/` | pending |
+| 12.5 | llm-caching | `devops/ai/llm-caching` | `skills/ai/llm-caching/` | validated (0 findings in content -- READY TO SHIP on first pass; 1 stale cross-reference to llm-cost-optimization fixed in a follow-up pass once that sibling landed) |
+| 12.6 | llm-cost-optimization | `devops/ai/llm-cost-optimization` | `skills/ai/llm-cost-optimization/` | validated (0 findings in content; 5 stale "sibling skill doesn't exist yet" claims fixed in a follow-up pass once agent-evals/llm-caching/agent-observability all landed, since this one was built before them) |
 | 12.7 | llmops-platform-engineering | `devops/ai/llmops-platform-engineering` | `skills/ai/llmops-platform-engineering/` | pending |
 | 12.8 | model-registry-governance | `devops/ai/model-registry-governance` | `skills/ai/model-registry-governance/` | pending |
 | 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | pending |
