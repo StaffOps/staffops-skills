@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [ai, llm, prompt-injection, security, agents, input-validation, blast-radius]
     category: ai
-    related_skills: [git-guardrails, agent-platform-design, ai-agent-security]
+    related_skills: [git-guardrails, agent-platform-design, ai-agent-security, mcp-server-security]
 ---
 # Prompt Injection Defense
 
@@ -21,7 +21,7 @@ mattering. It deliberately does not cover the broader agent threat model of
 tool abuse and exfiltration paths once an agent already holds dangerous
 capabilities (`ai-agent-security`), or the MCP-specific mechanics of
 injection arriving through a tool's structured response
-(`mcp-server-security`, once that skill lands in this catalog). This
+(`mcp-server-security`). This
 skill is what to do about the content the model reads; those two are what to
 do about the capabilities the model holds.
 
