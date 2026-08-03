@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-174-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-191-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 174 platform engineering skills for AI coding agents, covering
+A catalog of 191 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -129,6 +129,31 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 ## Catalog
 
 <!-- catalog:start -->
+
+<details>
+<summary><strong>ai</strong> (17) — AI/LLM-ops and AI-security: agents, evals, cost, and supply chain.</summary>
+
+| Skill | Description | Includes |
+| --- | --- | --- |
+| `agent-evals` | Build golden-dataset regression evals for agent quality. | — |
+| `agent-observability` | Emit spans, tokens, and cost signals for LLM agent turns. | — |
+| `ai-agent-security` | Bound agent tool abuse, exfiltration, and overreach. | — |
+| `ai-coding-agent-guardrails` | Scope file, shell, and review permissions for coding agents. | — |
+| `ai-pipeline-orchestration` | Run RAG index refresh and batch inference on Argo Workflows. | — |
+| `ai-red-teaming` | Adversarially test an agent's tool, data, and scope limits. | — |
+| `ai-security-hardening` | Harden the inference host: weight theft, DoS, CIS baseline. | — |
+| `ai-sre-incident-response` | Detect and mitigate LLM quality, cost, safety incidents. | — |
+| `llm-app-security` | Isolate tenants, moderate output, and rate-limit LLM apps. | — |
+| `llm-caching` | Choose exact, semantic, or provider-side LLM caching. | — |
+| `llm-cost-optimization` | Cut LLM API spend via model choice, tokens, and batching. | — |
+| `llmops-platform-engineering` | Gate LLM prompt/model promotion with evals and rollback. | — |
+| `mcp-server-security` | Secure MCP transport, tool authz, and audit logging. | — |
+| `model-registry-governance` | Track model provenance, eval results, and approval status. | — |
+| `model-supply-chain-security` | Vet upstream model checkpoints and training data provenance. | — |
+| `prompt-injection-defense` | Defend against prompt injection carried in untrusted input. | — |
+| `rag-observability-evals` | Measure RAG retrieval quality and answer groundedness. | — |
+
+</details>
 
 <details>
 <summary><strong>apm-metrics</strong> (50) — Metric-by-metric diagnostic references for platform components.</summary>

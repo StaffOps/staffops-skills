@@ -28,6 +28,7 @@ BADGE_RE = re.compile(r"(\[!\[Skills\]\(https://img\.shields\.io/badge/skills-)\
 
 # One line per category, shown in DESCRIPTION.md and the README summary.
 BLURBS = {
+    "ai": "AI/LLM-ops and AI-security: agents, evals, cost, and supply chain.",
     "apm-metrics": "Metric-by-metric diagnostic references for platform components.",
     "aws": "AWS service design and troubleshooting patterns.",
     "containers": "Docker, Compose, image building, and runtime debugging.",
