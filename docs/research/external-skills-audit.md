@@ -16,14 +16,19 @@ at least one real, independently-verified issue during validation (never a rubbe
 and all were fixed and re-verified before committing — see the table below for exactly
 what each fix was.
 
-**Tier 3, item 12 (the 17 `skills/ai/` skills) is in progress: 8 of 17 done**, in two
+**Tier 3, item 12 (the 17 `skills/ai/` skills) is in progress: 12 of 17 done**, in three
 batches of 4, each committed separately — commit `e888a13`+`ffb5fd2`+`839d68d` (batch 1:
 ai-agent-security, prompt-injection-defense, mcp-server-security, ai-red-teaming — the
-security-focused cluster) and commit `2c708c9` (batch 2: agent-evals, agent-observability,
-llm-caching, llm-cost-optimization — the LLM-ops-fundamentals cluster). Items 10 (linkedin
-interface) and 11 (organizer family, 4 skills) have not been started yet.
+security-focused cluster), commit `2c708c9` (batch 2: agent-evals, agent-observability,
+llm-caching, llm-cost-optimization — the LLM-ops-fundamentals cluster), and commit
+`de63cfa` (batch 3: ai-pipeline-orchestration, llmops-platform-engineering,
+model-registry-governance, rag-observability-evals — the CI/CD-and-pipelines cluster).
+Remaining: 5 more `skills/ai/` skills (ai-sre-incident-response,
+ai-coding-agent-guardrails, ai-security-hardening, llm-app-security,
+model-supply-chain-security), then items 10 (linkedin interface) and 11 (organizer
+family, 4 skills), neither of which has been started yet.
 
-**A recurring, expected pattern across both `skills/ai/` batches**: skills built
+**A recurring, expected pattern across all three `skills/ai/` batches so far**: skills built
 concurrently in the same batch routinely cite each other, and whichever one finishes first
 correctly says "sibling X doesn't exist yet" (accurate at the moment it checked) — then the
 sibling lands moments later and that claim goes stale. This is not a build defect, it's a
@@ -149,13 +154,13 @@ right once a few are built; not locked in.
 |---|-------|-----------------------------------------------|--------|--------|
 | 12.1 | agent-evals | `devops/ai/agent-evals` | `skills/ai/agent-evals/` | validated (1 finding fixed: a fabricated quote in quotation marks attributed to `skill-authoring` that doesn't appear there, replaced with an accurate real quote; plus a cosmetic double-hyphen-vs-em-dash mismatch in a claimed-verbatim CLI output, re-verified against the real command) |
 | 12.2 | agent-observability | `devops/ai/agent-observability` | `skills/ai/agent-observability/` | validated (0 findings in content -- cross-referenced ~9 existing skills, every specific quote/metric-name verified accurate; 1 stale cross-reference to llm-cost-optimization fixed in a follow-up pass once that sibling landed) |
-| 12.3 | ai-pipeline-orchestration | `devops/ai/ai-pipeline-orchestration` | `skills/ai/ai-pipeline-orchestration/` | pending |
+| 12.3 | ai-pipeline-orchestration | `devops/ai/ai-pipeline-orchestration` | `skills/ai/ai-pipeline-orchestration/` | validated (0 findings in content -- grounded in real Argo Workflows infra, every metric name/chart version/YAML convention cross-checked exact; 1 stale "no llmops-platform-engineering exists" claim fixed once that sibling landed) |
 | 12.4 | ai-sre-incident-response | `devops/ai/ai-sre-incident-response` | `skills/ai/ai-sre-incident-response/` | pending |
 | 12.5 | llm-caching | `devops/ai/llm-caching` | `skills/ai/llm-caching/` | validated (0 findings in content -- READY TO SHIP on first pass; 1 stale cross-reference to llm-cost-optimization fixed in a follow-up pass once that sibling landed) |
 | 12.6 | llm-cost-optimization | `devops/ai/llm-cost-optimization` | `skills/ai/llm-cost-optimization/` | validated (0 findings in content; 5 stale "sibling skill doesn't exist yet" claims fixed in a follow-up pass once agent-evals/llm-caching/agent-observability all landed, since this one was built before them) |
-| 12.7 | llmops-platform-engineering | `devops/ai/llmops-platform-engineering` | `skills/ai/llmops-platform-engineering/` | pending |
-| 12.8 | model-registry-governance | `devops/ai/model-registry-governance` | `skills/ai/model-registry-governance/` | pending |
-| 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | pending |
+| 12.7 | llmops-platform-engineering | `devops/ai/llmops-platform-engineering` | `skills/ai/llmops-platform-engineering/` | validated (1 finding fixed: eval-gate CI example's prose said "its own stage between test and deploy" but the YAML used `stage: test` -- reworded prose to match reality as a job within the test stage; every technical claim incl. the eval-harness's real exit-code logic verified accurate; added bilateral cross-reference with model-registry-governance once it landed) |
+| 12.8 | model-registry-governance | `devops/ai/model-registry-governance` | `skills/ai/model-registry-governance/` | validated (0 findings in content -- the honest 3-way SBOM-parallel split held up exactly, every gate/citation cross-checked; added a clause on cosign sign-blob's operational difference from image signing, removed a self-contradictory "mlops" tag, added bilateral cross-reference with llmops-platform-engineering once it landed) |
+| 12.9 | rag-observability-evals | `devops/ai/rag-observability-evals` | `skills/ai/rag-observability-evals/` | validated (0 findings -- READY TO SHIP on first pass; builder self-corrected a stale cross-reference to ai-pipeline-orchestration mid-build and caught its own copy-paste error in the worked example by actually running the real command, both independently reproduced by the validator) |
 | 12.10 | ai-agent-security | `security/ai/ai-agent-security` | `skills/ai/ai-agent-security/` | validated (1 finding fixed: mischaracterized git-guardrails as having a confirmation tier for "the rest" of destructive ops — it's actually a strict deny-by-default binary gate; corrected in two spots, plus a grammar typo) |
 | 12.11 | ai-coding-agent-guardrails | `security/ai/ai-coding-agent-guardrails` | `skills/ai/ai-coding-agent-guardrails/` | pending |
 | 12.12 | ai-red-teaming | `security/ai/ai-red-teaming` | `skills/ai/ai-red-teaming/` | validated (0 findings in the file itself; independent reviewer reproduced the harness-integration claim from scratch and confirmed READY TO SHIP; only note was that the builder's own report overstated what was checked into the repo vs. its scratch testing, not a defect in the skill) |
