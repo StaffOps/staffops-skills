@@ -2,7 +2,7 @@
 
 Language, framework, and instrumentation patterns.
 
-20 skills.
+21 skills.
 
 - **agent-platform-design** — Design autonomous agent execution and guardrails.
 - **anomaly-detection-deep** — Choose detection algorithms and tune false positives.
@@ -12,6 +12,7 @@ Language, framework, and instrumentation patterns.
 - **go-patterns** — Write idiomatic Go services, context and gRPC.
 - **grpc-distributed-tracing** — Propagate trace context across gRPC languages.
 - **interactive-debugging** — Drive a real debugger from the shell via DAP. _(references/)_
+- **linkedin-connection-pipeline** — Vendor-agnostic LinkedIn connection pipeline state machine. _(scripts/)_
 - **mcp-server-development** — Build MCP servers with tools, resources and prompts.
 - **prophet-isolation-forest-patterns** — Forecast and detect outliers with Prophet.
 - **python-cli-tools** — Build distributable CLIs with Click or Typer.

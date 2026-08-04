@@ -32,9 +32,36 @@ except 5 that came back clean on the first pass (`agent-observability`, `llm-cac
 `rag-observability-evals`, `ai-security-hardening`, `model-supply-chain-security`) — see
 the table below for exactly what each fix was.
 
-**Remaining in tier 3**: item 10 (linkedin backend-agnostic interface, 1 skill) and item 11
-(organizer family, 4 skills) — neither has been started yet, and both still need the scope
-decisions already recorded in their sections below before building.
+**Tier 3, items 10 and 11 are now also DONE**, closing out the full 22-item plan:
+- **Item 11 (organizer family, 4 skills)** — `image-enhancer`, `invoice-organizer`,
+  `file-organizer`, `skill-share`, committed as `22e163c`. Two real bugs found and fixed by
+  independent validation: `image-enhancer`'s `split_alpha()` crashed on palette-mode images
+  (GIFs, indexed PNGs) because Pillow's filters only accept L/RGB/CMYK-class modes, and its
+  worked-example Laplacian-variance numbers were found non-reproducible and replaced with
+  real re-run numbers plus a corrected, more instructive narrative (salt noise inflates the
+  metric rather than lowering it). `skill-share`'s own dangling-reference checker
+  false-positived on its own illustrative examples and on a sibling's external-repo
+  citation, blocking it from packaging itself — fixed. `invoice-organizer` and
+  `file-organizer` validated clean (the latter with a builder-found-and-fixed macOS
+  case-insensitive-filesystem collision bug, independently reproduced).
+- **Item 10 (linkedin backend-agnostic interface, 1 skill)** — `linkedin-connection-pipeline`
+  under `skills/development/`. Ships a vendor-agnostic `LinkedInBackend` abstract interface
+  plus a real SQLite state machine (accounts/leads/runs, round-robin assignment, a
+  PID-liveness-locked scheduler ported faithfully from the source's Node.js design,
+  temporal-pattern streak-vs-isolated disambiguation for an ambiguous "restricted" outcome)
+  with a normalized `Outcome`/`ConnectionStatus` enum vocabulary replacing the source's
+  hardcoded Linked API JSON error strings — no default production backend ships, only a
+  test-only `FakeBackend`. Independent validation reproduced all 9 checks directly (a real
+  subprocess kill/reclaim test of the PID lock, a from-scratch two-batch round-robin fixture
+  driven through the real CLI, reverting-then-restoring a `sys.modules` module-identity fix
+  to prove both the bug and the fix were real, a vendor-neutrality grep across every code
+  file) and found one dangling-reference false positive (an external-repo citation read as a
+  same-skill path, same class of bug as `skill-eval-harness`'s) plus one documentation
+  precision issue (the "resolves itself naturally" framing on the streak/isolated edge case
+  undersold a structural property: an account with zero successful sends ever cannot reach
+  `'terminate'` for any lead until it lands at least one success) — both fixed.
+
+Catalog is now 196 skills across 17 categories.
 
 **Patterns worth carrying forward from the whole `skills/ai/` effort** (12 items x 4
 batches, higher volume than tiers 1-2 combined):
@@ -149,7 +176,7 @@ tiers 1-2 for every item; do not skip validation just because the batch is large
 
 | Item | Source | Target path | Status |
 |------|--------|-------------|--------|
-| Generic `LinkedInBackend` adapter interface + SQLite state machine (accounts/leads/runs, runway-balanced assignment, liveness-locked scheduler, temporal-pattern error disambiguation, cross-account retry) — no default vendor, Linked API not included as a dependency | Linked-API/linkedin-skills (`linkedin`, `linkedin-growth`) | `skills/development/linkedin-automation-interface/` (name tentative, adjust at build time) | pending |
+| Generic `LinkedInBackend` adapter interface + SQLite state machine (accounts/leads/runs, round-robin assignment, liveness-locked scheduler, temporal-pattern error disambiguation, cross-account retry) — no default vendor, Linked API not included as a dependency | Linked-API/linkedin-skills (`linkedin-growth`) | `skills/development/linkedin-connection-pipeline/` | built, validated, fixed — READY TO SHIP. Independent validator reproduced all 9 checks directly (real subprocess kill/reclaim test of the PID-liveness lock, a from-scratch two-batch round-robin fixture driven through the real CLI, reverting-then-restoring the `sys.modules` identity fix to prove both the bug and the fix are real, a vendor-neutrality grep across every code file). One documentation-accuracy fix applied: the "restricted-outcome disambiguation resolves itself naturally" claim was corrected — for an account with zero successful sends ever, the streak check's unbounded lookback means `'terminate'` is structurally unreachable for any of its leads until the account lands at least one success (not unsafe, just needed to be stated precisely rather than implied as transient) |
 
 #### 11. Organizer family (4 skills, real implementations)
 

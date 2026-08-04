@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-195-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-196-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 195 platform engineering skills for AI coding agents, covering
+A catalog of 196 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -243,7 +243,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>development</strong> (20) — Language, framework, and instrumentation patterns.</summary>
+<summary><strong>development</strong> (21) — Language, framework, and instrumentation patterns.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -255,6 +255,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `go-patterns` | Write idiomatic Go services, context and gRPC. | — |
 | `grpc-distributed-tracing` | Propagate trace context across gRPC languages. | — |
 | `interactive-debugging` | Drive a real debugger from the shell via DAP. | `references/` |
+| `linkedin-connection-pipeline` | Vendor-agnostic LinkedIn connection pipeline state machine. | `scripts/` |
 | `mcp-server-development` | Build MCP servers with tools, resources and prompts. | — |
 | `prophet-isolation-forest-patterns` | Forecast and detect outliers with Prophet. | — |
 | `python-cli-tools` | Build distributable CLIs with Click or Typer. | — |
