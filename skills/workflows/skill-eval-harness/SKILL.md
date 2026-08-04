@@ -48,7 +48,7 @@ This generalizes two existing tools rather than picking one:
   resumable run loop, retries, and a hard rule that an executor which
   cannot report dollar cost gets rejected unless the operator opts in.
 - **anthropics/skills' skill-creator** (`agents/grader.md`,
-  `agents/analyzer.md`, `references/schemas.md`) contributed the judging
+  `agents/analyzer.md`, `skill-creator/references/schemas.md`) contributed the judging
   discipline: read the whole transcript and every output file, not just the
   final answer; verify substance over surface compliance; and critique the
   eval's own assertions for being non-discriminating.

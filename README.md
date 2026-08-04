@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-191-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-195-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 191 platform engineering skills for AI coding agents, covering
+A catalog of 195 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -271,13 +271,16 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>documentation</strong> (6) — Technical writing, diagrams, and docs-site conventions.</summary>
+<summary><strong>documentation</strong> (9) — Technical writing, diagrams, and docs-site conventions.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `adr-template` | Write MADR architecture decision records. | — |
 | `api-docs-patterns` | Generate API docs from OpenAPI and protobuf. | — |
 | `diagram-patterns` | Choose Mermaid, drawio or ASCII for diagrams. | — |
+| `file-organizer` | Scan, dedupe, plan, apply, and undo file reorganizations. | `scripts/` |
+| `image-enhancer` | Upscale, sharpen, denoise, and resize images via Pillow. | `scripts/` |
+| `invoice-organizer` | Extract, rename, organize, and CSV-export invoices/receipts. | `scripts/` |
 | `markdown-docs` | Write structured, reviewable Markdown docs. | — |
 | `mkdocs-conventions` | Configure MkDocs Material sites and navigation. | — |
 | `pdf-operations` | Extract, merge, split, watermark, OCR, and fill PDF forms. | `references/`, `scripts/` |
@@ -438,7 +441,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>workflows</strong> (12) — Team conventions and delivery workflows.</summary>
+<summary><strong>workflows</strong> (13) — Team conventions and delivery workflows.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
@@ -453,6 +456,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `session-handoff` | Hand off an incident or migration to the next on-call shift. | `references/` |
 | `skill-authoring` | Structure and validate a new catalog skill before it ships. | — |
 | `skill-eval-harness` | Run paired, budget-capped evals to validate a skill change. | `references/`, `scripts/` |
+| `skill-share` | Scaffold, validate, package, and announce a catalog skill. | `scripts/` |
 | `spec-writing` | Write requirements, design and task specs. | — |
 
 </details>

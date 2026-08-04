@@ -2,7 +2,7 @@
 
 Team conventions and delivery workflows.
 
-12 skills.
+13 skills.
 
 - **conventional-commits** — Write Conventional Commits and changelogs.
 - **git-advanced** — Rebase, bisect and recover Git history safely.
@@ -15,4 +15,5 @@ Team conventions and delivery workflows.
 - **session-handoff** — Hand off an incident or migration to the next on-call shift. _(references/)_
 - **skill-authoring** — Structure and validate a new catalog skill before it ships.
 - **skill-eval-harness** — Run paired, budget-capped evals to validate a skill change. _(references/, scripts/)_
+- **skill-share** — Scaffold, validate, package, and announce a catalog skill. _(scripts/)_
 - **spec-writing** — Write requirements, design and task specs.
