@@ -311,3 +311,16 @@ broken ownership across a tree.
 - `references/permissions.md` — full mode table, ACL semantics, umask math
 - `references/disk-full.md` — decision tree for space and inode exhaustion
 - `scripts/perm-audit.sh` — permission and ownership audit for a directory tree
+
+## When NOT to use
+
+- **Network-attached storage or cloud volumes** — for EBS/EFS/S3 mount issues, look at cloud-specific docs or CSI driver skills.
+- **File content processing** (grep/awk/sed) — see [shell-text-processing](../shell/shell-text-processing/SKILL.md).
+- **Disk I/O performance analysis** (iostat, fio benchmarks) — use [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
+
+## Related skills
+
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — pipes, find, xargs, globbing.
+- [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) — iostat, iotop, latency analysis.
+- [disk-and-memory-issues](../troubleshooting/disk-and-memory-issues/SKILL.md) — diagnosing full-disk and inode exhaustion incidents.
+- [ubuntu-administration](../linux/ubuntu-administration/SKILL.md) — apt, dpkg, system-level config.

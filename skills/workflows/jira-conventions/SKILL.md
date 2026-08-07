@@ -346,3 +346,15 @@ Until then, use manual workflows.
 - JQL reference: https://confluence.atlassian.com/jirasoftwarecloud/advanced-searching-764478330.html
 - Conventional Commits: https://www.conventionalcommits.org/
 - Related: `git-conventions` (steering), `conventional-commits`, `git-advanced`
+
+## When NOT to use
+
+- **GitHub Issues / GitLab Issues** — different platforms, different conventions.
+- **Sprint planning methodology** (Scrum/Kanban) — this skill is about ticket format, not process.
+- **Project roadmapping** — see spec-writing for feature planning.
+
+## Related skills
+
+- [conventional-commits](../workflows/conventional-commits/SKILL.md) — linking commits to Jira tickets.
+- [spec-writing](../workflows/spec-writing/SKILL.md) — writing requirements that map to tickets.
+- [adr-template](../documentation/adr-template/SKILL.md) — documenting decisions referenced in tickets.

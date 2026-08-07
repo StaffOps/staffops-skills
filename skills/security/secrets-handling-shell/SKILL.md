@@ -26,6 +26,12 @@ command with a secret as an argument, deciding where to store an API key
 locally, or reviewing a script/pipeline for secret-handling mistakes before
 it ships.
 
+## When NOT to Use
+
+- Kubernetes secrets management (ESO, ExternalSecret CRD) → use `external-secrets-aws-sm`
+- .NET app secrets integration (IOptions, providers) → use `secrets-management-dotnet`
+- AWS Secrets Manager rotation/lifecycle → use `external-secrets-aws-sm`
+
 ## The core leak paths, and why each matters
 
 | Path | Who can see it | How long it persists |
@@ -243,3 +249,8 @@ rewriting as sufficient remediation on its own.
 
 - `bash-scripting` — the shell fundamentals these habits build on
 - `ssh-hardening` — key-based auth as an alternative to password/token secrets for SSH specifically
+
+## Related skills
+- `bash-error-handling` — safe script patterns
+- `external-secrets-aws-sm` — K8s secrets from AWS SM
+- `secrets-management-dotnet` — app-level secrets

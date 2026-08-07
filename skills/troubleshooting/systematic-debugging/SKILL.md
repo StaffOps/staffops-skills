@@ -464,3 +464,16 @@ most during triage.
   artifact, runner-agnostic
 - `examples/` -- full condition-based-waiting implementations in Go,
   Python, and C#
+
+## When NOT to use
+
+- **Known fixes** — if you already know the solution, just apply it; don't over-formalize.
+- **Linux-specific operational triage** — see [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) for that structured procedure.
+- **Performance profiling** — once you know it's a perf issue, jump to [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
+
+## Related skills
+
+- [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md) — Linux-focused troubleshooting framework.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — rapid incident first-response.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — evidence gathering from logs.
+- [disk-and-memory-issues](../troubleshooting/disk-and-memory-issues/SKILL.md) — focused memory/disk debugging.

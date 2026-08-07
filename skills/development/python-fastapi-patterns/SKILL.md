@@ -394,6 +394,20 @@ docker run --rm -v $(pwd)/python:/app -w /app python:3.11-slim sh -c \
   "pip install -e '.[dev]' -q && pytest tests/ -v"
 ```
 
+## When NOT to use
+
+- Building a gRPC service (not REST) — use `python-grpc-aio`
+- Adding OTel tracing to an existing FastAPI app — use `python-otel-patterns`
+- Building CLI tools (not web services) — use `python-cli-tools`
+
+## Related skills
+
+- `python-grpc-aio` — when the service contract is gRPC, not HTTP
+- `python-otel-patterns` — OTel `FastAPIInstrumentor` and trace integration
+- `mcp-server-development` — when the endpoint should be an MCP server
+- `docker-compose-patterns` — local dev stack for FastAPI services
+- `secrets-management-dotnet` — equivalent secrets patterns for .NET (if comparing stacks)
+
 ## Anti-patterns
 
 ### ❌ Blocking calls in async routes

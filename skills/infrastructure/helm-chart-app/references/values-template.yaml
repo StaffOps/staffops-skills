@@ -1,0 +1,96 @@
+# Minimal working values.yaml for <org> app/ Helm chart
+# Copy this as a starting point for new service deployments.
+# Required fields marked with # REQUIRED
+
+# --- Deployment type ---
+deploymentType: Rollout          # Rollout | StatefulSet | Deployment
+strategy: Canary                 # Canary | BlueGreen | RollingUpdate | Recreate | OnDelete
+
+# --- Mandatory labels (Kyverno enforces) --- # REQUIRED
+area: "dpm"                      # Team sigla (lowercase)
+costCenter: "Program-DataPlatform"
+costScope: "API"                 # API | PROCESS | DATABASE-MANAGED | INFRASTRUCTURE | ...
+costProject: "PEOPLE"            # UPPERCASE with dashes
+environment: "PRD"               # PRD | HML | DEV | BTC
+
+# --- Image --- # REQUIRED
+image:
+  repository: harbor.<org-domain>/<org>-images/dpm-people-api
+  tag: "a1b2c3d"                 # Immutable SHA from CI — never "latest"
+  pullPolicy: IfNotPresent
+
+# --- Service ---
+service:
+  port: 8080
+
+# --- Resources (requests MUST equal limits for Guaranteed QoS) --- # REQUIRED
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+  resizePolicy:
+    - resourceName: cpu
+      restartPolicy: NotRequired
+    - resourceName: memory
+      restartPolicy: NotRequired
+
+# --- Probes ---
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 15
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+# --- Autoscaling (KEDA) ---
+autoscaling:
+  enabled: true
+  offHoursScaleDown: false       # true only for DEV
+  minReplicas: 2
+  maxReplicas: 10
+  pollingInterval: 30
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "70"
+
+# --- External Secrets ---
+externalSecrets:
+  enabled: false
+  # refreshInterval: 1h
+  # secretStoreRef:
+  #   name: aws-secretsmanager
+  #   kind: ClusterSecretStore
+  # data:
+  #   - secretKey: DB_PASSWORD
+  #     remoteRef:
+  #       key: /prd/dpm/people-api
+  #       property: db_password
+
+# --- Extra environment variables (non-sensitive) ---
+env:
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: "http://otel-collector.monitoring:4317"
+  - name: OTEL_SERVICE_NAME
+    value: "dpm-people-api"
+  - name: ASPNETCORE_ENVIRONMENT
+    value: "Production"
+
+# --- Istio ---
+istio:
+  enabled: true                  # Adds ambient label to namespace
+
+# --- Pod disruption budget ---
+pdb:
+  enabled: true
+  minAvailable: 1

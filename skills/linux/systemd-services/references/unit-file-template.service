@@ -1,0 +1,90 @@
+# Systemd Unit File Template
+# Place in: /etc/systemd/system/myapp.service
+# Enable:  systemctl daemon-reload && systemctl enable --now myapp
+
+[Unit]
+Description=My Application Service
+Documentation=https://docs.example.com/myapp
+After=network-online.target
+Wants=network-online.target
+# If depends on another service:
+# Requires=redis.service
+# After=redis.service
+
+[Service]
+Type=notify                  # simple|forking|notify|oneshot
+User=myapp
+Group=myapp
+WorkingDirectory=/opt/myapp
+
+# Environment
+Environment="ENVIRONMENT=production"
+Environment="PORT=8080"
+EnvironmentFile=-/etc/myapp/env     # - means don't fail if missing
+
+# Execution
+ExecStartPre=/opt/myapp/pre-start.sh
+ExecStart=/opt/myapp/bin/server --config /etc/myapp/config.yaml
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill -TERM $MAINPID
+
+# Restart policy
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3            # max 3 restarts per 60s
+
+# Timeouts
+TimeoutStartSec=30
+TimeoutStopSec=30
+WatchdogSec=60               # must send sd_notify within this
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict         # /usr, /boot, /efi read-only
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/myapp /var/log/myapp
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# Resource limits
+LimitNOFILE=65535
+LimitNPROC=4096
+MemoryMax=2G
+CPUQuota=200%                # 2 cores max
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=myapp
+
+[Install]
+WantedBy=multi-user.target
+
+# ═══ COMMON COMMANDS ════════════════════════════════════════════
+# systemctl daemon-reload              # after editing unit file
+# systemctl start myapp                # start
+# systemctl stop myapp                 # stop
+# systemctl restart myapp              # restart
+# systemctl status myapp               # status + recent logs
+# systemctl enable myapp               # start on boot
+# systemctl disable myapp              # don't start on boot
+# systemctl is-active myapp            # scripting: check if running
+# systemctl show myapp --property=MainPID  # get PID
+# systemctl list-units --type=service --state=failed  # all failed
+# journalctl -u myapp -f               # follow logs
+# journalctl -u myapp --since "10min ago"
+# journalctl -u myapp -p err           # only errors
+# systemd-analyze blame                # boot time per service
+# systemd-analyze critical-chain myapp # startup dependency chain
+
+# ═══ TIMER UNIT (cron replacement) ══════════════════════════════
+# /etc/systemd/system/myapp-cleanup.timer
+# [Unit]
+# Description=Run myapp cleanup daily
+# [Timer]
+# OnCalendar=daily
+# Persistent=true
+# [Install]
+# WantedBy=timers.target

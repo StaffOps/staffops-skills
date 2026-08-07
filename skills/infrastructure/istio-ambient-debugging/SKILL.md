@@ -293,3 +293,15 @@ istioctl proxy-config listeners <pod>
 - Istio Ambient docs: https://istio.io/latest/docs/ambient/
 - istioctl reference: https://istio.io/latest/docs/reference/commands/istioctl/
 - Related skills: `istio-ambient-otel`, `otel-collector-multi-cluster`, `grpc-distributed-tracing`
+
+## When NOT to use
+
+- For Istio Ambient + OTel cross-cluster configuration → use `istio-ambient-otel`
+- For general Kubernetes networking issues (not Istio) → use cluster network debugging
+- For Istio metrics interpretation → use `istio-ambient-metrics` (apm-metrics)
+
+## Related skills
+
+- `istio-ambient-otel` — ServiceEntry/TLS patterns for cross-cluster OTLP
+- `otel-collector-multi-cluster` — collector routing affected by Istio
+- `monitoring-stack-overview` — how Istio Ambient fits the observability pipeline

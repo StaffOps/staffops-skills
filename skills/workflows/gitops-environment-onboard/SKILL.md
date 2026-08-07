@@ -9,13 +9,22 @@ metadata:
   hermes:
     tags: [gitops, environment, onboard, workflows]
     category: workflows
-    related_skills: []
+    related_skills: [pipeline-template-apps, skill-authoring]
 ---
 # GitOps Environment Onboarding
 
 ## When to Use
 
-Use when onboarding a new service into <org> GitOps pipeline. Covers the 4-step workflow from ApplicationSet registration through environment values, CI/CD pipeline, and domain catalog. Includes validation checklist and common pitfalls.
+- Onboarding a **new service** into the GitOps pipeline (first deployment)
+- Adding an **existing service** to a new environment (e.g., adding BTC)
+- Migrating a service from manual `kubectl apply` to GitOps
+
+## When NOT to Use
+
+- **Updating an existing service** (just change values.yaml, no onboarding needed)
+- **Deploying a CronWorkflow** (see `helm-chart-cronworkflow` skill)
+- **Cluster add-ons** (see `helmfile-k8s-addon` skill — different repo/pattern)
+- **One-off debugging pods** (no GitOps needed)
 
 ## Overview
 
@@ -405,3 +414,9 @@ curl http://my-new-service.dpm.svc.cluster.local:8080/healthz
 - `argocd-patterns` skill — sync policies, hooks, generators
 - `pipeline-template-apps` skill — pipeline stages, image tagging
 - See your organization's tagging policy for mandatory CostCenter/tag values
+
+## Related skills
+- `helmfile-applicationset` — repo structure for ApplicationSets
+- `argocd-patterns` — ArgoCD sync strategies
+- `helm-chart-app` — the app chart values
+- `pipeline-template-apps` — CI/CD pipeline for the service

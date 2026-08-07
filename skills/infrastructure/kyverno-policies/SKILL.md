@@ -17,6 +17,12 @@ metadata:
 
 Kyverno policies enforced at <org>. Use when debugging pod admission failures, understanding mandatory labels, image mutation rules, or designing new policies. Covers ClusterPolicy patterns, org-specific rules, exceptions, and troubleshooting.
 
+## When NOT to Use
+
+- Kyverno controller health/metrics → use `kyverno-metrics`
+- OPA/Gatekeeper policies → different engine, different syntax
+- Network-level isolation → use NetworkPolicy or Istio AuthorizationPolicy
+
 ## Overview
 
 Kyverno is the policy engine enforcing infrastructure and security standards at admission time across all <org> EKS clusters. It runs in the `kyverno` namespace and intercepts every resource creation/update via admission webhooks.
@@ -234,3 +240,8 @@ kubectl get events -n <namespace> --field-selector reason=PolicyViolation
 
 - `cosign-image-signing` skill — signing details, key rotation, Harbor `--new-bundle-format=false` gotcha (Kyverno verifies signatures created by this)
 - `helm-chart-app` skill — how labels are set in Helm values
+
+## Related skills
+- `container-image-apko` — golden images that policies validate
+- `cosign-image-signing` — signature verification policies
+- `helm-chart-app` — ensuring chart templates pass policies

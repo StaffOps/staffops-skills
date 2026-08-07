@@ -389,3 +389,16 @@ releases:
 
 - `helmfile-templating` skill — escaping gotchas in `.gotmpl` files
 - `helmfile-applicationset` skill — application-level helmfile (different pattern)
+
+## When NOT to use
+
+- For Helm triple-template escaping issues → use `helmfile-templating`
+- For ArgoCD ApplicationSet patterns → use `argocd-patterns`
+- For application Helm chart values (not cluster add-ons) → use `helm-chart-app-bdc`
+
+## Related skills
+
+- `helmfile-templating` — escaping rules when helmfile renders Go templates
+- `argocd-patterns` — GitOps delivery of the add-ons helmfile manages
+- `helmfile-applicationset` — bedag/raw pattern for ArgoCD ApplicationSets
+- `monitoring-stack-overview` — many add-ons are observability components

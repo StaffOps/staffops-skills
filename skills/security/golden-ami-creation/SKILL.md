@@ -431,3 +431,16 @@ source "amazon-ebs" "ubuntu" {
 - `aws-ftr-compliance` skill — CIS benchmark alignment
 - `terraform-modules` skill — EC2 instance module consumes AMI via SSM
 - Path: `<workspace>/01-DEVOPS/AUTOMATIONS/AMIS/`
+
+## When NOT to use
+
+- For container image hardening (apko/melange) → use `container-image-apko` / `container-package-melange`
+- For EKS node management (Bottlerocket, not custom AMI) → use `eks-management`
+- For vulnerability scanning of AMIs post-build → use `sbom-vulnerability-management`
+
+## Related skills
+
+- `container-image-apko` — container equivalent of golden AMI hardening
+- `eks-management` — EKS nodes that may consume golden AMIs (non-Bottlerocket)
+- `sbom-vulnerability-management` — scanning the AMI filesystem with Trivy
+- `aws-ftr-compliance` — FTR requires hardened images as evidence

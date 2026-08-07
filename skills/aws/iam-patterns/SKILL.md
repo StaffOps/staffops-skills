@@ -439,3 +439,17 @@ aws --profile <org>-dev s3 ls
 - SCP examples: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html
 - Cloudsplaining: https://github.com/salesforce/cloudsplaining
 - Related: `eks-management`, `cost-explorer`
+
+## When NOT to use
+
+- Configuring IRSA on EKS pods (not role/policy design) — use `eks-management`
+- Managing secrets that IAM roles access — use `external-secrets-aws-sm`
+- Remediating Security Hub IAM findings — use `security-hub-findings-mgmt`
+
+## Related skills
+
+- `eks-management` — IRSA setup and pod identity binding
+- `security-hub-patterns` — IAM compliance controls and findings
+- `external-secrets-aws-sm` — secrets that IAM roles grant access to
+- `aws-ftr-compliance` — IAM best practices for AWS FTR review
+- `cost-explorer` — cost implications of cross-account role patterns

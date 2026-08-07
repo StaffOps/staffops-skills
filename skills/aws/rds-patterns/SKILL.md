@@ -466,6 +466,19 @@ aws rds restore-db-cluster-to-point-in-time \
   --restore-to-time 2026-05-28T12:00:00Z
 ```
 
+## When NOT to use
+
+- Self-managed PostgreSQL on EC2 (not RDS) — use `golden-ami-creation` + `postgresql-metrics`
+- Application-level connection pooling code — use `dotnet-async-patterns` or `python-fastapi-patterns`
+- Secrets rotation for database credentials — use `external-secrets-aws-sm`
+
+## Related skills
+
+- `external-secrets-aws-sm` — rotating and syncing RDS credentials to K8s
+- `cost-explorer` — analyzing RDS spend and Reserved Instance utilization
+- `iam-patterns` — IAM authentication for RDS Proxy
+- `eks-management` — EKS pod connectivity to RDS via security groups
+
 ## Anti-patterns
 
 - ❌ **db.m5.large default without analysis** — always benchmark; often `db.r6g.medium` (Graviton) is better and cheaper

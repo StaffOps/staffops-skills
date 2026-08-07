@@ -185,3 +185,16 @@ storage and pull-time benefit beyond any single image's own size.
 
 - `dockerfile-authoring` — multi-stage builds, layer ordering fundamentals
 - `docker-cli-operations` — `docker history`, `system df`, and cleanup commands
+
+## When NOT to use
+
+- Writing the Dockerfile itself (layer ordering, syntax) — use `dockerfile-authoring`
+- Building golden/hardened base images with apko — use `container-image-apko`
+- Debugging a running container that crashes — use `container-runtime-debugging`
+
+## Related skills
+
+- `dockerfile-authoring` — writing Dockerfiles that produce optimized images
+- `container-image-apko` — apko-based minimal images (superset of optimization)
+- `docker-cli-operations` — inspecting image layers and sizes with CLI
+- `container-runtime-debugging` — when the optimized image fails at runtime

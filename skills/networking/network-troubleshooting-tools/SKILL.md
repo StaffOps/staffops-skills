@@ -214,3 +214,17 @@ provably in between, not on either host.
 - `dns-troubleshooting` — `dig` and the DNS-specific diagnostic path
 - `tls-troubleshooting` — `openssl s_client` and certificate-layer diagnosis
 - `linux-firewall` — the rules behind a DROP/REJECT a capture confirms
+
+## When NOT to use
+
+- **Application performance profiling** (slow queries, GC pauses) — use APM/profiling tools.
+- **DNS-specific resolution** issues — see [dns-troubleshooting](../networking/dns-troubleshooting/SKILL.md) for dig/resolvectl.
+- **TLS certificate or handshake** problems — see [tls-troubleshooting](../networking/tls-troubleshooting/SKILL.md).
+
+## Related skills
+
+- [tcp-ip-fundamentals](../networking/tcp-ip-fundamentals/SKILL.md) — theory behind what the tools measure.
+- [dns-troubleshooting](../networking/dns-troubleshooting/SKILL.md) — name resolution debugging.
+- [tls-troubleshooting](../networking/tls-troubleshooting/SKILL.md) — certificate and handshake issues.
+- [linux-firewall](../networking/linux-firewall/SKILL.md) — when packets are being dropped by rules.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — using these tools during outages.

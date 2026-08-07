@@ -203,3 +203,16 @@ from memory.
 - `log-analysis` — extracting evidence from logs efficiently
 - `disk-and-memory-issues` — two of the most common specific root causes
 - `incident-triage-linux` — applying this methodology under time pressure
+
+## When NOT to use
+
+- **Quick one-off commands** you already know — this is the framework, not the commands themselves.
+- **Application-level debugging** (stepping through code, unit test failures) — see [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md).
+- **Cloud/K8s-specific issues** — start with platform-native observability tools first.
+
+## Related skills
+
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — first-response procedure.
+- [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md) — general debugging framework beyond Linux.
+- [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) — the tools this methodology references.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — structured log investigation.

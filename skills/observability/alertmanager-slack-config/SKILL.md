@@ -221,3 +221,17 @@ Adjust `group_by` in route. Common: `group_by: ['alertname', 'cluster', 'namespa
 - Alertmanager docs: https://prometheus.io/docs/alerting/latest/configuration/
 - Slack template syntax: https://prometheus.io/docs/alerting/latest/notifications/
 - Related skills: `vmalert-configuration` (for `external.alert.source` Grafana links)
+
+## When NOT to use
+
+- For alert rule authoring (PromQL/MetricsQL expressions) → use `vmalert-configuration`
+- For designing SLO-based alerting strategy → use `alerting-strategy`
+- For Grafana OnCall routing (not Alertmanager) → use Grafana docs directly
+- For general Helm triple-template escaping → use `helmfile-templating`
+
+## Related skills
+
+- `vmalert-configuration` — writing VMRule alert expressions that feed Alertmanager
+- `alerting-strategy` — philosophy of symptom-based alerting and severity levels
+- `helmfile-templating` — escaping gotchas when configuring Alertmanager templates via helmfile
+- `monitoring-stack-overview` — where Alertmanager sits in the observability pipeline

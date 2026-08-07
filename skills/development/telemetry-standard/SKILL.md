@@ -1,15 +1,15 @@
 ---
 name: telemetry-standard
-description: "Adopt the shared OTel helper for .NET and Python."
-version: 1.0.0
+description: "Use when integrating telemetry into apps via the shared OTel helper for .NET and Python, choosing between manual OTel SDK config vs the corporate libs, or designing new services that emit traces/metrics/logs. Covers lib API, env vars, sampling strategy, and behavior per environment."
+version: 1.1.0
 author: Carlos Felipe Gomes
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [telemetry, standard, development]
+    tags: [telemetry, opentelemetry, otel, dotnet, python, observability]
     category: development
-    related_skills: [telemetry-helper]
+    related_skills: [dotnet-otel-patterns, python-otel-patterns, grpc-distributed-tracing]
 ---
 # <org> OTel Helper — Corporate Observability Standard
 
@@ -17,7 +17,18 @@ The libraries `OtelHelper` (.NET) and `otel_helper` (Python) abstract OpenTeleme
 
 ## When to Use
 
-<org> OTel Helper library standard for .NET and Python. Use when integrating telemetry into <org> apps, choosing between manual OTel SDK config vs the <org> libs, or designing new services that emit traces/metrics/logs. Covers the corporate observability standard, lib API, env vars, behavior per environment.
+- Adding telemetry to a new .NET or Python service
+- Choosing between manual OTel SDK setup vs the corporate helper
+- Configuring environment-specific behavior (LOCAL/DEV/HML/PRD/BTC)
+- Debugging why traces/metrics/logs aren't flowing
+- Setting up a sample app for E2E telemetry verification
+
+## When NOT to Use
+
+- Go services → manual OTel SDK setup (no Go helper exists yet)
+- Frontend/browser telemetry → separate pattern (browser SDK)
+- Already using the helper and need advanced patterns → see `dotnet-otel-patterns` or `python-otel-patterns`
+- Collector pipeline config → see observability skills (otel-collector-multi-cluster)
 
 ## Goal
 

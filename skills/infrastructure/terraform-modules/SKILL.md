@@ -9,13 +9,19 @@ metadata:
   hermes:
     tags: [terraform, modules, infrastructure]
     category: infrastructure
-    related_skills: []
+    related_skills: [eks-management, iam-patterns, untagged-resources-bulk-fix]
 ---
 # <org> Terraform Modules
 
 ## When to Use
 
 <org> Terraform modules catalog. Use when provisioning AWS resources (ECS services/clusters, S3 buckets, CloudFront distributions, EC2 instances) or migrating ECS to EKS. Covers module interfaces, common variables, tagging patterns, and usage examples.
+
+## When NOT to Use
+
+- Kubernetes-native resources (Deployments, Services, CronWorkflows) → use Helm charts via GitOps
+- One-off manual resource creation → still use Terraform (ClickOps forbidden per `cloud-security` steering)
+- Crossplane-managed resources → use Crossplane compositions instead
 
 ## Overview
 

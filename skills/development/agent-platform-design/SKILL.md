@@ -270,6 +270,12 @@ Patterns compose: cron detects anomaly → webhook enriches → Slack bot notifi
 
 ---
 
+## When NOT to use
+
+- Building MCP servers (protocol implementation) — use `mcp-server-development`
+- Coding a specific FastAPI webhook endpoint — use `python-fastapi-patterns`
+- Designing anomaly detection algorithms — use `anomaly-detection-deep`
+
 ## Anti-patterns
 
 - ❌ Agent without observability — invisible failures

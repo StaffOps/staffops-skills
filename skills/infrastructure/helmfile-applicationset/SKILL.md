@@ -17,6 +17,12 @@ metadata:
 
 Helmfile + bedag/raw chart pattern for ArgoCD ApplicationSets at <org>. Use when onboarding services into GitOps, configuring multi-environment deployments, or understanding the *-applicationsets repo structure. Covers directory generators, values layering, and environment repos.
 
+## When NOT to Use
+
+- Deploying cluster add-ons (monitoring, Istio, Kyverno) → use `helmfile-k8s-addon`
+- Debugging ArgoCD sync errors → use `argocd-patterns`
+- Understanding which env repo controls a service → use `gitops-environments`
+
 ## Overview
 
 At <org>, every business domain manages its ArgoCD ApplicationSets through a dedicated `*-applicationsets/` repository. These repos use **helmfile** to render ArgoCD `ApplicationSet` resources via the **bedag/raw** Helm chart, which outputs raw Kubernetes manifests without opinionated templates.
@@ -227,3 +233,9 @@ helmfile -e prd apply
 - `helmfile-templating` skill — escaping gotchas in gotmpl files
 
 Branch-to-environment mapping follows the same `dev`/`prd`/`btc` split used throughout this catalog: each branch in the `*-environments/` repo corresponds to the matching directory scanned by the Git directory generator (see "Repository structure" above).
+
+## Related skills
+- `argocd-patterns` — ArgoCD configuration
+- `helm-chart-app` — the app chart being deployed
+- `gitops-environments` — environment topology
+- `helmfile-k8s-addon` — cluster add-on management

@@ -291,6 +291,19 @@ case result := <-resultCh:
 }
 ```
 
+## When NOT to use
+
+- Python service development — use `python-fastapi-patterns` or `python-grpc-aio`
+- .NET service development — use `dotnet-async-patterns`
+- Go-specific OTel integration — patterns are here, but for cross-language tracing use `grpc-distributed-tracing`
+
+## Related skills
+
+- `grpc-distributed-tracing` — cross-language gRPC tracing involving Go services
+- `python-grpc-aio` — the Python counterpart for gRPC async servers
+- `dotnet-async-patterns` — .NET equivalent for async workers and channels
+- `mcp-server-development` — building MCP servers (Go or Python)
+
 ## Anti-patterns
 
 - ❌ Goroutine leaks (no defer wg.Done(), no ctx cancellation)

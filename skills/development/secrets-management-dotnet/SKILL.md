@@ -342,6 +342,19 @@ public class SecretsHealthCheck(IOptions<DatabaseOptions> dbOpts) : IHealthCheck
 }
 ```
 
+## When NOT to use
+
+- AWS Secrets Manager + ESO sync to K8s (infra side) — use `external-secrets-aws-sm`
+- Python secrets handling — patterns differ; use `python-fastapi-patterns` (env/config)
+- IAM role design for secrets access — use `iam-patterns`
+
+## Related skills
+
+- `external-secrets-aws-sm` — Kubernetes-side ExternalSecret that feeds the .NET volume mount
+- `iam-patterns` — IAM roles that grant access to Secrets Manager
+- `dotnet-async-patterns` — async configuration reloading in .NET
+- `dotnet-otel-patterns` — tracing through configuration providers
+
 ## Anti-patterns
 
 ### ❌ Hardcoded secrets in code

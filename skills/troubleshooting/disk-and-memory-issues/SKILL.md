@@ -211,3 +211,16 @@ depth.
 - `linux-process-management` — `/proc`, cgroups, and OOM mechanics in full depth
 - `linux-filesystem` — the complete disk-full decision tree and permission model
 - `linux-performance-analysis` — the broader USE-method resource triage this fits into
+
+## When NOT to use
+
+- **Kubernetes eviction / OOMKill** — use K8s resource metrics and pod events, not host-level tools.
+- **Application memory leaks** (heap profiling, GC analysis) — use language-specific profilers or Pyroscope.
+- **Network storage latency** (EBS, NFS) — those are I/O issues but require cloud-specific diagnosis.
+
+## Related skills
+
+- [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) — broader perf toolkit (CPU, scheduler, IO).
+- [linux-filesystem](../linux/linux-filesystem/SKILL.md) — permissions, mounts, inodes.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — finding OOM/disk errors in system logs.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — when disk/memory triggers an outage.

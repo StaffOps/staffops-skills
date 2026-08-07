@@ -332,3 +332,16 @@ Event 1──* Delivery (triggers, non-cascading reference)
 - **Rationale format** → `steering/spec-driven-workflow.md` § "Rationale (decisions and trade-offs)"
 - **When to create specs** → `steering/spec-driven-workflow.md` § "When to create specs"
 - **Documentation** → `steering/documentation-sync.md` (update after implementation)
+
+## When NOT to use
+
+- **Documentation of existing systems** — use READMEs, ADRs, or runbooks instead of specs.
+- **Quick bug fixes** with obvious cause — just fix it; a spec adds ceremony without value.
+- **API reference docs** — use OpenAPI/proto specs, not feature specs.
+
+## Related skills
+
+- [adr-template](../documentation/adr-template/SKILL.md) — documenting architectural decisions within specs.
+- [jira-conventions](../workflows/jira-conventions/SKILL.md) — mapping spec tasks to tickets.
+- [skill-authoring](../workflows/skill-authoring/SKILL.md) — specs for new skills follow similar structure.
+- [session-handoff](../workflows/session-handoff/SKILL.md) — specs persist intent across sessions.

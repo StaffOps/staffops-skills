@@ -304,3 +304,16 @@ production branch:
 - Skipping `pre-build` security scans (gitleaks, trivy)
 - Using `latest` tag in deploy manifests (non-reproducible)
 - Direct ECS/EKS API calls without feature flag check
+
+## When NOT to use
+
+- **Infrastructure pipelines** (Terraform, Helm chart releases) — different pipeline patterns.
+- **GitHub Actions** — this skill is GitLab CI focused.
+- **Pipeline debugging** (runner issues, Docker-in-Docker) — see CI/CD troubleshooting docs.
+
+## Related skills
+
+- [conventional-commits](../workflows/conventional-commits/SKILL.md) — commit format that triggers pipeline stages.
+- [git-guardrails](../workflows/git-guardrails/SKILL.md) — pre-push checks before CI runs.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — writing pipeline script blocks.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — validating scripts used in pipelines.

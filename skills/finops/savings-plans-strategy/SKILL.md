@@ -19,6 +19,12 @@ Framework for purchasing and managing AWS Savings Plans at <org>.
 
 Use when evaluating Savings Plans purchases, comparing SP vs Reserved Instances, setting coverage targets, or analyzing commitment utilization. Covers SP types, coverage targets (70-80%), term/payment trade-offs, renewal tracking, and <org>-specific Karpenter+Spot+Graviton context.
 
+## When NOT to Use
+
+- Instance type selection or downsizing → use `ec2-rightsizing-patterns`
+- Spot instance strategy → covered within Karpenter NodePool config
+- Cost allocation/tagging → use `untagged-resources-bulk-fix`
+
 ## Savings Plans types
 
 | Type | Flexibility | Discount | Applies to |

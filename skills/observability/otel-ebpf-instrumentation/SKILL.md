@@ -260,3 +260,16 @@ EXTERNAL-DOCS/opentelemetry.io/content/en/docs/zero-code/obi/
 ├── network/      # Network observability
 └── distributed-traces.md
 ```
+
+## When NOT to use
+
+- For SDK-based instrumentation patterns (.NET/Python/Go) → use language-specific `*-otel-patterns` skills
+- For OTel Collector pipeline topology → use `otel-collector-multi-cluster`
+- For Pyroscope profiling (eBPF profiler, not tracing) → use `pyroscope-profiling-patterns`
+
+## Related skills
+
+- `otel-collector-multi-cluster` — where eBPF-generated telemetry is routed
+- `pyroscope-profiling-patterns` — eBPF profiling (different from tracing)
+- `monitoring-stack-overview` — how eBPF instrumentation fits the overall pipeline
+- `dotnet-otel-patterns` / `python-otel-patterns` — SDK-based alternative

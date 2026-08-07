@@ -312,3 +312,16 @@ counts and exit statuses per stage.
 - `references/find-recipes.md` — practical `find` and `xargs` combinations
 - `scripts/explain-pipeline.sh` — per-stage diagnostics for a pipeline
 - `examples/bulk-rename.sh` — safe batch rename with dry-run and NUL handling
+
+## When NOT to use
+
+- **Writing multi-file scripts** — use [bash-scripting](../shell/bash-scripting/SKILL.md) for anything beyond a one-liner.
+- **Text transformation logic** (awk/sed/jq pipelines) — see [shell-text-processing](../shell/shell-text-processing/SKILL.md).
+- **Debugging slow commands or high load** — use [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) instead.
+
+## Related skills
+
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — writing full scripts with functions, loops, error handling.
+- [shell-text-processing](../shell/shell-text-processing/SKILL.md) — awk, sed, jq, cut for data extraction.
+- [linux-filesystem](../linux/linux-filesystem/SKILL.md) — permissions, mounts, disk usage.
+- [linux-process-management](../linux/linux-process-management/SKILL.md) — signals, ps, kill, cgroups.

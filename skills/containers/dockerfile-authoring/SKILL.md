@@ -265,3 +265,17 @@ size.
 
 - `container-image-optimization` — squeezing size further, layer analysis
 - `docker-cli-operations` — build flags, BuildKit features, registry push
+
+## When NOT to use
+
+- Building golden/hardened base images without Dockerfile — use `container-image-apko`
+- Reducing size of an already-built image — use `container-image-optimization`
+- Running/debugging containers after build — use `docker-cli-operations`
+
+## Related skills
+
+- `container-image-optimization` — advanced size reduction beyond Dockerfile best practices
+- `container-image-apko` — declarative image builds that bypass Dockerfile entirely
+- `docker-compose-patterns` — multi-stage builds in compose context
+- `docker-cli-operations` — testing built images interactively
+- `container-runtime-debugging` — when the built image misbehaves at runtime

@@ -167,6 +167,12 @@ Metric spike → click exemplar → Trace in Tempo → click span → Logs in Lo
 - ❌ Querying vminsert endpoint for reads (use vmselect)
 - ❌ Sending logs via OTLP AND stdout (duplicate ingestion, double cost)
 
+## When NOT to use
+
+- For detailed collector pipeline config → use `otel-collector-multi-cluster`
+- For querying specific backends (LogQL, TraceQL, MetricsQL) → use per-backend skills
+- For alert routing/templating → use `alertmanager-slack-config` or `vmalert-configuration`
+
 ## Related skills
 
 - `otel-collector-multi-cluster` — collector pipeline details

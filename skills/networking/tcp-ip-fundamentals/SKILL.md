@@ -210,3 +210,16 @@ reverse proxy in front that binds the low port and forwards to a high one.
 - `network-troubleshooting-tools` — the tools (`ss`, `tcpdump`, `traceroute`) in depth
 - `dns-troubleshooting` — the layer above this, name resolution specifically
 - `linux-firewall` — where SYN packets actually get dropped or rejected
+
+## When NOT to use
+
+- **Hands-on tool usage** (tcpdump flags, ss options) — see [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
+- **Application protocol debugging** (HTTP/2, gRPC, WebSocket) — use protocol-specific tools.
+- **Cloud networking** (VPC peering, Transit Gateway, overlay networks) — different abstraction layer.
+
+## Related skills
+
+- [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md) — practical tools for TCP/IP diagnosis.
+- [linux-firewall](../networking/linux-firewall/SKILL.md) — filtering at network/transport layers.
+- [dns-troubleshooting](../networking/dns-troubleshooting/SKILL.md) — application-layer name resolution.
+- [tls-troubleshooting](../networking/tls-troubleshooting/SKILL.md) — transport-layer security.

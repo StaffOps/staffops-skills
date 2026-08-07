@@ -278,3 +278,17 @@ Rules:
 - <org> clusters: `<org>-workloads-dev-nv`, `<org>-workloads-prd-nv`, `<org>-eks-prd` (core)
 - Alertmanager: `https://alertmanager.<org-domain>`
 - Grafana: `https://grafana.<org-domain>`
+
+## When NOT to use
+
+- **Writing runbooks** (authoring format, template) — see [runbook-authoring](../sre/runbook-authoring/SKILL.md).
+- **Post-incident analysis** — see [post-mortem-templates](../sre/post-mortem-templates/SKILL.md) and [root-cause-analysis](../sre/root-cause-analysis/SKILL.md).
+- **Linux-specific operational triage** — see [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md).
+
+## Related skills
+
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — Linux-level first response.
+- [root-cause-analysis](../sre/root-cause-analysis/SKILL.md) — structured RCA after containment.
+- [alerting-strategy](../sre/alerting-strategy/SKILL.md) — alert routing that triggers runbooks.
+- [post-mortem-templates](../sre/post-mortem-templates/SKILL.md) — documenting after the incident.
+- [runbook-authoring](../sre/runbook-authoring/SKILL.md) — writing the runbooks this skill executes.

@@ -277,3 +277,16 @@ cosign verify --key cosign.pub $IMAGE || exit 1
 - Cosign docs: https://docs.sigstore.dev/cosign/overview/
 - Sigstore: https://www.sigstore.dev/
 - Harbor signature integration: https://goharbor.io/docs/latest/working-with-projects/working-with-images/signing-images/
+
+## When NOT to use
+
+- For building the golden images that get signed → use `container-image-apko`
+- For Kyverno policies that verify signatures → use `kyverno-bdc-policies`
+- For general CI/CD pipeline structure → use `pipeline-template-apps`
+
+## Related skills
+
+- `container-image-apko` — building the apko images that cosign signs
+- `kyverno-bdc-policies` — ClusterPolicy that enforces signature verification
+- `container-package-melange` — building APK packages consumed by apko images
+- `sbom-vulnerability-management` — SBOM generated alongside the signed image

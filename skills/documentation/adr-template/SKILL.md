@@ -48,6 +48,19 @@ ADRs are **immutable once accepted** — if a decision changes, a new ADR supers
 - Individual code refactors (rename a variable)
 - Bug fixes
 - Routine dependency updates
+
+## Copy-Paste Template
+
+Use `references/adr-template.md` — a streamlined, ready-to-fill ADR skeleton with:
+- Status, date, context, decision drivers
+- Considered options with pros/cons
+- Consequences and risks
+- "When this decision would be wrong" section (signals to re-evaluate)
+
+```bash
+cp references/adr-template.md docs/adr/NNNN-my-decision.md
+# Replace NNNN with next sequential number
+```
 - Decisions already covered by existing ADRs
 
 ## MADR format
@@ -246,3 +259,16 @@ What forces are at play? What constraints exist?
 - Nygard original post: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
 - Corporate docs: `<workspace>/<central-docs-portal>`
 - Related: `markdown-docs`, `mkdocs-conventions`
+
+## When NOT to use
+
+- **Trivial decisions** (variable naming, minor config tweaks) — ADRs are for decisions with non-trivial trade-offs.
+- **Feature specs** (requirements, design, tasks) — see [spec-writing](../workflows/spec-writing/SKILL.md).
+- **Operational runbooks** — different purpose; see [runbook-authoring](../sre/runbook-authoring/SKILL.md).
+
+## Related skills
+
+- [spec-writing](../workflows/spec-writing/SKILL.md) — feature-level planning docs.
+- [mkdocs-conventions](../documentation/mkdocs-conventions/SKILL.md) — publishing ADRs in corporate docs.
+- [markdown-docs](../documentation/markdown-docs/SKILL.md) — formatting and structure.
+- [conventional-commits](../workflows/conventional-commits/SKILL.md) — referencing ADR numbers in commits.

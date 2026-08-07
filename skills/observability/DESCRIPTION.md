@@ -2,7 +2,7 @@
 
 Telemetry pipelines, query languages, and signal correlation.
 
-17 skills.
+28 skills.
 
 - **alertmanager-slack-config** — Route Alertmanager alerts to Slack with context.
 - **fluent-bit-loki-pipeline** — Ship logs to Loki with labels and multiline parsing.

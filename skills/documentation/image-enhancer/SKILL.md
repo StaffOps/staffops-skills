@@ -324,3 +324,15 @@ scale-dependence caveat above).
 - Real-ESRGAN-ncnn-vulkan releases (optional, not vendored): https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan/releases
 - Related: `pdf-operations` (same validate-before-write, single-dispatcher
   house style, applied to PDFs instead of raster images)
+
+## When NOT to use
+
+- **Vector graphics or diagrams** (Mermaid, drawio) — see [diagram-patterns](../documentation/diagram-patterns/SKILL.md).
+- **Video processing** — different toolchain (ffmpeg).
+- **AI image generation** — this skill is for enhancing/processing existing images.
+
+## Related skills
+
+- [pdf-operations](../documentation/pdf-operations/SKILL.md) — images embedded in PDFs.
+- [file-organizer](../documentation/file-organizer/SKILL.md) — organizing image assets.
+- [markdown-docs](../documentation/markdown-docs/SKILL.md) — embedding enhanced images in docs.

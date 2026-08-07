@@ -24,6 +24,12 @@ Use when hardening a server's SSH configuration, setting up key-based
 authentication for a fleet, restricting a deploy key's capabilities, or
 responding to an SSH-related audit finding.
 
+## When NOT to Use
+
+- Ephemeral containers/pods that don't run sshd → no SSH to harden
+- AWS SSM Session Manager replaces SSH entirely → no sshd needed
+- Network-level ACLs or firewall rules → use `linux-firewall`
+
 ## The core sshd_config baseline
 
 ```
@@ -254,3 +260,8 @@ adopting for accountability.
 - `linux-hardening` — broader OS-level hardening this complements
 - `linux-security-auditing` — verifying this configuration stays correct over time
 - `linux-filesystem` — the permission requirements SSH enforces on key files
+
+## Related skills
+- `linux-hardening` — broader OS hardening
+- `linux-security-auditing` — verifying SSH config
+- `tls-troubleshooting` — certificate issues with SSH keys

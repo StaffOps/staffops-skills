@@ -1,7 +1,7 @@
 ---
 name: python-packaging
-description: "Package Python projects with pyproject.toml and venvs."
-version: 1.0.0
+description: "Use when creating a new Python project with pyproject.toml, managing dependencies, configuring virtual environments, or publishing packages. Covers the complete pyproject.toml, src layout, dependency pinning strategy, and Docker build patterns."
+version: 1.1.0
 author: Carlos Felipe Gomes
 license: MIT
 platforms: [linux, macos, windows]
@@ -11,233 +11,228 @@ metadata:
     category: development
     related_skills: [python-scripting, python-cli-tools, python-testing]
 ---
+
 # Python Packaging
 
-Modern Python packaging centered on `pyproject.toml`: dependency
-declaration, virtual environments, and the difference between an
-application's pinned lockfile and a library's flexible version ranges —
-getting this backward is the most common packaging mistake.
+Modern Python packaging with `pyproject.toml`. One file to rule them all: metadata, dependencies, tool config.
 
 ## When to Use
 
-Use when starting a new Python project, converting an old `setup.py`-based
-project to modern tooling, deciding how to pin dependencies, or debugging a
-"works on my machine" dependency issue.
+- Starting a new Python project
+- Converting old `setup.py` / `setup.cfg` to modern tooling
+- Deciding how to pin dependencies (app vs library)
+- Packaging a CLI tool for `pip install`
+- Setting up the `src/` layout correctly
 
-## pyproject.toml: the modern standard
+## When NOT to Use
 
-```toml
-[project]
-name = "myproject"
-version = "1.0.0"
-description = "What this project does"
-requires-python = ">=3.11"
-dependencies = [
-    "requests>=2.31,<3",
-    "click>=8.1",
-]
+- Single throwaway script → just use `python-scripting` skeleton
+- Notebook exploration → Jupyter + `requirements.txt` is fine
+- Go/Rust/C# projects → language-native packaging
 
-[project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.4", "mypy>=1.10"]
+---
 
-[project.scripts]
-mytool = "myproject.cli:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-```
-
-`pyproject.toml` (PEP 621) replaced the older combination of `setup.py` +
-`setup.cfg` as the single source of project metadata — a new project should
-start here directly rather than with the legacy files. `[build-system]`
-names which tool actually builds the package (Hatchling, setuptools,
-Poetry's own backend, PDM); the choice mostly doesn't matter for a simple
-project, but must be consistent with whichever tool manages the project day
-to day.
-
-## Virtual environments
-
-```bash
-python3 -m venv .venv                  # create
-source .venv/bin/activate               # activate (POSIX)
-.venv\Scripts\activate                   # activate (Windows)
-deactivate                                # leave it
-
-pip install -e ".[dev]"                  # editable install of the current project + dev extras
-```
-
-**Every project needs an isolated environment** — installing dependencies
-into the system Python risks version conflicts between unrelated projects
-sharing the same interpreter, and on many modern Linux distributions is
-outright blocked (`externally-managed-environment`) specifically to prevent
-this. `.venv` as the directory name is a strong, widely-recognized
-convention — add it to `.gitignore` immediately, since it should never be
-committed.
-
-`pip install -e .` (editable/development mode) installs the project such
-that changes to the source take effect immediately without reinstalling —
-essential during active development, since the alternative (a normal,
-non-editable install) requires reinstalling after every code change to see
-its effect.
-
-## Applications vs libraries: pin differently, deliberately
-
-This distinction is the single most consequential decision in dependency
-management, and getting it backward causes real problems in both
-directions.
-
-**An application** (something deployed and run, not imported by other
-code) should pin **exact** versions, via a lockfile, for reproducibility —
-the same deployment artifact should behave identically today and in six
-months:
-
-```
-# requirements.txt (generated, not hand-written)
-requests==2.31.0
-click==8.1.7
-urllib3==2.2.1
-```
-
-```bash
-pip freeze > requirements.txt        # capture exact versions from a working environment
-pip install -r requirements.txt      # reproduce it exactly, elsewhere
-```
-
-**A library** (published for other projects to depend on) should declare
-**flexible ranges** in `pyproject.toml`, not exact pins — pinning exactly in
-a library forces every consumer of that library into the same exact
-version, which becomes an unsatisfiable conflict the moment two libraries a
-project depends on pin *different* exact versions of a shared dependency:
-
-```toml
-dependencies = [
-    "requests>=2.31,<3",   # a range: compatible with anything in this window
-]
-```
-
-The rule of thumb: **pin exactly at the point of deployment; range flexibly
-at the point of declaration.** A library's `pyproject.toml` declares ranges;
-an application's separately-generated lockfile pins exact versions for its
-own deployment.
-
-## Modern dependency managers
-
-```bash
-# uv -- fast, increasingly the default recommendation
-uv venv
-uv pip install -e ".[dev]"
-uv lock                          # generates uv.lock, a full reproducible lockfile
-uv sync                          # installs exactly what the lockfile specifies
-
-# Poetry -- an alternative, all-in-one tool
-poetry init
-poetry add requests
-poetry install
-```
-
-`uv` (from Astral, the Ruff authors) has become a common recommendation
-specifically for its speed — dependency resolution and installs that take
-`pip` tens of seconds often complete in a fraction of a second with `uv`,
-which matters meaningfully in CI where this happens on every run. Both `uv`
-and Poetry produce a full lockfile (`uv.lock` / `poetry.lock`) covering
-*every* transitive dependency with an exact, hash-verified version — a
-stronger reproducibility guarantee than a hand-maintained
-`requirements.txt`.
-
-## Version specifiers
-
-| Specifier | Meaning |
-| --- | --- |
-| `==2.31.0` | Exactly this version |
-| `>=2.31` | This version or newer, unbounded |
-| `>=2.31,<3` | A range — the conventional way to allow minor/patch updates but block a breaking major version |
-| `~=2.31` | "Compatible release" — equivalent to `>=2.31,<2.32` (locks the minor version) |
-| `!=2.31.5` | Exclude a specific known-bad version |
-
-`>=2.31,<3` is the generally preferred form for a library dependency: it
-follows the common (though not universal) convention that a major version
-bump signals a breaking change, so allowing anything up to the next major
-version captures compatible improvements while blocking a version likely to
-break the dependent code.
-
-## Reproducibility: the actual goal
-
-```bash
-pip install pip-audit
-pip-audit                          # check installed packages against known vulnerability databases
-
-pip list --outdated                # what has newer versions available
-```
-
-A lockfile's purpose is that **the same input produces the same
-environment, every time, on every machine** — a `requirements.txt`
-generated with `pip freeze` achieves this for direct dependencies but
-doesn't capture the guarantee as strongly as a hash-verified lockfile
-(`uv.lock`, `poetry.lock`), which also pins every *transitive* dependency
-and can verify package integrity against a known hash, protecting against a
-compromised or altered package showing up under the same version number.
-
-## Building and publishing
-
-```bash
-python -m build              # produces dist/*.whl and dist/*.tar.gz
-python -m twine upload dist/*   # publish to PyPI (or an internal index)
-
-uv build                      # equivalent, if using uv
-```
-
-A wheel (`.whl`) is a pre-built, platform-specific (or pure-Python
-platform-independent) distribution format — installing from a wheel is
-faster than from a source distribution (`.tar.gz`) because it skips any
-build step at install time. Publish both when the project has no compiled
-extensions; a pure-Python wheel is universal across platforms.
-
-## Namespace/import structure
+## Project Layout (src layout — recommended)
 
 ```
 myproject/
-├── pyproject.toml
 ├── src/
-│   └── myproject/
+│   └── mypackage/
 │       ├── __init__.py
-│       ├── cli.py
-│       └── core.py
-└── tests/
-    └── test_core.py
+│       ├── core.py
+│       └── cli.py
+├── tests/
+│   ├── conftest.py
+│   └── test_core.py
+├── pyproject.toml
+├── README.md
+└── .gitignore
 ```
 
-The `src/` layout (package code under `src/myproject/` rather than a bare
-`myproject/` at the repo root) is the modern recommendation — it prevents a
-specific, confusing class of bug where the *local, uninstalled* source gets
-imported accidentally during testing instead of the actually-installed
-package, because a bare top-level package directory is importable directly
-from the repo root without an install at all.
+**Why src layout?** Prevents accidentally importing uninstalled code from the working directory. Tests always run against the *installed* package.
+
+---
+
+## Complete pyproject.toml (copy-paste ready)
+
+```toml
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mypackage"
+version = "0.1.0"
+description = "What this package does"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [
+    {name = "Your Name", email = "you@example.com"},
+]
+
+dependencies = [
+    "httpx>=0.27,<1",
+    "pydantic>=2.0,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+mycommand = "mypackage.cli:main"
+
+[project.urls]
+Repository = "https://gitlab.example.com/team/mypackage"
+
+# --- Tool configs (all in one file) ---
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--cov=src --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+```
+
+---
+
+## Dependency Strategy: Apps vs Libraries
+
+| | Application (deployed) | Library (pip-installable) |
+|--|--|--|
+| Pin style | **Exact** (`==`) in lockfile | **Range** (`>=x,<y`) in pyproject.toml |
+| File | `requirements.txt` (generated) | `pyproject.toml` `[project.dependencies]` |
+| Why | Reproducible deploys | Flexible for consumers |
+| Generate lock | `pip freeze > requirements.txt` | Not applicable |
+
+### For applications (deploy to K8s):
+
+```bash
+# Generate lockfile
+pip install -e . && pip freeze > requirements.txt
+
+# Dockerfile uses the lockfile
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+```
+
+### For libraries:
+
+```toml
+# Flexible ranges — let consumers resolve
+dependencies = [
+    "requests>=2.28,<3",
+    "click>=8.0",
+]
+```
+
+---
+
+## Virtual Environment Commands
+
+```bash
+# Create
+python -m venv .venv
+
+# Activate
+source .venv/bin/activate      # Linux/macOS
+.venv\Scripts\activate         # Windows
+
+# Install in editable mode (for development)
+pip install -e ".[dev]"
+
+# Deactivate
+deactivate
+```
+
+### Docker-based (no local venv needed)
+
+```bash
+# Install + run tests
+docker run --rm -v "$(pwd):/app" -w /app python:3.11-slim sh -c \
+  "pip install -e '.[dev]' -q && pytest"
+
+# Build wheel
+docker run --rm -v "$(pwd):/app" -w /app python:3.11-slim sh -c \
+  "pip install build -q && python -m build"
+```
+
+---
+
+## Entry Points (CLI commands)
+
+```toml
+# In pyproject.toml
+[project.scripts]
+mycommand = "mypackage.cli:main"
+```
+
+```python
+# src/mypackage/cli.py
+def main():
+    """Entry point for `mycommand`."""
+    print("Hello from mycommand!")
+```
+
+After `pip install -e .`, the command `mycommand` is available in PATH.
+
+---
+
+## Publishing (to private PyPI or Harbor)
+
+```bash
+# Build
+python -m build  # creates dist/mypackage-0.1.0.tar.gz + .whl
+
+# Upload to private index
+twine upload --repository-url https://pypi.example.com/simple/ dist/*
+
+# Install from private index
+pip install mypackage --index-url https://pypi.example.com/simple/
+```
+
+---
 
 ## Pitfalls
 
-- **Pinning exact versions in a library's `pyproject.toml`** — forces every
-  consumer into that exact version, causing unsatisfiable conflicts for
-  anyone depending on two libraries with different exact pins of a shared
-  dependency.
-- **Not pinning exactly for an application's deployment** — "works on my
-  machine" but not reproducibly elsewhere, because a range allowed a newer,
-  behaviorally different version to be installed.
-- **Installing dependencies into the system Python** — version conflicts
-  across unrelated projects, and blocked outright on many modern
-  distributions.
-- **Committing `.venv/` to version control** — large, platform-specific,
-  and unnecessary; it's fully reproducible from the lockfile/dependency
-  declarations.
-- **A bare top-level package directory instead of `src/` layout** — risks
-  accidentally testing against uninstalled local source rather than the
-  actual installed package.
-- **Hand-editing a generated lockfile** — the next regeneration silently
-  overwrites the manual edit; change the source declaration and regenerate
-  instead.
+| Mistake | Fix |
+|---------|-----|
+| No `src/` layout | Tests import uninstalled code → works locally, fails in CI |
+| `setup.py` still | Migrate to `pyproject.toml` (it's the standard since 2023) |
+| `pip install .` without `-e` in dev | Changes require reinstall each time |
+| Forgetting `[dev]` extras | Tests can't run: pytest/ruff not installed |
+| `requirements.txt` as source of truth for a lib | Use pyproject.toml ranges instead |
+| Version only in `pyproject.toml` but code reads `__version__` | Use `importlib.metadata.version("pkg")` |
 
-## Reference
+---
 
-- `python-scripting` — the code being packaged
-- `python-cli-tools` — the `[project.scripts]` entry point pattern in depth
-- `python-testing` — testing an installed/editable package correctly
+## Related Skills
+
+- `python-scripting` — single-file scripts before they need packaging
+- `python-cli-tools` — Click/Typer on top of packaged entry points
+- `python-testing` — test config lives in pyproject.toml too

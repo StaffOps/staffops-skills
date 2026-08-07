@@ -253,3 +253,17 @@ Run `scripts/lint.sh` to apply all four to a directory tree.
 - `scripts/template.sh` — production script skeleton
 - `scripts/lint.sh` — shellcheck + shfmt + parse check over a tree
 - `examples/` — annotated scripts built from these rules
+
+## When NOT to use
+
+- **Tasks over ~200 lines** or with complex data structures — switch to Python.
+- **Cross-platform portability** where only POSIX sh is available — avoid Bash-specific features.
+- **Error handling / trap patterns** — see [bash-error-handling](../shell/bash-error-handling/SKILL.md) for the dedicated treatment.
+
+## Related skills
+
+- [bash-error-handling](../shell/bash-error-handling/SKILL.md) — set -euo pipefail, traps, cleanup.
+- [shell-cli-design](../shell/shell-cli-design/SKILL.md) — argument parsing, usage messages.
+- [shell-text-processing](../shell/shell-text-processing/SKILL.md) — awk, sed, jq pipelines.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — shellcheck, bats.
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — pipes, redirection, job control.

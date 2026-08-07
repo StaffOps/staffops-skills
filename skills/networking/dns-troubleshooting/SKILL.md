@@ -219,3 +219,16 @@ or not at all.
 - `tcp-ip-fundamentals` — the connectivity layer DNS problems are often confused with
 - `network-troubleshooting-tools` — `dig`, `nc`, packet capture in more depth
 - `linux-firewall` — where a UDP/53 rule gap actually blocks resolution
+
+## When NOT to use
+
+- **Application-level DNS caching** (in-process, HTTP client) — that's app config, not system DNS.
+- **Kubernetes CoreDNS tuning** — use K8s-specific debugging (coredns pods, ndots settings).
+- **General network connectivity** (TCP timeouts, packet loss) — see [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
+
+## Related skills
+
+- [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md) — tcpdump, ss, curl for non-DNS network issues.
+- [tcp-ip-fundamentals](../networking/tcp-ip-fundamentals/SKILL.md) — understanding layers below DNS.
+- [linux-firewall](../networking/linux-firewall/SKILL.md) — when firewall rules block DNS traffic on port 53.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — when DNS failure causes a broader outage.

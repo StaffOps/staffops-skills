@@ -220,3 +220,16 @@ genuinely the smoking gun.
 
 - `shell-text-processing` — the underlying `grep`/`awk`/`jq` tools in depth
 - `linux-troubleshooting-methodology` — where log analysis fits in a broader investigation
+
+## When NOT to use
+
+- **Centralized log platforms** (Loki, Elasticsearch) with their own query languages — use LogQL/KQL skills instead.
+- **Binary protocol debugging** — logs are text; for packet captures use [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
+- **Metrics/traces correlation** — use observability platform skills for cross-signal analysis.
+
+## Related skills
+
+- [shell-text-processing](../shell/shell-text-processing/SKILL.md) — awk/sed/grep patterns for log parsing.
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — pipes and find for locating log files.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — using log analysis during triage.
+- [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md) — building hypotheses from log evidence.

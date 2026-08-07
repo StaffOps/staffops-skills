@@ -354,6 +354,19 @@ def detect_prophet_anomalies(df: pd.DataFrame, threshold_sigma: float = 3.0):
     return df
 ```
 
+## When NOT to use
+
+- Implementing Prophet/Isolation Forest code (not designing rules) — use `prophet-isolation-forest-patterns`
+- Building the gRPC ML service scaffold — use `python-grpc-aio`
+- Configuring Alertmanager routing for anomaly alerts — use `alertmanager-slack-config`
+
+## Related skills
+
+- `prophet-isolation-forest-patterns` — implementation-level Prophet and IF patterns
+- `python-grpc-aio` — building the async gRPC server that hosts ML models
+- `alerting-strategy` — designing alert severity and routing for detected anomalies
+- `agent-platform-design` — autonomous agent guardrails for self-healing loops
+
 ## Anti-patterns
 
 - ❌ **Alerting on raw Z-Score without warm-up** — first 30 samples are unreliable (high variance in Welford's)

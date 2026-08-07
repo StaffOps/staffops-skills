@@ -147,3 +147,16 @@ Should return zero (or only externally-pushed metrics from systems you don't con
 - Multi-cluster monitoring patterns: VictoriaMetrics docs
 - kubernetes-mixin: https://github.com/kubernetes-monitoring/kubernetes-mixin
 - Related skills: `kubelet-scrape-architecture`, `vm-cardinality-management`
+
+## When NOT to use
+
+- For kubelet scrape config mechanics → use `kubelet-scrape-architecture`
+- For VictoriaMetrics cluster scaling/capacity → use `victoriametrics-troubleshooting`
+- For OTel Collector resource attributes → use `otel-collector-multi-cluster`
+
+## Related skills
+
+- `kubelet-scrape-architecture` — scrape config that produces the labels
+- `victoriametrics-troubleshooting` — VM cluster receiving the labeled data
+- `otel-collector-multi-cluster` — where `eks_cluster`/`cluster` attributes are set
+- `streaming-aggregation` — aggregating across clusters after labeling

@@ -161,3 +161,16 @@ When series are dropped at the source (no longer emitted):
 - **streaming aggregation**: keep raw data for some uses, aggregate down for dashboards
 
 See related skill: `streaming-aggregation`.
+
+## When NOT to use
+
+- For VM cluster performance tuning (flags, cache) → use `victoriametrics-tuning`
+- For VM cluster failures/capacity → use `victoriametrics-troubleshooting`
+- For streaming aggregation config syntax → use `streaming-aggregation`
+
+## Related skills
+
+- `victoriametrics-tuning` — optimizing performance after cardinality is controlled
+- `victoriametrics-troubleshooting` — when cardinality caused an OOM/failure
+- `streaming-aggregation` — reducing cardinality at scrape time
+- `kubelet-scrape-architecture` — major source of high-cardinality kubelet metrics

@@ -15,6 +15,12 @@ metadata:
 
 <org> uses **apko** for all golden/base container images. Declarative, minimal, multi-arch, SBOM-included.
 
+## When NOT to Use
+
+- Application images (built FROM a golden base) → use standard Dockerfile multi-stage
+- Custom APK packages → use `container-package-melange` first, then reference in apko
+- Signing built images → use `cosign-image-signing`
+
 ## Why apko over Dockerfile
 
 | Aspect | Dockerfile | apko |
@@ -248,3 +254,8 @@ apko is preferred, but Dockerfile is acceptable when:
 - Development/debug images (where shell is intentionally needed)
 
 Even then, use an apko-built base image as the final stage.
+
+## Related skills
+- `container-package-melange` — building custom packages for apko
+- `cosign-image-signing` — signing the golden images
+- `kyverno-policies` — enforcing signed image policies

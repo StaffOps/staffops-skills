@@ -675,6 +675,20 @@ The agent doesn't hardcode API calls — it discovers capabilities via MCP. This
 
 ---
 
+## When NOT to use
+
+- Designing autonomous agent execution patterns (not MCP protocol) — use `agent-platform-design`
+- Building a FastAPI REST service (not MCP) — use `python-fastapi-patterns`
+- Adding OTel to a Python service — use `python-otel-patterns`
+
+## Related skills
+
+- `agent-platform-design` — high-level agent orchestration that consumes MCP servers
+- `python-fastapi-patterns` — when the endpoint should be REST, not MCP
+- `python-grpc-aio` — when the protocol should be gRPC, not MCP
+- `python-otel-patterns` — instrumenting MCP server code with traces
+- `docker-compose-patterns` — local dev stack for MCP servers
+
 ## Anti-patterns
 
 - ❌ Exposing raw database queries as tools (SQL injection risk)

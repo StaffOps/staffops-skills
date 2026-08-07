@@ -1,23 +1,58 @@
 ---
 name: post-mortem-templates
-description: "Write blameless post-mortems with actions."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [post, mortem, templates, sre]
-    category: sre
-    related_skills: [incident-response-runbook, alerting-strategy, sla-slo-design]
+description: "Use when writing a blameless post-mortem after a production incident (SEV1-2 mandatory, SEV3 encouraged). Provides copy-paste templates by severity, 5-Whys and fishbone RCA techniques, action item standards (owner + Jira + due date), review meeting format, and blameless language guide. Template is ready to fill — no structural work needed."
 ---
 # Post-Mortem Templates
 
 Blameless post-mortem framework for <org>. Every SEV1-2 incident requires a post-mortem within 5 business days. SEV3 encouraged.
 
-## When to Use
+## When to use
 
-Use when writing blameless post-mortems, structuring incident reviews, or tracking action items after incidents. Covers timeline construction, RCA techniques (5 Whys, fishbone), severity-based templates, action item tracking via Jira, and <org>-specific toolchain.
+- SEV1 or SEV2 incident resolved → post-mortem MANDATORY within 5 business days
+- SEV3 incident with interesting learning → post-mortem ENCOURAGED
+- Need to write action items that actually get tracked
+- Leading a post-mortem review meeting
+- Recurring incident (same root cause seen before)
+
+## When NOT to use
+
+- Incident is still active → use `incident-response-runbook`
+- Need to triage severity → use `incident-triage`
+- Writing a runbook for an alert → use `runbook-authoring`
+- Designing SLOs → use `sla-slo-design`
+
+## Steps: Writing a post-mortem
+
+1. **Start within 48h** of resolution (memory fades fast)
+2. **Copy the template below** (SEV1 or SEV3 simplified)
+3. **Build the timeline** from Slack, Alertmanager, ArgoCD, and Grafana
+4. **Run 5-Whys** until you hit a SYSTEMIC cause (not "human error")
+5. **Write action items** with: specific description + owner + due date + Jira ticket
+6. **Schedule review meeting** (30-60 min, within 5 business days)
+7. **Publish** to `#postmortem` Slack channel after review
+8. **Track** action items weekly until all P1 items are closed
+
+## Decision tree: Which template?
+
+```
+INCIDENT RESOLVED
+│
+├─ Was it customer-facing (external impact)?
+│  ├─ YES → Was there data loss or revenue impact?
+│  │         ├─ YES → SEV1 TEMPLATE (full, mandatory)
+│  │         └─ NO  → SEV2 TEMPLATE (full, mandatory)
+│  └─ NO → Was there an interesting systemic learning?
+│           ├─ YES → SEV3 TEMPLATE (simplified, encouraged)
+│           └─ NO  → No post-mortem needed (but document the fix in commit message)
+│
+├─ Multiple teams involved?
+│  ├─ YES → Use SEV1 template (full cross-team accountability)
+│  └─ NO  → Use severity-appropriate template
+│
+└─ Same root cause as a previous incident?
+   ├─ YES → MANDATORY post-mortem (regardless of severity) — pattern = systemic gap
+   └─ NO  → Follow severity-based decision above
+```
 
 ## Core Principles
 
@@ -323,3 +358,11 @@ Incident resolved
 - Related skills: `incident-response-runbook`, `alerting-strategy`, `sla-slo-design`
 - <org> Slack: `#postmortem` (sharing), `#eks-notifications-*` (alert history)
 - Grafana: `https://grafana.<org-domain>` (evidence dashboards)
+
+## Related skills
+
+- `incident-response-runbook` — response process during active incident
+- `root-cause-analysis` — RCA techniques in depth
+- `alerting-strategy` — alerts that should have caught it earlier
+- `sla-slo-design` — SLO impact quantification
+- `runbook-authoring` — write runbook to prevent next occurrence

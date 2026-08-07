@@ -287,3 +287,16 @@ resolved, removing the guesswork about merge order.
 
 - `docker-cli-operations` — the underlying `docker` commands Compose wraps
 - `dockerfile-authoring` — building the images referenced by `build:`
+
+## When NOT to use
+
+- Production Kubernetes deployments — use `helm-chart-app` or `argocd-patterns`
+- Single-container operations (run/exec/logs) — use `docker-cli-operations`
+- Debugging a specific container that crashes — use `container-runtime-debugging`
+
+## Related skills
+
+- `docker-cli-operations` — single-container commands used within compose workflows
+- `container-runtime-debugging` — diagnosing crashes in compose services
+- `dockerfile-authoring` — writing the Dockerfiles that compose services build
+- `helm-chart-app` — when the compose stack graduates to Kubernetes

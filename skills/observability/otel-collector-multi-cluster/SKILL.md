@@ -303,3 +303,18 @@ This multiplies series for **all OTLP metrics** by number of pods. Acceptable fo
 - Agent runs on every cluster and has k8sattributes with local K8s API access
 - Gateway (core-devops only) doesn't have K8s API access to workload clusters
 - If not promoted at agent level, the info is lost before reaching the gateway
+
+## When NOT to use
+
+- For Fluent Bit log pipeline details → use `fluent-bit-loki-pipeline`
+- For eBPF auto-instrumentation (no SDK) → use `otel-ebpf-instrumentation`
+- For Istio Ambient + OTel integration → use `istio-ambient-otel`
+- For VictoriaMetrics backend issues → use `victoriametrics-troubleshooting`
+
+## Related skills
+
+- `otel-ebpf-instrumentation` — eBPF-based auto-instrumentation feeding the collector
+- `istio-ambient-otel` — ServiceEntry/TLS config for cross-cluster OTLP
+- `multicluster-label-strategy` — label alignment across clusters
+- `monitoring-stack-overview` — architectural context for the collector chain
+- `collector-internal-metrics` (apm-metrics) — self-telemetry for diagnosing the collector

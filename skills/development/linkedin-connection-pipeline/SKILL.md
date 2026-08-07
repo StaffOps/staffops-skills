@@ -1,6 +1,6 @@
 ---
 name: linkedin-connection-pipeline
-description: "Vendor-agnostic LinkedIn connection pipeline state machine."
+description: "Use when building or extending a vendor-agnostic LinkedIn outreach pipeline — SQLite state machine, retry policies, account rotation, liveness scheduling, and abstract backend adapters. Ships a complete implementation with tests."
 version: 1.0.0
 author: Carlos Felipe Gomes
 license: MIT
@@ -522,3 +522,16 @@ Copyright 2025 Linked API), specifically its Node.js scheduler
 - `cli_account` (a `linkedin-cli`-specific account name) became
   `backend_ref`, an opaque string passed through to whichever concrete
   backend is loaded.
+
+## When NOT to Use
+
+- Need a full CRM / multi-touch campaign manager → use HubSpot, Apollo, etc.
+- Just sending a few manual connections → no pipeline needed
+- Need email sequences / LinkedIn messaging sequences → out of scope (this is connection-request only)
+- Already locked into a vendor SDK that handles retries internally → adapt rather than replace
+
+## Related Skills
+
+- `python-scripting` — the patterns used in pipeline.py (argparse, logging, pathlib)
+- `python-testing` — the test suite ships pytest fixtures and parametrize patterns
+- `agent-platform-design` — for wrapping this as an autonomous scheduled agent

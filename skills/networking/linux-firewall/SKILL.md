@@ -220,3 +220,16 @@ isn't what's expected.
 - `tcp-ip-fundamentals` — the connection states these rules interact with
 - `network-troubleshooting-tools` — `tcpdump` to confirm what's actually arriving
 - `ubuntu-administration` — `ufw` as a friendlier front end over this same mechanism
+
+## When NOT to use
+
+- **Cloud security groups / NACLs** (AWS, GCP) — use cloud-native tools; this is host-level iptables/nftables.
+- **Kubernetes NetworkPolicies** — different abstraction; use Cilium/Calico docs.
+- **Application-level access control** (auth, RBAC) — firewalls operate at L3/L4, not L7.
+
+## Related skills
+
+- [tcp-ip-fundamentals](../networking/tcp-ip-fundamentals/SKILL.md) — understanding what the firewall filters.
+- [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md) — verifying connectivity through firewall rules.
+- [dns-troubleshooting](../networking/dns-troubleshooting/SKILL.md) — when firewall blocks DNS port 53.
+- [tls-troubleshooting](../networking/tls-troubleshooting/SKILL.md) — when firewall interferes with TLS handshake.

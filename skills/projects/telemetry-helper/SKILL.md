@@ -337,3 +337,9 @@ docker run --rm -v $(pwd):/app -w /app python:3.11-slim sh -c \
 - Dashboards: `otel-telemetry-helper/dashboards/`
 - Tests docs: `otel-telemetry-helper/{dotnet,python}/TESTS.md`
 - HOW-TO guides: `otel-telemetry-helper/{dotnet,python}/HOW-TO.md`
+
+## When NOT to use
+
+- **Manual OTel SDK configuration** — use the helper library; don't re-implement what it provides.
+- **Non-BDC projects** — the library embeds org-specific conventions (env vars, sampling, endpoint resolution).
+- **Collector/pipeline configuration** — see observability skills for OTel Collector config.

@@ -280,3 +280,16 @@ bats -t test/
 - `references/shellcheck-codes.md` — the frequent codes with before/after
 - `scripts/check.sh` — combined lint, format, and parse gate for CI
 - `examples/myscript.bats` — a complete bats suite with stubbing
+
+## When NOT to use
+
+- **Python/Go test frameworks** — this is exclusively for shell scripts (bats, shellcheck).
+- **Validating YAML/JSON config** — use dedicated linters (yamllint, jsonlint, helm lint).
+- **Integration/E2E tests** that spin up services — use Docker Compose or a CI pipeline.
+
+## Related skills
+
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — writing the scripts under test.
+- [bash-error-handling](../shell/bash-error-handling/SKILL.md) — error paths that tests should cover.
+- [shell-cli-design](../shell/shell-cli-design/SKILL.md) — argument edge cases to test.
+- [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md) — when a test failure needs root-cause analysis.

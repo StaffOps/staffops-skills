@@ -318,3 +318,16 @@ description: imperative, lowercase, no period, <72 chars
 - semantic-release: https://semantic-release.gitbook.io/
 - git-cliff: https://git-cliff.org/
 - Related: `git-conventions` (steering), `git-advanced`, `jira-conventions`
+
+## When NOT to use
+
+- **Internal WIP commits** during development — squash into a proper conventional commit before merge.
+- **Non-git versioning systems** — the format is git-centric.
+- **Changelog prose** — conventional commits generate changelogs; the writing itself is different.
+
+## Related skills
+
+- [git-advanced](../workflows/git-advanced/SKILL.md) — rebase, bisect, history rewriting.
+- [git-guardrails](../workflows/git-guardrails/SKILL.md) — pre-commit hooks, push safety.
+- [shell-cli-design](../shell/shell-cli-design/SKILL.md) — consistent naming conventions in automation.
+- [spec-writing](../workflows/spec-writing/SKILL.md) — linking commits to spec tasks.

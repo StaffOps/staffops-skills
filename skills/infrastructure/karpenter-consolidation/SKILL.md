@@ -136,3 +136,16 @@ kubectl get ec2nodeclass <name> -o json | jq '{securityGroupSelector: .spec.secu
 - Metrics: https://karpenter.sh/docs/reference/metrics/
 - Instance types: https://karpenter.sh/docs/reference/instance-types/
 - Related skills: `karpenter-metrics`, `eks-management`, `ec2-rightsizing-patterns`
+
+## When NOT to use
+
+- For EKS cluster management and node group design → use `eks-management`
+- For EC2 instance right-sizing recommendations → use `ec2-rightsizing-patterns`
+- For Karpenter provisioner metrics → use `karpenter-metrics` (apm-metrics)
+
+## Related skills
+
+- `eks-management` — EKS cluster design including Karpenter NodePools
+- `ec2-rightsizing-patterns` — instance family selection feeding Karpenter
+- `karpenter-metrics` (apm-metrics) — monitoring Karpenter health and decisions
+- `monitoring-stack-overview` — observing consolidation impact on telemetry

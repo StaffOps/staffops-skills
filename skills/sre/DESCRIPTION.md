@@ -1,8 +1,8 @@
 # sre
 
-Reliability engineering: SLOs, incidents, and error budgets.
+Reliability engineering: SLOs, incidents, triage, capacity projection, and error budgets.
 
-7 skills.
+15 skills.
 
 - **alerting-strategy** — Design symptom-based alerts and cut fatigue.
 - **error-budget-framework** — Track error budgets and burn rate alerts.

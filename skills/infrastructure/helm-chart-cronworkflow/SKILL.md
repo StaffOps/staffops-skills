@@ -17,6 +17,12 @@ metadata:
 
 Use when deploying scheduled batch jobs via Argo CronWorkflows on <org> EKS clusters. Covers the corporate cronworkflow Helm chart, schedule/concurrency config, IRSA, ExternalSecrets, mandatory labels, multi-step workflows, and <org> cron namespaces.
 
+## When NOT to Use
+
+- Long-running services (APIs, workers) → use `helm-chart-app`
+- Event-driven scaling → use KEDA ScaledJob (different pattern)
+- Simple K8s CronJob without Argo features → still use this chart (consistency)
+
 ## Overview
 
 The `cronworkflow/` chart standardizes Argo CronWorkflow deployments across <org> EKS clusters. It enforces mandatory labels, resource limits, retry strategies, and integrates with External Secrets Operator for AWS credentials.
@@ -349,3 +355,8 @@ steps:
 - `helmfile-applicationset` skill — how CronWorkflows are managed via ApplicationSets
 - `helm-chart-app` skill — long-running service chart (complementary)
 - `external-secrets-aws-sm` skill — ESO integration details
+
+## Related skills
+- `helm-chart-app` — standard app deployments
+- `argocd-patterns` — GitOps delivery of CronWorkflows
+- `helmfile-applicationset` — managing multiple environments

@@ -151,3 +151,16 @@ Until merge purges, deleted series still appear in `/api/v1/status/tsdb`. Wait f
 - vmagent: https://docs.victoriametrics.com/vmagent/
 - Capacity planning: https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#capacity-planning
 - Local cache: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/VictoriaMetrics/docs`
+
+## When NOT to use
+
+- For VM performance tuning flags → use `victoriametrics-tuning`
+- For cardinality explosions and label management → use `vm-cardinality-management`
+- For VMAlert rule configuration → use `vmalert-configuration`
+
+## Related skills
+
+- `victoriametrics-tuning` — flag-level performance optimization
+- `vm-cardinality-management` — detecting and fixing high-cardinality series
+- `vmalert-configuration` — alert/recording rules evaluated against VM
+- `monitoring-stack-overview` — VM's place in the overall pipeline

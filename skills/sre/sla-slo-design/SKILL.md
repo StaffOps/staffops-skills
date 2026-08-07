@@ -1,23 +1,62 @@
 ---
 name: sla-slo-design
-description: "Define SLIs, SLOs and reliability targets."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [sla, slo, design, sre]
-    category: sre
-    related_skills: [error-budget-framework, incident-response-runbook, alerting-strategy, runbook-authoring, post-mortem-templates]
+description: "Use when defining reliability targets (SLI/SLO/SLA) for a new or existing service, choosing service tier, writing recording rules for VictoriaMetrics, or setting up burn rate alerting. Covers availability/latency/freshness SLI types, tier classification (Tier 1-3), example VMRule recording rules with exact PromQL, error budget calculation, and quarterly review process."
 ---
 # SLI/SLO/SLA Design Framework
 
 Reliability engineering framework for <org> services. Based on Google SRE book patterns, adapted for VictoriaMetrics + VMAlert + Alertmanager stack.
 
-## When to Use
+## When to use
 
-SLI/SLO/SLA design framework. Use when defining reliability targets for services, creating error budgets, designing burn rate alerts, or establishing service tiers. Covers indicator selection, objective setting, budget policies, multi-window alerting, and <org>-specific patterns.
+- Onboarding a new service (define its reliability targets)
+- Quarterly SLO review with service owners
+- Customer requesting an SLA (need SLO - margin)
+- Error budget exhausted (need to reassess targets)
+- Designing burn rate alerts for a service
+- BTC (batch) workload needs freshness SLI
+
+## When NOT to use
+
+- Implementing the burn rate alerts → use `error-budget-framework`
+- Writing the runbook for SLO violation → use `runbook-authoring`
+- Configuring Alertmanager routing → use `alerting-strategy`
+- Active incident investigation → use `root-cause-analysis`
+
+## Steps: Define SLO for a new service
+
+1. **Classify service tier** (use decision tree below)
+2. **Choose SLI type** (availability for APIs, freshness for batch)
+3. **Set SLO target** based on tier table
+4. **Write recording rules** (copy from examples below, replace service_name)
+5. **Calculate error budget** (1 - SLO × window)
+6. **Set up burn rate alerts** (see `error-budget-framework`)
+7. **Create Grafana dashboard** (budget remaining gauge + burn rate)
+8. **Document in service catalog** (owner, tier, SLO, SLI definition)
+9. **Schedule quarterly review** with service owner + product
+
+## Decision tree: Which tier?
+
+```
+NEW SERVICE NEEDS SLO
+│
+├─ Is it customer-facing (external users hit it directly)?
+│  ├─ YES → Is it in the critical path (payment, auth, core lookup)?
+│  │         ├─ YES → TIER 1 (99.95%, p99 < 200ms)
+│  │         └─ NO  → TIER 2 (99.9%, p99 < 500ms)
+│  └─ NO → Is it a batch/async workload (BTC)?
+│           ├─ YES → BATCH SLO (99.5% job success, freshness < SLA)
+│           └─ NO  → TIER 3 (99.5%, p99 < 2s) — internal tools
+│
+├─ SLI TYPE DECISION:
+│  ├─ Request-based (API, gRPC)? → Availability + Latency SLIs
+│  ├─ Batch/async (CronWorkflow)? → Job Success + Freshness SLIs
+│  └─ Streaming (Kafka consumer)? → Lag + Throughput SLIs
+│
+└─ WINDOW DECISION:
+   ├─ Standard: 30-day rolling (NOT calendar month)
+   ├─ Batch: 7-day rolling (jobs run less frequently)
+   └─ Never: calendar month (creates end-of-month anxiety)
+```
 
 ## Concepts
 
@@ -259,6 +298,138 @@ SLO overview dashboard (datasource UID: `victoriametrics`):
 - Recording rules namespace: `monitoring`
 - SLO review cadence: quarterly (with service owners)
 
+## Complete Recording Rules — Copy-Paste per Service
+
+### Availability SLI (request-based services)
+
+```yaml
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: sli-SERVICE-NAME-availability
+  namespace: monitoring
+spec:
+  groups:
+    - name: sli.SERVICE_NAME.availability
+      interval: 30s
+      rules:
+        # SLI: ratio of successful requests (non-5xx)
+        - record: sli:http_requests_good:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_count{
+              service_name="SERVICE_NAME",
+              http_status_code!~"5.."
+            }[5m])) by (service_name, cluster)
+            /
+            sum(rate(http_server_request_duration_seconds_count{
+              service_name="SERVICE_NAME"
+            }[5m])) by (service_name, cluster)
+          labels:
+            slo_tier: "2"
+            slo_target: "0.999"
+
+        # Error budget remaining (30d rolling)
+        - record: sli:error_budget_remaining:ratio
+          expr: |
+            1 - (
+              (1 - sli:http_requests_good:ratio_rate5m{service_name="SERVICE_NAME"})
+              / (1 - 0.999)
+            )
+          labels:
+            slo_tier: "2"
+```
+
+### Latency SLI (percentage under threshold)
+
+```yaml
+        # SLI: % requests completing under 500ms
+        - record: sli:http_latency_good:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_bucket{
+              service_name="SERVICE_NAME",
+              le="0.5"
+            }[5m])) by (service_name, cluster)
+            /
+            sum(rate(http_server_request_duration_seconds_count{
+              service_name="SERVICE_NAME"
+            }[5m])) by (service_name, cluster)
+          labels:
+            slo_tier: "2"
+            slo_target: "0.99"
+            threshold_seconds: "0.5"
+```
+
+### Freshness SLI (batch/BTC workloads)
+
+```yaml
+    - name: sli.SERVICE_NAME.freshness
+      interval: 60s
+      rules:
+        # SLI: data age in seconds (lower = fresher)
+        - record: sli:batch_data_age:seconds
+          expr: |
+            time() - max(batch_last_successful_run_timestamp{
+              service_name="SERVICE_NAME"
+            }) by (service_name, cluster)
+          labels:
+            slo_tier: "3"
+            slo_target_seconds: "3600"
+
+        # SLI: job success ratio (7d window)
+        - record: sli:batch_job_success:ratio_7d
+          expr: |
+            sum(increase(argo_workflows_count{
+              namespace="SERVICE_NAMESPACE",
+              status="Succeeded"
+            }[7d])) by (service_name)
+            /
+            sum(increase(argo_workflows_count{
+              namespace="SERVICE_NAMESPACE"
+            }[7d])) by (service_name)
+          labels:
+            slo_tier: "3"
+            slo_target: "0.995"
+```
+
+### Multi-window burn rate (generic, works for any service)
+
+```yaml
+    - name: sli.SERVICE_NAME.burn_rate
+      interval: 30s
+      rules:
+        # 5m window (short, for multi-window pairing)
+        - record: sli:burn_rate:5m
+          expr: |
+            (1 - sli:http_requests_good:ratio_rate5m{service_name="SERVICE_NAME"})
+            / (1 - 0.999)
+
+        # 1h window
+        - record: sli:burn_rate:1h
+          expr: |
+            (
+              sum(increase(http_server_request_duration_seconds_count{
+                service_name="SERVICE_NAME", http_status_code=~"5.."
+              }[1h])) by (service_name, cluster)
+              /
+              sum(increase(http_server_request_duration_seconds_count{
+                service_name="SERVICE_NAME"
+              }[1h])) by (service_name, cluster)
+            ) / (1 - 0.999)
+
+        # 6h window
+        - record: sli:burn_rate:6h
+          expr: |
+            (
+              sum(increase(http_server_request_duration_seconds_count{
+                service_name="SERVICE_NAME", http_status_code=~"5.."
+              }[6h])) by (service_name, cluster)
+              /
+              sum(increase(http_server_request_duration_seconds_count{
+                service_name="SERVICE_NAME"
+              }[6h])) by (service_name, cluster)
+            ) / (1 - 0.999)
+```
+
 ## Anti-patterns
 
 - ❌ 100% availability target (impossible, blocks all innovation)
@@ -283,3 +454,12 @@ SLO overview dashboard (datasource UID: `victoriametrics`):
   - `alerting-strategy` — symptom-based alerting (SLOs are the canonical symptom)
   - `runbook-authoring` — runbooks for SLO violations and burn rate alerts
   - `post-mortem-templates` — when SLO is missed, post-mortem framework
+
+## Related skills
+
+- `error-budget-framework` — burn rate alerting implementation (companion to this skill)
+- `alerting-strategy` — symptom-based alerting philosophy
+- `runbook-authoring` — runbooks for SLO violation alerts
+- `incident-response-runbook` — what to do when SLO is at risk
+- `slo-burn-rate-calculator` — automated burn rate calculation script
+- `post-mortem-templates` — when SLO is missed, document and learn

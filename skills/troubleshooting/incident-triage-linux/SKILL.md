@@ -194,3 +194,17 @@ investigation from scratch.
 - `linux-troubleshooting-methodology` — the thorough investigation process this complements
 - `disk-and-memory-issues` — a common specific root cause to check early
 - `log-analysis` — extracting the evidence referenced throughout this skill
+
+## When NOT to use
+
+- **Kubernetes/container-level incidents** — start with K8s events, pod logs, and observability dashboards.
+- **Application-level bugs** (logic errors, data corruption) — this is for infrastructure symptoms.
+- **Post-incident analysis / RCA writing** — see [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md).
+
+## Related skills
+
+- [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md) — structured approach after initial triage.
+- [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) — deep CPU/mem/IO analysis.
+- [disk-and-memory-issues](../troubleshooting/disk-and-memory-issues/SKILL.md) — focused disk/OOM troubleshooting.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — parsing system and application logs during triage.
+- [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md) — when triage points to a complex root cause.

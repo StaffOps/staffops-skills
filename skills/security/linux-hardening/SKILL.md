@@ -24,6 +24,13 @@ Use when building a hardened base image, responding to a CIS benchmark or
 compliance audit finding, or reviewing a host's baseline security posture
 before it goes into production.
 
+## When NOT to Use
+
+- Auditing/verifying drift (not fixing) → use `linux-security-auditing`
+- SSH-specific hardening → use `ssh-hardening`
+- Network/firewall rules → use `linux-firewall`
+- Container-level security → Kyverno pod security policies
+
 ## Kernel network parameters (sysctl)
 
 ```
@@ -245,3 +252,8 @@ commands to run unconditionally.
 - `ssh-hardening` — SSH-specific configuration in depth
 - `linux-security-auditing` — verifying and continuously checking this baseline
 - `linux-firewall` — network-layer controls, a separate and complementary layer
+
+## Related skills
+- `ssh-hardening` — SSH-specific hardening
+- `linux-security-auditing` — auditing existing config
+- `golden-ami-creation` — baking hardening into AMIs

@@ -19,6 +19,12 @@ Framework for identifying and executing instance right-sizing across <org>'s EKS
 
 Use when right-sizing EC2 instances, analyzing Compute Optimizer recommendations, transitioning instance families, or optimizing Karpenter NodePools. Covers CPU+memory utilization analysis, instance family transitions (m5→m6g→m7g), burstable vs general purpose decision tree, ScaleOps integration, and <org> Karpenter+Bottlerocket context.
 
+## When NOT to Use
+
+- Pod-level resource sizing (requests/limits) → ScaleOps handles automatically
+- Savings Plans purchase decisions → use `savings-plans-strategy`
+- Untagged cost attribution → use `untagged-resources-bulk-fix`
+
 ## Right-sizing signals
 
 | Signal | Source | Threshold |

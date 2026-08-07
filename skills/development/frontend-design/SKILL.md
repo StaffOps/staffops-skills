@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Design distinctive UI and avoid common AI-generated cliches.
+description: "Use when building or restyling a UI that needs a distinct identity — choosing color palettes, typeface pairings, layout concepts, and avoiding generic AI-generated clichés. Covers the brainstorm-critique process, accessibility contrast floor, token system, and mechanical self-check."
 version: 1.0.0
 author: Carlos Felipe Gomes
 license: MIT
@@ -36,6 +36,13 @@ below is a floor, not a substitute for a real audit on a regulated product.
 - **Not** when a design system, brand guideline, or component library
   already owns these decisions -- defer to it and use this skill only for
   gaps it leaves open
+
+## When NOT to Use
+
+- Project already has a complete design system (Material, Ant, Chakra) → follow it
+- Pure backend service with no UI
+- Data visualization / charting → use D3/Vega/Plotly patterns instead
+- Accessibility audit on a regulated product → engage a real auditor, not just this contrast floor
 
 ## The two-pass process: brainstorm, critique, then build
 
@@ -253,3 +260,8 @@ with the same intent as spacing and color.
   runnable artifacts -- it is prose-only)
 - WCAG 2.x contrast formulas: https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html
 - Playwright CLI screenshots: https://playwright.dev/docs/cli#take-screenshots
+
+## Related Skills
+
+- `python-cli-tools` — CLI with rich/textual TUI if the "frontend" is terminal-based
+- `diagram-patterns` — when the UI includes architecture or flow diagrams

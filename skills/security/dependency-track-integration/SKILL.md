@@ -331,3 +331,16 @@ curl -s "${DTRACK_URL}/api/v1/metrics/portfolio/current" \
 - `sbom-vulnerability-management` skill — full pipeline overview
 - `container-image-apko` skill — apko auto-generates SBOM
 - Vulnerability SLAs are enforced via policy severity thresholds (see Vulnerability policies above)
+
+## When NOT to use
+
+- For Trivy scanning and SBOM generation → use `sbom-vulnerability-management`
+- For Security Hub finding triage (AWS-level) → use `security-hub-findings-mgmt`
+- For DefectDojo integration (findings lifecycle) → use `sbom-vulnerability-management`
+
+## Related skills
+
+- `sbom-vulnerability-management` — SBOM generation + Trivy + DefectDojo lifecycle
+- `security-hub-findings-mgmt` — AWS Security Hub findings (parallel to DTrack)
+- `cosign-image-signing` — image signing in the same pipeline that generates SBOMs
+- `container-image-apko` — golden images whose SBOMs feed DependencyTrack

@@ -415,3 +415,16 @@ dependency state, and outdated repository keys in one pass.
 - `references/apt-internals.md` — pinning, sources.list.d, dpkg states
 - `references/netplan-schema.md` — Netplan YAML reference with worked examples
 - `scripts/apt-audit.sh` — package/update/reboot state in one report
+
+## When NOT to use
+
+- **RHEL/CentOS/Amazon Linux specifics** (yum, dnf, rpm) — this skill is Debian/Ubuntu focused.
+- **Kernel tuning or low-level performance** — see [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
+- **Container image builds** — for minimal images use apko/melange, not apt inside containers.
+
+## Related skills
+
+- [systemd-services](../linux/systemd-services/SKILL.md) — service management, journald.
+- [linux-filesystem](../linux/linux-filesystem/SKILL.md) — permissions, mounts, disk usage.
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — shell mechanics, pipes, find.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating admin tasks.

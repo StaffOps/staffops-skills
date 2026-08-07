@@ -172,3 +172,16 @@ job=vmagent            — self-monitoring
 - VictoriaMetrics scrape configs: https://docs.victoriametrics.com/sd_configs/
 - Local cache: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/VictoriaMetrics/docs`
 - Related: `multicluster-label-strategy`, `streaming-aggregation`
+
+## When NOT to use
+
+- For VictoriaMetrics cluster capacity/scaling → use `victoriametrics-troubleshooting`
+- For OTel Collector pipeline issues → use `otel-collector-multi-cluster`
+- For multi-cluster label alignment beyond kubelet → use `multicluster-label-strategy`
+
+## Related skills
+
+- `multicluster-label-strategy` — externalLabels and cross-cluster joins
+- `victoriametrics-troubleshooting` — vmagent scrape errors landing in VM
+- `streaming-aggregation` — reducing cardinality from kubelet histograms
+- `monitoring-stack-overview` — where kubelet scrape fits in the pipeline

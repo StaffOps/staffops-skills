@@ -1,23 +1,26 @@
 ---
 name: alerting-strategy
-description: "Design symptom-based alerts and cut fatigue."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [alerting, strategy, sre]
-    category: sre
-    related_skills: [error-budget-framework, alertmanager-slack-config, vmalert-configuration, runbook-authoring]
+description: "Use when designing new alert rules, reducing alert fatigue, routing alerts to correct channels, evaluating alert quality (MTTA/MTTR/false-positive rate), or deciding between symptom-based vs cause-based alerting. Covers multi-window burn rate, Alertmanager routing, silence/inhibit patterns, severity assignment decision tree, and weekly review cadence."
 ---
 # Alerting Strategy
 
 Philosophy and implementation patterns for effective alerting at <org>. Goal: every alert is actionable, routed correctly, and leads to resolution.
 
-## When to Use
+## When to use
 
-Use when designing alerting rules, reducing alert fatigue, configuring Alertmanager routing, or evaluating alert quality. Covers symptom-based alerting philosophy, severity levels, quality metrics (MTTA/MTTR), routing trees, silence/inhibit patterns, and <org>-specific Slack channel routing.
+- Designing a new alert rule for a service
+- Reducing alert fatigue (>10 alerts/day)
+- Deciding severity level for an alert
+- Routing alerts to the correct Slack channel
+- Evaluating if an existing alert should be tuned or deleted
+- Setting up silence for planned maintenance
+
+## When NOT to use
+
+- Implementing recording rules → use `error-budget-framework`
+- Writing the runbook linked from the alert → use `runbook-authoring`
+- Configuring VMAlert CRD specifics → use `vmalert-configuration`
+- Slack message template formatting → use `alertmanager-slack-config`
 
 ## Alert Philosophy
 
@@ -283,6 +286,76 @@ Design → Implement → Test → Deploy → Monitor → Tune → Retire
 6. **Tune**: adjust thresholds based on real data (quarterly review)
 7. **Retire**: delete alerts nobody acts on (30-day inactivity rule)
 
+## Steps: Designing a new alert
+
+1. **Identify the user-facing symptom** (not the internal cause)
+2. **Choose the SLI**: error rate, latency p99, or freshness
+3. **Use decision tree below** to pick severity + routing
+4. **Write the VMRule** with all 4 annotations (summary, description, runbook_url, grafana_url)
+5. **Write the runbook** BEFORE deploying the alert (see `runbook-authoring`)
+6. **Test**: inject failure or use `vmalert` dry-run to confirm it fires correctly
+7. **Deploy** via GitOps (ArgoCD → monitoring namespace)
+8. **Review after 1 week**: did it fire? Was it actionable? Tune or delete.
+
+## Decision tree: Should I alert on this?
+
+```
+WANT TO CREATE AN ALERT
+│
+├─ Does this directly reflect USER EXPERIENCE?
+│  ├─ YES (error rate, latency, availability) → SYMPTOM-BASED ✅
+│  │  └─ Use multi-window burn rate (see error-budget-framework)
+│  └─ NO (CPU, memory, queue depth, pod count)
+│     ├─ Will this cause USER IMPACT within minutes if unchecked?
+│     │  ├─ YES (disk 95%, cert expiry <24h) → PREDICTIVE ALERT ✅
+│     │  └─ NO (CPU 80%, memory 70%) → DASHBOARD PANEL ONLY ❌
+│     └─ Is there NO self-healing mechanism?
+│        ├─ YES (disk full = data loss, no autoscale) → ALERT ✅
+│        └─ NO (HPA/KEDA will scale, Karpenter adds nodes) → DON'T ALERT ❌
+│
+├─ SEVERITY DECISION:
+│  ├─ Customer-facing outage OR data loss risk? → critical
+│  ├─ Degraded (elevated errors, not full outage)? → warning
+│  ├─ Internal-only OR trend (days to impact)? → info
+│  └─ Useful context but no action needed? → dashboard only (no alert)
+│
+├─ ROUTING DECISION:
+│  ├─ critical + SLO burn → #eks-notifications-workload-prd (repeat: 15m)
+│  ├─ critical + infra → #eks-notifications (repeat: 30m)
+│  ├─ warning → #eks-notifications (repeat: 1h)
+│  ├─ info + team-specific → #eks-notifications-teams (repeat: 4h)
+│  └─ dev cluster → #eks-notifications-workload-dev (repeat: 8h)
+│
+└─ THRESHOLD DECISION:
+   ├─ For burn rate: use Google SRE multi-window (14.4x/6x/3x/1x)
+   ├─ For latency: p99 > 2× baseline for 5+ min
+   ├─ For error rate: > 10× baseline for 5+ min
+   ├─ For capacity: > 90% with no autoscaling
+   └─ For freshness: > 2× expected processing time
+```
+
+## Decision tree: Should I delete/tune this alert?
+
+```
+EXISTING ALERT REVIEW
+│
+├─ Has it fired in the last 30 days?
+│  ├─ NO → Candidate for deletion (unless seasonal/rare)
+│  └─ YES → Continue
+│
+├─ When it fired, did someone ACT on it?
+│  ├─ NO (ignored/acked without action) → DELETE or downgrade severity
+│  └─ YES → Continue
+│
+├─ Was the action EFFECTIVE (resolved the issue)?
+│  ├─ NO (action taken but didn't help) → REWRITE the runbook or the alert
+│  └─ YES → KEEP ✅
+│
+└─ Does it fire too often (>3×/week for same root cause)?
+   ├─ YES → Fix the underlying issue, not the alert threshold
+   └─ NO → Alert is healthy ✅
+```
+
 ## Anti-patterns
 
 - ❌ **Alert fatigue** — too many alerts desensitize responders. Target <10/day actionable.
@@ -306,3 +379,11 @@ Design → Implement → Test → Deploy → Monitor → Tune → Retire
 - <org> Alertmanager: `https://alertmanager.<org-domain>`
 - <org> Grafana: `https://grafana.<org-domain>`
 - Slack channels: `#eks-notifications`, `#eks-notifications-workload-prd`, `#eks-notifications-teams`
+
+## Related skills
+
+- `error-budget-framework` — multi-window burn rate recording + alerting rules
+- `runbook-authoring` — write the runbook BEFORE deploying the alert
+- `vmalert-configuration` — VMRule CRD specifics (extraArgs, evalDelay)
+- `alertmanager-slack-config` — Slack template formatting
+- `sla-slo-design` — SLO targets that drive burn rate thresholds

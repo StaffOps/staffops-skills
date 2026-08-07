@@ -282,3 +282,17 @@ docker run --rm -v $(pwd):/app -w /app python:3.11-slim sh -c \
 - Examples: `otel-telemetry-helper/python/example/`
 - OTel Python docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/python/`
 - Related skills: `telemetry-standard`, `grpc-distributed-tracing`, `dotnet-otel-patterns`
+
+## When NOT to use
+
+- .NET OTel instrumentation — use `dotnet-otel-patterns`
+- OTel Collector pipeline config (not app SDK) — use `otel-collector-multi-cluster`
+- Designing the gRPC service itself (not its tracing) — use `python-grpc-aio`
+
+## Related skills
+
+- `dotnet-otel-patterns` — equivalent patterns for .NET services
+- `grpc-distributed-tracing` — cross-language context propagation
+- `python-fastapi-patterns` — building the FastAPI service that gets instrumented
+- `python-grpc-aio` — the gRPC service that `GrpcAioInstrumentor` wraps
+- `telemetry-standard` — corporate helper library (`setup_telemetry`) that applies these patterns

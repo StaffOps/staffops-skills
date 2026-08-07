@@ -330,3 +330,16 @@ resource "aws_config_config_rule" "encrypted_volumes" {
 - `terraform-modules` skill — module patterns with built-in compliance
 - Mandatory tagging (`CostCenter`, `CostScope`, `CostProject`, `Environment`) is itself a compliance requirement — untagged resources block ownership tracing during an audit
 - Path: `<workspace>/03-TESTS/FTR/` — <org> FTR findings
+
+## When NOT to use
+
+- For day-to-day Security Hub finding triage → use `security-hub-findings-mgmt`
+- For container vulnerability scanning (Trivy/SBOM) → use `sbom-vulnerability-management`
+- For IAM role/policy design → use `iam-patterns`
+
+## Related skills
+
+- `security-hub-findings-mgmt` — ongoing finding management after FTR baseline
+- `sbom-vulnerability-management` — SBOM/Trivy scanning referenced in FTR evidence
+- `iam-patterns` — IAM least privilege patterns required for FTR
+- `golden-ami-creation` — CIS-hardened AMIs as FTR evidence

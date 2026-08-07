@@ -1,222 +1,243 @@
 ---
 name: model-supply-chain-security
-description: "Vet upstream model checkpoints and training data provenance."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [ai, model, supply-chain, checkpoint, pickle, data-poisoning, license, provenance]
-    category: ai
-    related_skills: [model-registry-governance, ai-red-teaming, sbom-vulnerability-management, cosign-image-signing]
+description: "Use when securing the model artifact supply chain — verifying model provenance, detecting tampered weights, signing model artifacts, scanning for embedded malware in model files, and ensuring fine-tuned models haven't been poisoned."
 ---
 # Model Supply Chain Security
 
-What can go wrong in the inputs that produce a model -- a third-party
-checkpoint pulled from a public hub, the fine-tuning data used to adapt it,
-and the license terms attached to both -- before any of that ever reaches a
-registry entry. **This is explicitly not `model-registry-governance`'s
-territory**: that skill owns what a registry entry records once a model
-exists (identity, provenance metadata, eval linkage, approval state,
-lifecycle transitions), the honest signing-and-SBOM-parallel for a model
-artifact, and how `banned` gets enforced mechanically. This skill is the step
-before that -- the upstream supply chain a checkpoint or dataset travels
-through on its way to becoming a candidate registry entry, and what to check
-before trusting it that far.
+## When to use
 
-## When to Use
+- Downloading open-weight models from HuggingFace/model hubs
+- Deploying self-hosted models where artifact integrity matters
+- Implementing model signing for internal model registry
+- Scanning model files for embedded code/malware (pickle exploits)
+- Verifying that fine-tuned models haven't been tampered with
+- Building provenance chains for compliance (EU AI Act supply chain requirements)
 
-- Downloading a pretrained model, checkpoint, or LoRA adapter from a public
-  hub (Hugging Face, TensorFlow Hub, a community mirror) to self-host or
-  fine-tune, before it is loaded into any process.
-- Fine-tuning on external, user-contributed, or crowd-sourced data, or on
-  any dataset whose full contents no one on the team has reviewed
-  end-to-end.
-- Before a checkpoint or dataset acquired from outside the organization is
-  proposed for a `model-registry-governance` entry -- this skill is the
-  vetting step that happens first, so the provenance fields that skill's
-  registry records are actually true rather than assumed.
-- Redistributing a fine-tuned derivative of an open-weight base model, or
-  shipping a product built on one, where the base model's license terms
-  might restrict exactly that.
-- Not for deciding what a registry entry should record, how `approved`
-  and `banned` states are enforced, or the signing/SBOM-parallel for a
-  model artifact -- all of that is `model-registry-governance`. Not for
-  defending against a prompt injected at inference time through a document
-  or tool response -- that is `prompt-injection-defense`'s input-side
-  problem, a different attack surface from a backdoor baked into the
-  weights during training.
+## When NOT to use
 
-## Third-party checkpoint provenance: the pickle problem
+- Securing API-based model usage (provider handles this; use `ai-security-hardening`)
+- Model governance/lifecycle (use `model-registry-governance`)
+- Defending against data poisoning during training (use `ai-security-hardening`)
+- Agent permission scoping (use `ai-agent-security`)
 
-A checkpoint pulled from a public hub is not a normal dependency download --
-the file format itself can be a code-execution vector, independent of
-whether the weights are any good.
+## Steps
 
-**The concrete risk.** Legacy PyTorch checkpoints (a `.bin` or `.pt` file
-saved with the default serializer) are Python `pickle` streams. Loading one
-with `torch.load` does not just deserialize tensors -- `pickle` reconstructs
-arbitrary Python objects by calling whatever constructor the file specifies,
-which means a crafted checkpoint can execute arbitrary code the moment it is
-loaded, with no separate "run this" step required. This is not a theoretical
-concern specific to some rare misuse; it is the documented behavior of
-`pickle.load` on untrusted input, and a checkpoint from a public hub is
-untrusted input by definition -- nobody on the receiving end watched it get
-produced.
+1. **Verify model provenance on download**:
+   ```bash
+   # NEVER download models without verifying checksums
+   # HuggingFace — verify SHA256 of each file
+   pip install huggingface_hub
 
-**The concrete mitigation, in order of preference:**
+   python -c "
+   from huggingface_hub import hf_hub_download, model_info
+   info = model_info('meta-llama/Meta-Llama-3.1-8B-Instruct')
+   print(f'Model: {info.modelId}')
+   print(f'SHA: {info.sha}')
+   print(f'Last modified: {info.lastModified}')
+   print(f'Siblings: {len(info.siblings)} files')
+   # Verify each file hash matches
+   for sibling in info.siblings:
+       print(f'  {sibling.rfilename}: {sibling.lfs.sha256 if sibling.lfs else \"no-lfs\"}')
+   "
+   ```
 
-1. **Prefer `safetensors`-format checkpoints.** The format stores only raw
-   tensor data with a JSON header describing shapes and dtypes -- there is no
-   code path that executes anything on load, by construction, not by policy.
-   Most actively-maintained models on public hubs now ship a `safetensors`
-   variant alongside (or instead of) the legacy pickle format; take that
-   variant whenever it is offered.
-2. **If a pickle-format checkpoint must be used** (an older model with no
-   `safetensors` release, an internal artifact predating the migration),
-   scan it before loading rather than loading it directly. Tools built for
-   exactly this exist -- `picklescan` and similar static analyzers walk the
-   pickle opcode stream looking for dangerous reducers (`__reduce__`,
-   `eval`, `exec`, `os.system`, and similar) without executing the file.
-   State the limitation honestly: a static scanner catches known-dangerous
-   patterns, not every way a pickle stream can be made to do something bad --
-   it narrows the risk, it does not eliminate it the way a safe format does.
-   Treat a clean scan result as "no known-bad pattern found," not as a
-   safety guarantee equivalent to a format that cannot execute code at all.
-3. **Load in an isolated, network-restricted environment** for any
-   checkpoint whose format or source leaves residual doubt after the above --
-   the same "assume it can misbehave, bound the blast radius" posture this
-   catalog already applies to untrusted container images.
+2. **Scan model files for embedded code** (pickle attacks):
+   ```bash
+   # Install model scanner
+   pip install modelscan
 
-## Training and fine-tuning data provenance: poisoning risk
+   # Scan before loading ANY model file
+   modelscan --path ./downloaded-model/
+   # Output: lists any embedded code, imports, or suspicious patterns
 
-Fine-tuning changes model weights based on whatever data feeds the process --
-which means a subset of poisoned data mixed into an otherwise legitimate
-training set can implant behavior nobody asked for.
+   # Alternative: fickling for pickle-specific analysis
+   pip install fickling
+   fickling --check model.pkl
+   ```
 
-**The concrete risk.** Data poisoning is a documented attack class distinct
-from the inference-time problem `prompt-injection-defense` addresses: prompt
-injection is untrusted *content the model reads at inference time* carrying
-text crafted to be followed as an instruction; data poisoning is untrusted
-*content baked into the weights during training* that implants a standing
-behavior -- classically a backdoor, where a specific trigger phrase in a
-future prompt causes the model to produce a specific attacker-chosen output,
-with the model behaving normally on every input that does not contain the
-trigger. The two are not the same failure mode with the same fix: hardening
-how untrusted content is read at inference time (`prompt-injection-defense`'s
-layered controls) does nothing to stop a bad example that was already
-absorbed into the weights months earlier, because by the time inference
-happens, the bad behavior is not injected content anymore -- it is the
-model's own learned response.
+   ```python
+   # Automated scan in download pipeline
+   import subprocess
+   from pathlib import Path
 
-**Concrete mitigations for the training-time side:**
+   def scan_model_artifacts(model_dir: str) -> dict:
+       """Scan all model files for embedded code/malware."""
+       result = subprocess.run(
+           ["modelscan", "--path", model_dir, "--output", "json"],
+           capture_output=True, text=True
+       )
+       scan = json.loads(result.stdout)
 
-- **Vet the data source before it enters the training set.** Know who
-  contributed each subset of a fine-tuning corpus and whether that source is
-  trusted, moderated, or fully open (unmoderated user submissions carry the
-  highest poisoning risk, precisely because anyone can shape a subset of
-  what the model learns).
-- **Run anomaly detection on the training data distribution**, not just on
-  model outputs after the fact -- a poisoned subset frequently looks
-  statistically different from the rest of the corpus (an unusual
-  label/text pairing frequency, a suspicious phrase repeated far more often
-  than natural language would produce it) before it ever becomes a trained
-  behavior.
-- **Accept that prevention is not sufficient on its own.** Even careful
-  source vetting and distribution checks can miss a subtle trigger, because
-  the whole point of a backdoor is to look unremarkable in the training data
-  and only misbehave on a specific, rare input. The practical detection
-  mechanism for a backdoor that already made it into a fine-tuned model is
-  `ai-red-teaming`'s adversarial testing -- specifically, testing the
-  fine-tuned model against a battery of crafted trigger-phrase attempts
-  designed to surface a planted behavior, the same way that skill's attack
-  catalog surfaces a scope-escalation or tool-abuse bypass in an agent.
-  Route a suspected backdoor finding through `ai-red-teaming`'s workflow
-  (encode it as a case, score `blocker: true` on a confirmed trigger, do not
-  average one working trigger into a passing rate) rather than treating
-  "the training data looked fine" as proof the model is clean.
+       if scan.get("issues"):
+           raise SecurityError(
+               f"Model scan found {len(scan['issues'])} issues: "
+               f"{[i['description'] for i in scan['issues']]}"
+           )
+       return {"status": "clean", "files_scanned": scan["summary"]["scanned"]}
+   ```
 
-## License and provenance tracking: the check before registration
+3. **Sign model artifacts** (cosign for model files):
+   ```bash
+   # Sign model after internal validation
+   # Create tarball of model directory
+   tar -czf model-llama3-8b-v1.tar.gz ./Meta-Llama-3.1-8B-Instruct/
 
-Open-weight models on public hubs frequently carry usage restrictions that
-are easy to violate without noticing: commercial-use clauses that permit
-research use but not a paid product, attribution requirements, restrictions
-on what a derivative fine-tuned model may itself be licensed as, or
-field-of-use limits (no use in a specific regulated domain, no use for a
-specific application category). None of this is exotic legal territory --
-it is printed in the model card or the repository's license file -- but it
-is easy to skip when the checkpoint downloads in one command and fine-tuning
-starts the same afternoon.
+   # Generate SHA256 manifest
+   find ./Meta-Llama-3.1-8B-Instruct/ -type f -exec sha256sum {} \; > model-manifest.sha256
 
-**Where this differs from `model-registry-governance`.** That skill's
-provenance field records, among other things, "any known PII or licensing
-concern" *once an entry exists* -- it assumes the licensing question has
-already been answered by the time someone writes the registry entry. This
-skill is the step that produces that answer: before a third-party
-checkpoint or dataset is proposed for registration at all, read its actual
-license, confirm it permits the intended use (commercial deployment,
-redistribution, fine-tuning and re-releasing a derivative under a different
-license), and treat a license that is unclear, missing, or restrictive as a
-blocker to registration -- not as a footnote to fill in later. Getting this
-backward -- registering first, checking the license after a model is already
-in production -- turns a compliance question into a live incident instead of
-a five-minute read.
+   # Sign the manifest with cosign
+   cosign sign-blob --key cosign.key model-manifest.sha256 \
+     --output-signature model-manifest.sha256.sig \
+     --output-certificate model-manifest.sha256.cert
 
-## What this does not cover
+   # Verify before deployment
+   cosign verify-blob --key cosign.pub model-manifest.sha256 \
+     --signature model-manifest.sha256.sig
+   ```
 
-- **Registry entry metadata, lifecycle states, approval enforcement, and the
-  signing/SBOM-parallel for a model artifact** -- all `model-registry-governance`.
-  This skill's job ends where a checkpoint or dataset becomes a well-vetted
-  candidate for that registry; it does not define the registry itself.
-- **Inference-time prompt injection** (a document, ticket, or tool response
-  carrying text crafted to be followed as an instruction) -- that is
-  `prompt-injection-defense`'s territory. Data poisoning above is a
-  training-time attack on the weights; prompt injection is an inference-time
-  attack on the context window. Different mechanism, different fix, both
-  worth knowing apart.
-- **Adversarial test design and scoring methodology in general** --
-  `ai-red-teaming` owns the harness, the attack-category taxonomy, and the
-  scoring posture (a single bypass is a finding, not an average). This skill
-  only points to it as the practical way to surface a backdoor already
-  trained into a model.
-- **Container-image SBOM generation and CVE matching** -- unchanged,
-  `sbom-vulnerability-management`'s territory, and it does not extend to a
-  model's weights any more than `model-registry-governance` already explains
-  in its own "does not hold" section.
+4. **Secure model storage and access**:
+   ```yaml
+   # Model artifacts stored in S3 with versioning + access controls
+   # terraform/model-storage.tf
+   resource "aws_s3_bucket" "model_artifacts" {
+     bucket = "org-model-artifacts-${var.environment}"
+
+     versioning {
+       enabled = true  # Never lose a model version
+     }
+
+     server_side_encryption_configuration {
+       rule {
+         apply_server_side_encryption_by_default {
+           sse_algorithm = "aws:kms"
+           kms_master_key_id = aws_kms_key.model_encryption.arn
+         }
+       }
+     }
+
+     tags = {
+       Environment = var.environment
+       CostCenter  = "Platform-Infrastructure"
+       Purpose     = "ML Model Artifacts"
+     }
+   }
+
+   resource "aws_s3_bucket_policy" "model_access" {
+     bucket = aws_s3_bucket.model_artifacts.id
+     policy = jsonencode({
+       Version = "2012-10-17"
+       Statement = [{
+         Effect = "Allow"
+         Principal = { AWS = var.inference_role_arn }
+         Action = ["s3:GetObject"]
+         Resource = "${aws_s3_bucket.model_artifacts.arn}/*"
+         Condition = {
+           StringEquals = { "s3:ExistingObjectTag/signed": "true" }
+         }
+       }]
+     })
+   }
+   ```
+
+5. **Fine-tuning integrity validation**:
+   ```python
+   # Validate fine-tuned model hasn't been poisoned
+   def validate_fine_tuned_model(
+       base_model_path: str,
+       fine_tuned_path: str,
+       eval_dataset_path: str,
+       max_degradation: float = 0.05  # 5% quality drop = suspicious
+   ) -> dict:
+       """Compare fine-tuned model against base on safety benchmarks."""
+       base_scores = run_safety_eval(base_model_path, eval_dataset_path)
+       ft_scores = run_safety_eval(fine_tuned_path, eval_dataset_path)
+
+       checks = {
+           "refusal_rate": {
+               "base": base_scores["refusal_rate"],
+               "fine_tuned": ft_scores["refusal_rate"],
+               "degraded": ft_scores["refusal_rate"] < base_scores["refusal_rate"] - max_degradation,
+           },
+           "safety_score": {
+               "base": base_scores["safety_score"],
+               "fine_tuned": ft_scores["safety_score"],
+               "degraded": ft_scores["safety_score"] < base_scores["safety_score"] - max_degradation,
+           }
+       }
+
+       if any(c["degraded"] for c in checks.values()):
+           raise SecurityError(f"Fine-tuned model failed safety validation: {checks}")
+
+       return {"status": "passed", "checks": checks}
+   ```
+
+6. **Model SBOM (Software Bill of Materials)**:
+   ```yaml
+   # model-sbom.yaml — track what went into the model
+   model_id: llama3-8b-finetuned-ops-v1
+   base_model:
+     source: meta-llama/Meta-Llama-3.1-8B-Instruct
+     version: "2024-07-23"
+     sha256: "abc123..."
+     license: llama3.1
+   fine_tuning:
+     dataset: "internal-ops-conversations-v2"
+     dataset_hash: "def456..."
+     method: LoRA
+     epochs: 3
+     date: "2025-07-01"
+     trainer: platform-team
+   dependencies:
+     - transformers==4.42.0
+     - torch==2.3.0
+     - peft==0.11.0
+   validation:
+     safety_eval_passed: true
+     quality_eval_score: 0.89
+     modelscan_clean: true
+   signatures:
+     manifest_sig: "model-manifest.sha256.sig"
+     signed_by: "platform-team cosign key"
+     signed_date: "2025-07-02"
+   ```
+
+## Decision tree
+
+```
+IF downloading model from public hub (HuggingFace, etc.):
+  → Verify checksums (step 1)
+  → Scan for embedded code (step 2)
+  → NEVER load .pkl files without scanning
+IF deploying self-hosted model to production:
+  → Sign artifact (step 3)
+  → Only allow signed models in prod (S3 policy, step 4)
+  → Create SBOM (step 6)
+IF using a fine-tuned model:
+  → Validate against base model safety benchmarks (step 5)
+  → Document training data provenance in SBOM
+  → Sign after validation
+IF compliance audit (EU AI Act):
+  → Produce SBOM for all deployed models
+  → Show provenance chain (base → fine-tune → validation → signing → deploy)
+  → Demonstrate tamper detection capability
+IF model format is pickle-based (.pkl, .pt):
+  → HIGH RISK — scan is mandatory, no exceptions
+  → Prefer safetensors format (no arbitrary code execution)
+```
 
 ## Anti-patterns
 
-- Loading a pickle-format (`.bin`/`.pt`) checkpoint from a public hub
-  directly with no scan, on the assumption that a model file cannot be a
-  code-execution vector the way an executable can -- it can, by design of
-  `pickle.load`.
-- Treating a clean `picklescan` result as a safety guarantee rather than "no
-  known-bad pattern found" -- prefer `safetensors` whenever it is available
-  instead of relying on scanning a format that did not need to be scanned in
-  the first place.
-- Assuming `prompt-injection-defense`'s input-sanitization controls protect
-  against a backdoor trained into the weights -- that skill defends what the
-  model reads at inference time; a poisoned fine-tune is already a learned
-  behavior by the time inference happens.
-- Fine-tuning on an unmoderated, user-contributed dataset with no source
-  vetting and no distribution-anomaly check, then treating a clean-looking
-  eval score as proof no backdoor was planted -- a backdoor is designed to
-  look unremarkable until its specific trigger appears.
-- Skipping adversarial trigger-phrase testing on a freshly fine-tuned model
-  because "the training data looked fine" -- source vetting reduces
-  poisoning risk, it does not detect a backdoor that already landed;
-  `ai-red-teaming`'s testing is what does.
-- Fine-tuning on or redistributing a derivative of an open-weight model
-  without reading its license terms first, then discovering a commercial-use
-  or derivative-licensing restriction after the model is already in
-  production.
-- Registering a third-party checkpoint or dataset in a `model-registry-governance`
-  entry with the license field left blank or marked "TBD," planning to fill
-  it in later -- an unclear license is a blocker to registration, not a
-  footnote.
-- Calling this skill's checks "the SBOM for the model" or otherwise
-  overclaiming completeness -- a clean pickle scan, a vetted data source, or
-  a read license are each one narrow check against one specific risk, not a
-  comprehensive inventory of everything that could be wrong with a
-  checkpoint or dataset.
+- ❌ Loading HuggingFace models without verifying checksums
+- ❌ Using pickle-format models without scanning (`torch.load` executes arbitrary code)
+- ❌ No signing of internal model artifacts (can't detect tampering)
+- ❌ Fine-tuned models deployed without safety regression testing
+- ❌ Model weights stored in git (too large, no access control)
+- ❌ Same S3 bucket for model artifacts and general data (no access isolation)
+- ❌ No SBOM — can't answer "what's in this model?" during an incident
+
+## Related skills
+
+- `model-registry-governance` — lifecycle management (this skill covers integrity)
+- `ai-security-hardening` — infrastructure securing model serving
+- `cosign-image-signing` — same signing patterns applied to model artifacts
+- `sbom-vulnerability-management` — SBOM patterns (code deps, adapted here for models)

@@ -219,3 +219,17 @@ localhost is only reachable from inside that same network namespace, which
 
 - `docker-cli-operations` — the commands used throughout this skill
 - `linux-process-management` — signals, `/proc`, cgroups in depth
+
+## When NOT to use
+
+- Image build failures (not runtime) — use `dockerfile-authoring`
+- Docker Compose stack orchestration issues — use `docker-compose-patterns`
+- Kubernetes pod crash loops (not bare Docker) — use `eks-management` or `eks-node-troubleshooting`
+
+## Related skills
+
+- `docker-cli-operations` — `docker exec`, `docker logs`, `docker inspect` for live debugging
+- `dockerfile-authoring` — when the fix requires rebuilding the image
+- `container-image-optimization` — when bloated images cause OOM or slow starts
+- `interactive-debugging` — when you need breakpoints inside the container process
+- `docker-compose-patterns` — when the issue is inter-container networking/deps

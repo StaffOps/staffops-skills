@@ -199,3 +199,16 @@ See related skill: `fluent-bit-vs-otel-logs`.
 - Kubernetes filter: `pipeline/filters/kubernetes.md`
 - Lua filter: `pipeline/filters/lua.md`
 - Tail input: `pipeline/inputs/tail.md`
+
+## When NOT to use
+
+- For choosing between Fluent Bit vs OTel Collector for logs → use `fluent-bit-vs-otel-logs`
+- For LogQL query syntax → use `loki-logql-patterns`
+- For OTel Collector pipeline config (traces/metrics) → use `otel-collector-multi-cluster`
+
+## Related skills
+
+- `fluent-bit-vs-otel-logs` — decision framework for which log collector to use
+- `loki-logql-patterns` — querying the logs once they land in Loki
+- `otel-collector-multi-cluster` — the parallel pipeline for traces/metrics
+- `monitoring-stack-overview` — full signal flow architecture

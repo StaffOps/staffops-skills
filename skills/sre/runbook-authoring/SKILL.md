@@ -1,23 +1,56 @@
 ---
 name: runbook-authoring
-description: "Write actionable operational runbooks."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [runbook, authoring, sre]
-    category: sre
-    related_skills: [incident-response-runbook, alerting-strategy, vmalert-configuration]
+description: "Use when writing an operational runbook for a new or existing alert. Every production alert MUST have a linked runbook. Provides copy-paste template with diagnostics/mitigation/verification/escalation sections, naming convention (alert → file path), VMRule annotation integration, and validation script to find alerts missing runbook_url."
 ---
 # Runbook Authoring
 
 Standards for writing and maintaining operational runbooks at <org>. Every production alert MUST have a linked runbook.
 
-## When to Use
+## When to use
 
-Use when writing operational runbooks for alerts and incident response at <org>. Covers structure, Alertmanager integration, diagnostics commands, mitigation steps, escalation, and copy-paste template.
+- Creating a new alert rule (write runbook FIRST)
+- Alert fired and responder didn't know what to do (runbook gap)
+- Post-mortem action item: "write runbook for scenario X"
+- Quarterly review: validating existing runbooks still work
+- Incident revealed that existing runbook was wrong/incomplete
+
+## When NOT to use
+
+- Designing the alert itself → use `alerting-strategy`
+- Investigating a live incident → use `root-cause-analysis`
+- Writing a post-mortem → use `post-mortem-templates`
+- Configuring VMAlert CRD → use `vmalert-configuration`
+
+## Steps: Writing a new runbook
+
+1. **Name it**: `kebab-case(AlertName)` → `directory/file.md`
+2. **Copy the template below** into the correct directory
+3. **Fill diagnostics**: commands that the on-call can copy-paste at 3 AM
+4. **Fill root causes**: top 3, ordered by likelihood (most common first)
+5. **Fill mitigation**: at least 2 options (fast+safe, and escalation)
+6. **Fill verification**: how to confirm the fix worked
+7. **Fill escalation**: who to contact with Slack handle
+8. **Link from VMRule**: add `runbook_url` annotation
+9. **Test**: run every command in the runbook to confirm it works
+10. **Commit** via MR to `gitlab.<org-domain>/devops/runbooks/`
+
+## Decision tree: Where does this runbook go?
+
+```
+ALERT NAME
+│
+├─ Is it an SLO burn rate alert?
+│  └─ slo/<alert-kebab>.md
+│
+├─ Is it infrastructure (nodes, storage, network, certs)?
+│  └─ infrastructure/<alert-kebab>.md
+│
+├─ Is it observability stack (VM, OTel, Tempo, Loki)?
+│  └─ observability/<alert-kebab>.md
+│
+└─ Is it a workload/service?
+   └─ workload/<service-name>-<symptom>.md
+```
 
 ## Runbook Purpose
 
@@ -381,3 +414,11 @@ kubectl get vmrules -n monitoring -o json | \
 - Alertmanager: `https://alertmanager.<org-domain>`
 - Grafana: `https://grafana.<org-domain>`
 - VictoriaMetrics read: `https://victoria-metrics-read.<org-domain>/select/0/prometheus`
+
+## Related skills
+
+- `alerting-strategy` — design the alert that links to this runbook
+- `vmalert-configuration` — VMRule CRD with `runbook_url` annotation
+- `incident-response-runbook` — full incident response process
+- `root-cause-analysis` — deep investigation when runbook doesn't cover the case
+- `alertmanager-slack-config` — Slack template that renders the runbook link

@@ -142,3 +142,8 @@ spec:
 - Docs: https://docs.victoriametrics.com/stream-aggregation/
 - Local cache: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/VictoriaMetrics/docs`
 - Related skill: `vm-cardinality-management`
+
+## Related skills
+- `vm-cardinality-management` — reducing cardinality before it explodes
+- `victoriametrics-tuning` — overall VM performance
+- `cardinality-explosion-finder` — detecting the problem streaming-agg prevents

@@ -69,3 +69,15 @@ grep -r "TraceQL" tempo/docs/
 ## Maintenance
 
 Repos should be refreshed periodically (`git pull`) to stay consistent with the versions running in the clusters.
+
+## When NOT to use
+
+- **Real-time upstream docs** — if local docs might be stale and you need the latest, use web search.
+- **Organization-internal documentation** — see mkdocs-conventions or the devops-docs portal.
+- **Code-level API references** — read the source or generated API docs directly.
+
+## Related skills
+
+- [mkdocs-conventions](../documentation/mkdocs-conventions/SKILL.md) — corporate docs authoring.
+- [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding how skills reference docs.
+- [skill-authoring](../workflows/skill-authoring/SKILL.md) — citing local docs in new skills.

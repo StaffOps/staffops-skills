@@ -382,3 +382,16 @@ Channels:
 - `helm-chart-app` skill — the app chart consumed by Applications
 - `helm-chart-cronworkflow` skill — CronWorkflow chart for batch jobs
 - `helmfile-k8s-addon` skill — cluster add-on management (including ArgoCD itself)
+
+## When NOT to use
+
+- For helmfile-based add-on management (not ArgoCD ApplicationSets) → use `helmfile-k8s-addon`
+- For Argo Rollouts progressive delivery → use `argo-rollouts-metrics` (apm-metrics)
+- For GitOps environment onboarding step-by-step → use `gitops-environment-onboard`
+
+## Related skills
+
+- `helmfile-applicationset` — helmfile + bedag/raw pattern for ApplicationSets
+- `gitops-environment-onboard` — onboarding a new service into GitOps
+- `helmfile-k8s-addon` — cluster add-on management via helmfile (alternative to ArgoCD apps-of-apps)
+- `helm-chart-app-bdc` — the app chart that ArgoCD deploys

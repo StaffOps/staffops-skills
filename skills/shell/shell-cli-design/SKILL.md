@@ -281,3 +281,16 @@ echo data | ./tool.sh -                # stdin path works
 - `scripts/parse-args.sh` — sourceable long/short option parser
 - `examples/mytool.sh` — complete tool with subcommands, TTY detection, config
 - `examples/mytool.bats` — interface tests for the above
+
+## When NOT to use
+
+- **Internal helper functions** that are never called by a user — skip the full CLI UX.
+- **Python CLIs** (click/typer/argparse) — different patterns; this skill is Bash-focused.
+- **Script internals** (loops, arrays, quoting) — see [bash-scripting](../shell/bash-scripting/SKILL.md).
+
+## Related skills
+
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — script body implementation.
+- [bash-error-handling](../shell/bash-error-handling/SKILL.md) — exit codes and cleanup.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — testing CLI argument combinations.
+- [conventional-commits](../workflows/conventional-commits/SKILL.md) — consistent naming in automation scripts.

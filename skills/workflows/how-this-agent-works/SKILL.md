@@ -203,3 +203,16 @@ When a learning is referenced 3+ times → promote it to steering (if it became 
 - **How to modify code**: `steering/dev-environment.md` (Docker-only) + `steering/code-quality.md`
 - **How to commit**: `steering/git-conventions.md`
 - **Full setup**: `README.md`, section "Automated Setup"
+
+## When NOT to use
+
+- **Using the agent** for normal tasks — you don't need to understand internals to ask questions.
+- **Writing skills for a different agent platform** — this is specific to the staffops architecture.
+- **Modifying steering rules** — read the relevant steering file directly instead.
+
+## Related skills
+
+- [skill-authoring](../workflows/skill-authoring/SKILL.md) — creating new skills for this agent.
+- [skill-eval-harness](../workflows/skill-eval-harness/SKILL.md) — testing skill behavior.
+- [session-handoff](../workflows/session-handoff/SKILL.md) — understanding context across sessions.
+- [spec-writing](../workflows/spec-writing/SKILL.md) — writing specs that the agent follows.

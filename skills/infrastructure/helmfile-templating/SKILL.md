@@ -283,3 +283,16 @@ Fix: validate gotmpl syntax — `helmfile -e dev write-values --output-file-temp
 - Sprig functions: http://masterminds.github.io/sprig/
 - Helm template guide: https://helm.sh/docs/chart_template_guide/
 - Related skills: `vmalert-configuration`, `alertmanager-slack-config`
+
+## When NOT to use
+
+- For helmfile environment/release structure → use `helmfile-k8s-addon`
+- For VMAlert-specific escaping examples → use `vmalert-configuration`
+- For Alertmanager template escaping → use `alertmanager-slack-config`
+
+## Related skills
+
+- `helmfile-k8s-addon` — helmfile structure and multi-environment patterns
+- `vmalert-configuration` — VMAlert `external.alert.source` escaping case study
+- `alertmanager-slack-config` — Alertmanager template Go escaping
+- `argocd-patterns` — when helmfile output feeds ArgoCD

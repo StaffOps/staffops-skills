@@ -335,3 +335,16 @@ cat /sys/fs/cgroup/system.slice/myapp.service/memory.events
 - `references/cgroups-v2.md` — controllers, limits, and systemd mapping
 - `scripts/proc-inspect.sh` — one-shot diagnostic report for a PID
 - `examples/graceful-kill.sh` — SIGTERM-then-SIGKILL escalation with timeout
+
+## When NOT to use
+
+- **Systemd unit lifecycle** (enable/disable/restart services) — see [systemd-services](../linux/systemd-services/SKILL.md).
+- **Container process namespaces** — use container runtime docs or Kubernetes debugging tools.
+- **Performance root-cause analysis** (CPU flamegraphs, scheduler latency) — see [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
+
+## Related skills
+
+- [systemd-services](../linux/systemd-services/SKILL.md) — managing services, timers, journald.
+- [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) — CPU/mem/IO profiling.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating process management in scripts.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — when a runaway process causes an outage.

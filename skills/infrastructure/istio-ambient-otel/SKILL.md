@@ -287,3 +287,16 @@ Only bypass when you have a concrete reason (e.g., `k8sattributes` IP-based pod 
 - Istio Ambient docs: https://istio.io/latest/docs/ambient/
 - Gateway API: https://gateway-api.sigs.k8s.io/
 - Related skills: `istio-ambient-debugging`, `otel-collector-multi-cluster`, `grpc-distributed-tracing`
+
+## When NOT to use
+
+- For debugging Istio Ambient failures (400s, SNAT, routing) → use `istio-ambient-debugging`
+- For OTel Collector pipeline internals → use `otel-collector-multi-cluster`
+- For Istio metrics and mesh telemetry → use `istio-ambient-metrics` (apm-metrics)
+
+## Related skills
+
+- `istio-ambient-debugging` — troubleshooting unexpected errors in ambient mesh
+- `otel-collector-multi-cluster` — the collector pipeline that uses these ServiceEntries
+- `multicluster-label-strategy` — label alignment for cross-cluster telemetry
+- `monitoring-stack-overview` — architectural context

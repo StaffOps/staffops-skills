@@ -216,3 +216,15 @@ touched by `apply`.
   find-duplicates, plan, apply, and undo
 - Related: `pdf-operations` (same validation-gate house style, applied to a
   different file format)
+
+## When NOT to use
+
+- **Code project structure** (src/, tests/, lib/) — that's software architecture, not file organization.
+- **Git repository layout** — see project-specific conventions.
+- **Cloud storage organization** (S3 prefixes, bucket structure) — different concerns.
+
+## Related skills
+
+- [linux-filesystem](../linux/linux-filesystem/SKILL.md) — permissions, mounts, disk usage.
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — find, mv, and batch file operations.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating file organization tasks.

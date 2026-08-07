@@ -373,6 +373,19 @@ models/
 └── metadata.json                   # active versions, training timestamps
 ```
 
+## When NOT to use
+
+- Designing detection rules and thresholds (not ML) — use `anomaly-detection-deep`
+- Building the gRPC service that hosts the ML model — use `python-grpc-aio`
+- OTel instrumentation of ML inference — use `python-otel-patterns`
+
+## Related skills
+
+- `anomaly-detection-deep` — detection rule design (static, EWMA, Z-Score) that complements ML
+- `python-grpc-aio` — async gRPC server hosting Prophet/IF models
+- `python-otel-patterns` — instrumenting ML inference with spans
+- `agent-platform-design` — autonomous agents that consume ML predictions
+
 ## Anti-patterns
 
 - ❌ **Prophet on multivariate data** — it's univariate only; use one model per metric or switch to IF

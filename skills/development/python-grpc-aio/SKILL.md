@@ -372,6 +372,20 @@ docker run --rm -v $(pwd)/python:/app -w /app python:3.11-slim sh -c "
 "
 ```
 
+## When NOT to use
+
+- Building a REST/HTTP service — use `python-fastapi-patterns`
+- Cross-language trace propagation design — use `grpc-distributed-tracing`
+- OTel instrumentation (GrpcAioInstrumentor details) — use `python-otel-patterns`
+
+## Related skills
+
+- `python-fastapi-patterns` — when the contract should be REST, not gRPC
+- `python-otel-patterns` — `GrpcAioInstrumentor` monkey-patching and span details
+- `grpc-distributed-tracing` — cross-language context propagation
+- `go-patterns` — Go gRPC counterpart for the same service mesh
+- `prophet-isolation-forest-patterns` — ML service built on top of this gRPC scaffold
+
 ## Anti-patterns
 
 ### ❌ Missing await on RPC calls

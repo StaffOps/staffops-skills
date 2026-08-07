@@ -245,3 +245,16 @@ guess rather than a comparison.
 
 - `linux-process-management` — per-process `/proc` detail, cgroup limits
 - `linux-filesystem` — disk space and inode exhaustion specifically
+
+## When NOT to use
+
+- **Application-level profiling** (flame graphs, heap dumps) — use language-specific APM tools or Pyroscope.
+- **Network latency between hosts** — see [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
+- **Kubernetes pod resource issues** — start with k8s-workload-metrics or kubectl top; this skill is for bare-metal/VM Linux.
+
+## Related skills
+
+- [linux-process-management](../linux/linux-process-management/SKILL.md) — cgroups, nice, signals, OOM killer.
+- [disk-and-memory-issues](../troubleshooting/disk-and-memory-issues/SKILL.md) — focused troubleshooting for full disk and OOM.
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — composing diagnostic one-liners.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — structured first-response to production incidents.

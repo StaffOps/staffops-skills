@@ -218,3 +218,17 @@ Fix: re-check the triple-template escaping chain.
 - Local cache: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/VictoriaMetrics/docs/vmalert*`
 - vm-operator CRD reference: https://docs.victoriametrics.com/operator/api/
 - Related skills: `alertmanager-slack-config`, `helmfile-templating`
+
+## When NOT to use
+
+- For Alertmanager routing/Slack templates → use `alertmanager-slack-config`
+- For alerting philosophy and severity design → use `alerting-strategy`
+- For VictoriaMetrics cluster health issues → use `victoriametrics-troubleshooting`
+- For helmfile triple-template escaping beyond vmalert → use `helmfile-templating`
+
+## Related skills
+
+- `alertmanager-slack-config` — routing alerts from VMAlert to Slack
+- `alerting-strategy` — when/why to alert (symptom-based design)
+- `victoriametrics-troubleshooting` — VM cluster behind the queries
+- `helmfile-templating` — escaping `$labels`/`$value` in helmfile context

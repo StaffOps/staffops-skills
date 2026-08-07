@@ -302,6 +302,19 @@ docker run --rm -v $(pwd)/dotnet:/src -w /src \
   mcr.microsoft.com/dotnet/sdk:8.0 dotnet test
 ```
 
+## When NOT to use
+
+- Adding OTel tracing to async workers — use `dotnet-otel-patterns`
+- Designing gRPC service contracts — use `grpc-distributed-tracing`
+- Managing secrets in configuration — use `secrets-management-dotnet`
+
+## Related skills
+
+- `dotnet-otel-patterns` — `StartRootActivity` and span management in async workers
+- `grpc-distributed-tracing` — context propagation in .NET gRPC clients/servers
+- `secrets-management-dotnet` — loading secrets into IOptions for async services
+- `go-patterns` — equivalent async patterns in Go (goroutines, channels)
+
 ## Anti-patterns
 
 ### ❌ async void (exception black hole)

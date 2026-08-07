@@ -377,3 +377,17 @@ Always use the narrowest time range possible. Loki scans chunks sequentially —
 - LogQL: https://grafana.com/docs/loki/latest/query/
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/loki/docs`
 - Related skills: `fluent-bit-loki-pipeline`, `grafana-cross-signal-correlation`, `monitoring-stack-overview`
+
+## When NOT to use
+
+- For Fluent Bit pipeline configuration (labels, parsing) → use `fluent-bit-loki-pipeline`
+- For choosing between Fluent Bit and OTel for logs → use `fluent-bit-vs-otel-logs`
+- For trace correlation from logs → use `grafana-cross-signal-correlation`
+- For PromQL/MetricsQL queries → use `victoriametrics-troubleshooting`
+
+## Related skills
+
+- `fluent-bit-loki-pipeline` — how logs get into Loki (labels, structured metadata)
+- `grafana-cross-signal-correlation` — linking log lines to traces/metrics
+- `tempo-traceql-patterns` — querying traces that logs reference
+- `monitoring-stack-overview` — where Loki sits in the pipeline

@@ -277,3 +277,15 @@ touching `eval_harness.py`.
   `assertion_analysis`.** A candidate can beat the weighted release gate
   while every discriminating assertion is masked by non-discriminating ones
   padding the average — read the flagged assertions, not just the verdict.
+
+## When NOT to use
+
+- **Unit testing code** — this tests skill behavior, not application code. Use pytest/jest.
+- **Manual skill review** — if you just need a quick read, open the SKILL.md directly.
+- **CI pipeline testing** — the harness is for skill quality, not build validation.
+
+## Related skills
+
+- [skill-authoring](../workflows/skill-authoring/SKILL.md) — creating the skills being evaluated.
+- [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding skill loading.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — testing patterns for shell-based harness scripts.

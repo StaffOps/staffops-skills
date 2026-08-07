@@ -210,3 +210,16 @@ just the client-side error.
   failure fits into a broader connection diagnosis
 - `tcp-ip-fundamentals` — confirming the TCP handshake completes before
   blaming a hang on TLS
+
+## When NOT to use
+
+- **Certificate provisioning/lifecycle** (cert-manager, Let's Encrypt, ACME) — that's infra automation, not debugging.
+- **Application auth issues** (OAuth, JWT, API keys) — TLS is the transport layer, not the application auth layer.
+- **Network routing problems** unrelated to encryption — see [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
+
+## Related skills
+
+- [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md) — verifying connectivity before TLS enters the picture.
+- [dns-troubleshooting](../networking/dns-troubleshooting/SKILL.md) — SNI/hostname mismatches often start as DNS issues.
+- [tcp-ip-fundamentals](../networking/tcp-ip-fundamentals/SKILL.md) — understanding the handshake at the transport layer.
+- [linux-firewall](../networking/linux-firewall/SKILL.md) — when port 443 is blocked or NAT interferes.

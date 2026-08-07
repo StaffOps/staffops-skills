@@ -219,3 +219,17 @@ grafana:
 - Tempo datasource: https://grafana.com/docs/grafana/latest/datasources/tempo/
 - Spanmetrics connector: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/{tempo,loki,pyroscope}/docs`
+
+## When NOT to use
+
+- For TraceQL query syntax → use `tempo-traceql-patterns`
+- For LogQL query syntax → use `loki-logql-patterns`
+- For Prometheus/VM query patterns → use `victoriametrics-troubleshooting`
+- For Pyroscope flame graph usage → use `pyroscope-profiling-patterns`
+
+## Related skills
+
+- `tempo-traceql-patterns` — querying traces that exemplars link to
+- `loki-logql-patterns` — querying logs from tracesToLogs links
+- `pyroscope-profiling-patterns` — profile correlation from spans
+- `monitoring-stack-overview` — overall signal flow architecture

@@ -285,3 +285,16 @@ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet t
 - Sample apps with all patterns: `otel-telemetry-helper/dotnet/example/`
 - OTel .NET docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/dotnet/`
 - Related skills: `telemetry-standard`, `grpc-distributed-tracing`, `python-otel-patterns`
+
+## When NOT to use
+
+- Python OTel instrumentation — use `python-otel-patterns`
+- Collector pipeline configuration (not SDK) — use `otel-collector-multi-cluster`
+- Cross-language gRPC trace propagation design — use `grpc-distributed-tracing`
+
+## Related skills
+
+- `python-otel-patterns` — equivalent OTel patterns for Python services
+- `grpc-distributed-tracing` — cross-language trace context propagation
+- `dotnet-async-patterns` — async code that the OTel spans wrap
+- `telemetry-standard` — corporate OTel helper library that applies these patterns

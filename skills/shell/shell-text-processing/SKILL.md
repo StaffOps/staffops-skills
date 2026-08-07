@@ -252,3 +252,16 @@ cmd | od -c | head            # reveal invisible characters (\r, \t, NUL)
 - `references/sed.md` — addressing, hold space, multi-line editing
 - `references/gnu-vs-bsd.md` — portability differences across all these tools
 - `examples/log-report.sh` — multi-stage report from a raw access log
+
+## When NOT to use
+
+- **Structured data** (JSON, YAML, XML) with nested objects — use jq/yq/xmlstarlet, not regex.
+- **Binary file manipulation** — use dedicated tools (xxd, file, binutils).
+- **Complex data pipelines** where Python/pandas is clearer and more maintainable.
+
+## Related skills
+
+- [linux-command-line](../linux/linux-command-line/SKILL.md) — pipes, redirection, find/xargs.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — integrating text processing into scripts.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — applying text tools to log files.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — validating text pipelines.

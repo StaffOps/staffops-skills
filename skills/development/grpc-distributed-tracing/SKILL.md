@@ -283,3 +283,17 @@ For Python: similar pattern, generate code via `python -m grpc_tools.protoc` fro
 - otelgrpc (Go): https://pkg.go.dev/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/`
 - Related skills: `dotnet-otel-patterns`, `python-otel-patterns`, `go-patterns`, `istio-ambient-otel`
+
+## When NOT to use
+
+- Language-specific async/concurrency patterns — use `dotnet-async-patterns`, `python-grpc-aio`, or `go-patterns`
+- OTel Collector pipeline configuration — use `otel-collector-multi-cluster`
+- Istio ambient mesh trace propagation — use `istio-ambient-debugging`
+
+## Related skills
+
+- `dotnet-otel-patterns` — .NET-specific span management and `StartRootActivity`
+- `python-otel-patterns` — Python-specific `GrpcAioInstrumentor` patterns
+- `go-patterns` — Go gRPC interceptors and context propagation
+- `python-grpc-aio` — building the async Python gRPC server that carries traces
+- `istio-ambient-otel` — mesh-level trace propagation through ztunnel

@@ -166,3 +166,16 @@ For most <org> workloads, both are fine. Performance is rarely the deciding fact
 - OTel filelog receiver: `opentelemetry.io/content/en/docs/collector/configuration.md`
 - k8sattributesprocessor: `data/collector/processors/k8sattributes.yml`
 - Related skill: `fluent-bit-loki-pipeline`
+
+## When NOT to use
+
+- For Fluent Bit configuration details (labels, multiline, filters) → use `fluent-bit-loki-pipeline`
+- For OTel Collector pipeline topology → use `otel-collector-multi-cluster`
+- For querying logs already in Loki → use `loki-logql-patterns`
+
+## Related skills
+
+- `fluent-bit-loki-pipeline` — detailed Fluent Bit config for Loki output
+- `otel-collector-multi-cluster` — OTel Collector topology and pipeline design
+- `loki-logql-patterns` — LogQL queries after logs are ingested
+- `monitoring-stack-overview` — how both pipelines coexist

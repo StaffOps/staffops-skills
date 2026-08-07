@@ -17,7 +17,34 @@ How to generate and maintain API documentation at <org>.
 
 ## When to Use
 
-API documentation generation from OpenAPI/proto specs. Use when documenting REST/gRPC APIs, generating client SDKs, integrating API docs into MkDocs sites, or designing API contracts. Covers OpenAPI 3.x, protobuf docs, swagger-ui patterns, ReDoc, gRPC-Gateway.
+- Documenting REST APIs (OpenAPI 3.x spec)
+- Generating docs from protobuf definitions (gRPC)
+- Integrating API docs into MkDocs sites
+- Designing API contracts (spec-first or code-first)
+
+## When NOT to Use
+
+- Internal event schemas → use AsyncAPI instead
+- Database schemas → ER diagrams or dedicated DB docs
+- CLI tools → use `--help` + man pages
+- GraphQL → use GraphiQL or spectaql tooling
+
+## OpenAPI 3.x Template (copy-paste ready)
+
+See `references/openapi-example.yaml` — a complete, valid OpenAPI 3.1 spec with:
+- Auth (Bearer JWT), pagination, error responses
+- Reusable schemas, $ref patterns
+- Multiple server environments (PRD/HML/local)
+- Health endpoint
+
+```bash
+# Validate the spec
+docker run --rm -v $(pwd):/spec redocly/cli lint /spec/api/openapi.yaml
+
+# Generate interactive docs
+docker run --rm -v $(pwd):/spec -p 8080:80 swaggerapi/swagger-ui
+# Open http://localhost:8080
+```
 
 ## Decision matrix
 
@@ -406,3 +433,8 @@ Document EVERY non-2xx response (404, 400, 500). Otherwise clients can't handle 
 - ReDoc: https://github.com/Redocly/redoc
 - Swagger UI: https://swagger.io/tools/swagger-ui/
 - Related: `markdown-docs`, `mkdocs-conventions`, `grpc-distributed-tracing`
+
+## Related skills
+- `mkdocs-conventions` — hosting generated API docs
+- `diagram-patterns` — architecture diagrams to complement API docs
+- `markdown-docs` — writing supplementary guides

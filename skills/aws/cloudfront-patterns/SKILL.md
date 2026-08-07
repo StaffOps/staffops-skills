@@ -408,6 +408,19 @@ curl -I https://portal.<org-domain>/assets/main.js
 # Look for: X-Cache: Hit from cloudfront
 ```
 
+## When NOT to use
+
+- Configuring DNS records or routing policies — use `route53-patterns`
+- Managing ALB/NLB without CloudFront in front — use `eks-management`
+- Analyzing CDN cost spikes — use `cost-explorer`
+
+## Related skills
+
+- `route53-patterns` — DNS zones and health checks that front CloudFront distributions
+- `iam-patterns` — OAC/OAI role permissions for S3 origin access
+- `security-hub-patterns` — compliance findings related to CDN misconfigurations
+- `cost-explorer` — analyzing CloudFront data transfer costs
+
 ## Anti-patterns
 
 - ❌ **Cache invalidation overuse** — invalidating `/*` on every deploy; use versioned filenames instead

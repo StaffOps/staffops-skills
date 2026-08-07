@@ -387,6 +387,19 @@ aws route53 get-health-check-status --health-check-id HC123
 kubectl logs -n external-dns -l app.kubernetes.io/name=external-dns --tail=50
 ```
 
+## When NOT to use
+
+- Configuring CloudFront distribution origins — use `cloudfront-patterns`
+- Kubernetes ExternalDNS record sync issues — use `eks-management`
+- DNS resolution debugging from inside pods — use `container-runtime-debugging`
+
+## Related skills
+
+- `cloudfront-patterns` — when DNS points to a CloudFront distribution
+- `eks-management` — ExternalDNS controller managing Route53 records
+- `security-hub-patterns` — DNS-related compliance findings
+- `cost-explorer` — Route53 query volume cost
+
 ## Anti-patterns
 
 - ❌ **TTL too low (<60s)** — increases query costs and Route 53 charges; use 300s minimum for stable records

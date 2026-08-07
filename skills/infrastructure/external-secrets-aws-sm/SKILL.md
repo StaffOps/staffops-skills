@@ -260,3 +260,16 @@ Examples: `dpm/people-api/prd`, `dcp/receita-process/dev`, `devops/harbor/prd`
 
 - `helm-chart-app` skill — externalSecret section in chart values
 - `iam-patterns` skill — IRSA role design for ESO
+
+## When NOT to use
+
+- For IAM role design (IRSA) that grants ESO access to Secrets Manager → use `iam-patterns`
+- For Helm chart secret references (`externalSecrets:` in values) → use `helm-chart-app-bdc`
+- For secret rotation at the AWS level → use AWS docs / `secrets-management-dotnet` for app-side
+
+## Related skills
+
+- `iam-patterns` — IRSA roles that ESO ServiceAccounts assume
+- `helm-chart-app-bdc` — how apps reference ExternalSecrets in Helm values
+- `secrets-management-dotnet` — .NET app-side secret consumption patterns
+- `helmfile-k8s-addon` — deploying ESO itself as a cluster add-on

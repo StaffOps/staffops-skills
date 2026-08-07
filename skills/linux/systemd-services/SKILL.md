@@ -380,3 +380,16 @@ unit and reports exactly where it fails.
 - `scripts/unit-doctor.sh` — verify, reload, start, and diagnose a unit
 - `examples/webapp.service` — a complete hardened unit with resource limits
 - `examples/webapp-backup.timer` — a timer/service pair with `Persistent=true`
+
+## When NOT to use
+
+- **Container orchestration** (Docker, Kubernetes) — systemd manages the host, not pods.
+- **One-off commands or cron jobs** that don't need service lifecycle — a simple cron entry or systemd timer suffices.
+- **Process internals** (signals, cgroups, scheduling) — see [linux-process-management](../linux/linux-process-management/SKILL.md).
+
+## Related skills
+
+- [linux-process-management](../linux/linux-process-management/SKILL.md) — signals, ps, cgroups.
+- [ubuntu-administration](../linux/ubuntu-administration/SKILL.md) — package management, system config.
+- [log-analysis](../troubleshooting/log-analysis/SKILL.md) — reading journald output.
+- [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — when a crashed service triggers an incident.

@@ -307,3 +307,15 @@ document as something that stays out of git history.
 - pytesseract: https://github.com/madmaze/pytesseract
 - pypdf docs: https://pypdf.readthedocs.io/
 - Python `csv` module: https://docs.python.org/3/library/csv.html
+
+## When NOT to use
+
+- **Accounting/bookkeeping logic** — this organizes files, not financial calculations.
+- **Expense approval workflows** — use your finance platform, not file manipulation.
+- **Non-invoice documents** — see [file-organizer](../documentation/file-organizer/SKILL.md) for general file management.
+
+## Related skills
+
+- [file-organizer](../documentation/file-organizer/SKILL.md) — general file organization patterns.
+- [pdf-operations](../documentation/pdf-operations/SKILL.md) — extracting data from PDF invoices.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating batch invoice processing.

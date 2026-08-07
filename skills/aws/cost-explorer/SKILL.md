@@ -393,3 +393,16 @@ AWS Cost Anomaly Detection (uses ML) — free, no setup beyond enabling.
 - FinOps Foundation: https://www.finops.org/
 - Trusted Advisor: https://aws.amazon.com/premiumsupport/technology/trusted-advisor/
 - Related: `eks-management`, `iam-patterns`
+
+## When NOT to use
+
+- Right-sizing EC2/EKS instances — use `ec2-rightsizing-patterns`
+- Evaluating Savings Plans purchases — use `savings-plans-strategy`
+- Fixing untagged resources that break cost allocation — use `untagged-resources-bulk-fix`
+
+## Related skills
+
+- `ec2-rightsizing-patterns` — when you've found expensive instances and need resize guidance
+- `savings-plans-strategy` — when cost data suggests commitment-based discounts
+- `untagged-resources-bulk-fix` — when CUR shows unallocated spend due to missing tags
+- `eks-management` — when cost spikes come from EKS node provisioning

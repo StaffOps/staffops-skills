@@ -337,3 +337,16 @@ Remember: PRD keeps only 10% probabilistic + 100% errors/high-latency. Queries i
 - TraceQL: https://grafana.com/docs/tempo/latest/traceql/
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/tempo/docs`
 - Related skills: `grafana-cross-signal-correlation`, `otel-collector-multi-cluster`, `monitoring-stack-overview`
+
+## When NOT to use
+
+- For Tempo operational issues (Kafka, partitions, OOM) → use `tempo-v3-kafka-operations`
+- For log queries correlated with traces → use `loki-logql-patterns`
+- For profile correlation from spans → use `pyroscope-profiling-patterns`
+
+## Related skills
+
+- `tempo-v3-kafka-operations` — Tempo v3 operational health and migration
+- `grafana-cross-signal-correlation` — exemplar and tracesToLogs/Metrics config
+- `loki-logql-patterns` — LogQL for logs linked from traces
+- `monitoring-stack-overview` — where Tempo sits in the signal pipeline

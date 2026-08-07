@@ -315,3 +315,16 @@ aws eks list-clusters --region us-east-1
 - Karpenter: https://karpenter.sh/
 - AWS Best Practices: https://aws.github.io/aws-eks-best-practices/
 - Related: `cost-explorer`, `iam-patterns`
+
+## When NOT to use
+
+- Debugging a specific pod/container crash — use `container-runtime-debugging`
+- Configuring IAM roles for IRSA (policy design) — use `iam-patterns`
+- Node-level OS troubleshooting (kernel, filesystem) — use `eks-node-troubleshooting`
+
+## Related skills
+
+- `eks-node-troubleshooting` — when the issue is node-level (kubelet, containerd, OS)
+- `iam-patterns` — when the problem is IRSA trust policy or role permissions
+- `karpenter-consolidation` — when nodes aren't consolidating as expected
+- `cost-explorer` — when investigating EKS compute spend

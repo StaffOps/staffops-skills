@@ -325,3 +325,16 @@ for the full workflow once you decide it's warranted.
 - **Editing a shared file like a category's `DESCRIPTION.md` from a stale
   read.** Re-read it immediately before your edit; another concurrent
   change may have already landed.
+
+## When NOT to use
+
+- **Writing steering rules** — steering is always-active; skills are on-demand. Different format.
+- **Documenting a one-off procedure** — use a runbook or HOW-TO, not a skill.
+- **Platform-specific agent config** (MCP, agent JSON) — that's agent setup, not skill content.
+
+## Related skills
+
+- [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding where skills fit.
+- [skill-eval-harness](../workflows/skill-eval-harness/SKILL.md) — testing newly authored skills.
+- [skill-share](../workflows/skill-share/SKILL.md) — distributing skills across agents.
+- [markdown-docs](../documentation/markdown-docs/SKILL.md) — writing well-structured markdown.

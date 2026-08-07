@@ -457,3 +457,16 @@ Three sources, one aggregator (DefectDojo), one ticket system (Jira).
 - ❌ **Remediate in console then mark resolved** — Terraform drift, next `plan` reverts fix
 - ❌ **Single person triage** — bus factor 1, no coverage during PTO
 - ❌ **Findings older than 6 months in NEW** — indicates broken process, not low priority
+
+## When NOT to use
+
+- For AWS FTR preparation (one-time compliance review) → use `aws-ftr-compliance`
+- For container vulnerability management (Trivy/SBOM) → use `sbom-vulnerability-management`
+- For IAM least-privilege remediation patterns → use `iam-patterns`
+
+## Related skills
+
+- `aws-ftr-compliance` — FTR baseline that Security Hub findings support
+- `sbom-vulnerability-management` — container-level vulnerability lifecycle
+- `dependency-track-integration` — software composition analysis parallel to Security Hub
+- `iam-patterns` — remediating IAM-related findings

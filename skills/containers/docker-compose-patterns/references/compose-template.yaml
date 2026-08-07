@@ -1,0 +1,93 @@
+# Production-ready compose.yaml template
+# Usage: docker compose up -d
+# Health: docker compose ps --format "table {{.Name}}\t{{.Status}}"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime            # multi-stage target
+    image: myapp:${TAG:-latest}
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_NAME=myapp
+      - ENVIRONMENT=LOCAL
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - REDIS_HOST=redis
+    env_file:
+      - .env.local               # secrets here, NOT in environment:
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+    volumes:
+      - redis-data:/data
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d myapp"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.115.0
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel-config.yaml:/etc/otel/config.yaml:ro
+    ports:
+      - "4317:4317"    # gRPC
+      - "4318:4318"    # HTTP
+      - "8888:8888"    # Prometheus self-metrics
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+
+volumes:
+  redis-data:
+  pgdata:
+
+# ─── Useful commands ───────────────────────────────────────────
+# docker compose up -d --build        # rebuild and start
+# docker compose logs -f app          # tail app logs
+# docker compose exec app sh          # shell into running container
+# docker compose down -v              # stop + remove volumes
+# docker compose config               # validate and render final yaml

@@ -230,3 +230,16 @@ instead. These map directly onto cgroup v2 `memory.max` — see
 - `container-runtime-debugging` — deeper diagnosis when a container misbehaves
 - `docker-compose-patterns` — orchestrating multiple containers together
 - `linux-process-management` — signals, `/proc`, and cgroups underneath these commands
+
+## When NOT to use
+
+- Multi-container environments (compose up/down/profiles) — use `docker-compose-patterns`
+- Optimizing image size or build cache — use `container-image-optimization`
+- Writing Dockerfiles — use `dockerfile-authoring`
+
+## Related skills
+
+- `docker-compose-patterns` — when managing multi-container stacks
+- `container-runtime-debugging` — when a container is crashing or hanging
+- `dockerfile-authoring` — when you need to build a new image
+- `container-image-optimization` — when `docker images` shows bloated sizes

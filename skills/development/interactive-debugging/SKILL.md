@@ -1,6 +1,6 @@
 ---
 name: interactive-debugging
-description: "Drive a real debugger from the shell via DAP."
+description: "Use when you need live process state (locals, call stack, breakpoints) that logs/traces can't answer — via DAP CLI. Covers Python debugpy, Go dlv, .NET, Node, Kubernetes remote debug, and the dap command cheat sheet."
 version: 1.0.0
 author: Carlos Felipe Gomes
 license: MIT
@@ -318,6 +318,19 @@ other ephemeral runs where waiting out a 10-minute default is wasteful, set
   `references/advanced-techniques.md`.
 - **Three steps in a row without new information means you needed a
   breakpoint further ahead**, not a fourth step.
+
+## When NOT to use
+
+- Debugging from logs/traces/metrics (no live process needed) — use `container-runtime-debugging`
+- Investigating distributed trace gaps — use `grpc-distributed-tracing` or `tempo-trace-investigation`
+- Profiling CPU/memory without breakpoints — use `pyroscope-profiling-patterns`
+
+## Related skills
+
+- `container-runtime-debugging` — when `docker exec` or `kubectl debug` is enough
+- `python-otel-patterns` — when traces reveal the issue without live debugging
+- `dotnet-otel-patterns` — .NET diagnostic tools (dumps, counters) before attaching debugger
+- `go-patterns` — Go `dlv` patterns referenced in this skill
 
 ## Anti-patterns
 

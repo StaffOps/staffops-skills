@@ -160,3 +160,15 @@ before calling `claude --bg`.
   — a simple "pick up where I left off" note does not need severity,
   ruled-out lists, or redaction discipline; save this skill for incidents
   and migrations where re-treading ground or leaking a secret has real cost.
+
+## When NOT to use
+
+- **Single-session tasks** that complete in one conversation — no handoff needed.
+- **Persistent project documentation** — use specs or README, not session notes.
+- **Git branch management** — see [git-advanced](../workflows/git-advanced/SKILL.md).
+
+## Related skills
+
+- [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding agent context loading.
+- [spec-writing](../workflows/spec-writing/SKILL.md) — writing specs that survive across sessions.
+- [git-advanced](../workflows/git-advanced/SKILL.md) — committing WIP to preserve state.

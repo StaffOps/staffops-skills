@@ -1,0 +1,282 @@
+# OpenAPI 3.1 Example — Copy-Paste Template
+# Validates with: docker run --rm -v $(pwd):/spec redocly/cli lint /spec/openapi.yaml
+
+openapi: "3.1.0"
+info:
+  title: "Payment Service API"
+  description: |
+    Internal payment processing API.
+
+    ## Authentication
+    All endpoints require a Bearer token via `Authorization` header.
+    Tokens are issued by the identity service (see internal docs).
+  version: "1.2.0"
+  contact:
+    name: "Payments Team"
+    email: "payments@example.com"
+
+servers:
+  - url: "https://api.example.com/v1"
+    description: "Production"
+  - url: "https://api-hml.example.com/v1"
+    description: "Homologation"
+  - url: "http://localhost:8080/v1"
+    description: "Local development"
+
+tags:
+  - name: Orders
+    description: "Order lifecycle management"
+  - name: Health
+    description: "Service health endpoints"
+
+paths:
+  /orders:
+    post:
+      operationId: createOrder
+      summary: "Create a new order"
+      tags: [Orders]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+            example:
+              customerId: "cust_abc123"
+              items:
+                - productId: "prod_xyz"
+                  quantity: 2
+                  unitPrice: 29.99
+              currency: "BRL"
+      responses:
+        "201":
+          description: "Order created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+          headers:
+            X-Request-Id:
+              schema:
+                type: string
+              description: "Trace correlation ID"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          description: "Validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+
+    get:
+      operationId: listOrders
+      summary: "List orders with pagination"
+      tags: [Orders]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, processing, completed, cancelled]
+      responses:
+        "200":
+          description: "Paginated list of orders"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderList"
+
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: "Get order by ID"
+      tags: [Orders]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^ord_[a-zA-Z0-9]{12}$"
+      responses:
+        "200":
+          description: "Order details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /healthz:
+    get:
+      operationId: healthCheck
+      summary: "Liveness probe"
+      tags: [Health]
+      security: []
+      responses:
+        "200":
+          description: "Service is alive"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateOrderRequest:
+      type: object
+      required: [customerId, items, currency]
+      properties:
+        customerId:
+          type: string
+          description: "Customer identifier"
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        currency:
+          type: string
+          enum: [BRL, USD]
+
+    OrderItem:
+      type: object
+      required: [productId, quantity, unitPrice]
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+        unitPrice:
+          type: number
+          format: double
+          minimum: 0.01
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "ord_abc123def456"
+        customerId:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, completed, cancelled]
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        total:
+          type: number
+          format: double
+        currency:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    OrderList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Order"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "validation_failed"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        requestId:
+          type: string
+
+  responses:
+    BadRequest:
+      description: "Invalid request"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    Unauthorized:
+      description: "Missing or invalid auth token"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotFound:
+      description: "Resource not found"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"

@@ -19,6 +19,12 @@ Framework for finding, attributing, and tagging AWS resources missing mandatory 
 
 Use when detecting and remediating untagged AWS resources at scale. Covers Resource Groups Tagging API, AWS Config required-tags rule, CUR queries for untagged cost, bulk tagging scripts (boto3), SCP enforcement, and <org> mandatory tag compliance.
 
+## When NOT to Use
+
+- Kubernetes pod labels → Kyverno enforces mandatory labels at admission
+- Choosing correct tag values → see `aws-tag-policies` steering for the enum
+- Cost optimization (after tagging) → use `ec2-rightsizing-patterns` or `savings-plans-strategy`
+
 ## Why untagged resources matter
 
 - **Cost Explorer**: untagged resources appear in "No tag" bucket — invisible to FinOps

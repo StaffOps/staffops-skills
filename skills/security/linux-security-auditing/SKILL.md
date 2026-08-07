@@ -25,6 +25,12 @@ Use when auditing a host before or after it goes into production,
 investigating a suspected compromise, responding to a compliance
 requirement, or periodically verifying a hardening baseline hasn't drifted.
 
+## When NOT to Use
+
+- Container security posture → use `container-image-apko` + Kyverno policies
+- AWS account-level audit → use `aws-ftr-compliance` or Security Hub
+- Applying fixes → use `linux-hardening` (this skill is for *finding*, not *fixing*)
+
 ## Users and accounts
 
 ```bash
@@ -223,3 +229,8 @@ review, not a checklist to blindly execute.
 - `linux-hardening` — the baseline this auditing verifies
 - `ssh-hardening` — SSH-specific configuration to audit against
 - `linux-filesystem` — the permission model underlying several checks here
+
+## Related skills
+- `linux-hardening` — applying fixes for findings
+- `ssh-hardening` — SSH audit specifics
+- `aws-ftr-compliance` — AWS-level compliance audits

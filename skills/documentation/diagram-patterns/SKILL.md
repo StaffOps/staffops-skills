@@ -17,7 +17,20 @@ Decision framework for technical diagrams in <org> documentation.
 
 ## When to Use
 
-When to use Mermaid vs drawio vs ASCII art for technical diagrams. Use when choosing diagram tool for documentation, designing architecture diagrams, or standardizing diagram style. Covers decision framework, common patterns, examples per type.
+- Choosing diagram tool for a specific documentation context
+- Drawing architecture, sequence, flow, or state diagrams
+- Adding diagrams to MkDocs, README, or PR descriptions
+
+## When NOT to Use
+
+- Diagrams for slides/presentations → use drawio or Figma directly
+- UML class diagrams for code documentation → generate from code instead
+- Data flow for marketing materials → graphic design team
+
+## Mermaid Examples (copy-paste ready)
+
+See `references/mermaid-examples.md` for 8 production-ready patterns:
+- Flowchart, Sequence, Architecture, State, Pipeline, ER, Gantt, GitOps flow
 
 ## Decision matrix
 
@@ -298,3 +311,8 @@ Most <org> docs need only Context + Container levels.
 - C4 model: https://c4model.com/
 - Box-drawing characters: https://en.wikipedia.org/wiki/Box-drawing_characters
 - Related: `markdown-docs`, `mkdocs-conventions`
+
+## Related skills
+- `markdown-docs` — text documentation to accompany diagrams
+- `mkdocs-conventions` — embedding diagrams in doc sites
+- `api-docs-patterns` — documenting API flows visually

@@ -398,6 +398,19 @@ aws securityhub batch-update-findings \
 - **Future pipeline**: Kyverno admission failures → K8s Event → EventBridge → Lambda → `BatchImportFindings` (unifies cloud + K8s posture)
 - **Slack**: `#eks-notifications` could receive HIGH/CRITICAL via EventBridge → Lambda → webhook (same `alertmanager-slack-webhook` secret)
 
+## When NOT to use
+
+- Triaging and remediating individual findings — use `security-hub-findings-mgmt`
+- IAM policy design for least privilege — use `iam-patterns`
+- Container image vulnerability scanning — use `sbom-vulnerability-management`
+
+## Related skills
+
+- `security-hub-findings-mgmt` — finding lifecycle, SLAs, and remediation playbooks
+- `aws-ftr-compliance` — FTR preparation using Security Hub standards
+- `iam-patterns` — fixing IAM-related Security Hub findings
+- `sbom-vulnerability-management` — container/dependency scanning that feeds Security Hub
+
 ## Anti-patterns
 
 - ❌ **Manual finding updates via console** — no audit trail, not reproducible

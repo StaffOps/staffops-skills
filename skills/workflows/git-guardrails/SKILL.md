@@ -338,3 +338,47 @@ silent, unappealable block forever baked into a script.
   the `jq not found` warning on stderr, and prefer installing `jq` over
   relying on the fallback parser for anything beyond the simple documented
   schema.
+
+## Pre-commit Hooks (complementary protection)
+
+The Claude Code `PreToolUse` hook above covers agent sessions. For broader
+protection (human commits too), use standard git hooks or the pre-commit
+framework.
+
+### Available in `references/`
+
+| File | Purpose |
+|------|---------|
+| `references/pre-commit-hook.sh` | Standalone `.git/hooks/pre-commit` — blocks secrets, large files, .env |
+| `references/commit-msg-hook.sh` | Standalone `.git/hooks/commit-msg` — enforces Conventional Commits |
+| `references/pre-commit-config.yaml` | Framework-based `.pre-commit-config.yaml` — gitleaks, yaml lint, branch protection |
+| `references/example-config.json` | Per-repo override for the Claude Code hook |
+
+### Quick install (standalone hooks)
+
+```bash
+# Copy hooks into your repo
+cp references/pre-commit-hook.sh .git/hooks/pre-commit
+cp references/commit-msg-hook.sh .git/hooks/commit-msg
+chmod +x .git/hooks/pre-commit .git/hooks/commit-msg
+```
+
+### Quick install (pre-commit framework)
+
+```bash
+cp references/pre-commit-config.yaml .pre-commit-config.yaml
+pip install pre-commit
+pre-commit install
+pre-commit install --hook-type commit-msg
+```
+
+## Related Skills
+
+- `git-advanced` — rebase, bisect, conflict resolution
+- `conventional-commits` — commit message format spec
+
+## When NOT to use
+
+- **Greenfield repos with no CI** — hooks add friction before value exists; add them when the team grows.
+- **Scripting git operations** (rebase, cherry-pick) — see [git-advanced](../workflows/git-advanced/SKILL.md).
+- **Understanding git internals** (reflog, objects) — this skill is about guardrails, not mechanisms.

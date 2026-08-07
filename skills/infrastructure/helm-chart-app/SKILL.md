@@ -17,6 +17,12 @@ metadata:
 
 <org> corporate app Helm chart. Use when deploying services to EKS, configuring Rollouts/Deployments/StatefulSets, KEDA autoscaling, Istio routing, ExternalSecrets, or mandatory labels. Covers all values.yaml options, deployment types, strategies, and common patterns.
 
+## When NOT to Use
+
+- Scheduled batch jobs → use `helm-chart-cronworkflow` (CronWorkflow chart)
+- Cluster add-ons (monitoring, Istio, cert-manager) → use `helmfile-k8s-addon`
+- ApplicationSet registration → use `helmfile-applicationset`
+
 ## Overview
 
 The `app/` chart is the **most used Helm chart at <org>**. It standardizes application deployments across all EKS clusters.

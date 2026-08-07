@@ -1,11 +1,11 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-196-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-226-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 196 platform engineering skills for AI coding agents, covering
-observability, SRE, Kubernetes, AWS, security, and delivery workflows.
+A catalog of 226 platform engineering skills for AI coding agents, covering
+observability, SRE, Kubernetes, AWS, security, AI/LLM-ops, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
 when a topic becomes relevant — turning a general-purpose assistant into one
@@ -92,7 +92,7 @@ inline examples over exhaustively tested tooling. Contributions that add
 
 The 60-character description limit is deliberate: an agent loads every skill's
 frontmatter into context at all times and only expands the body on demand. Long
-descriptions dilute attention across 132 entries.
+descriptions dilute attention across 226 entries.
 
 ## Installation
 
@@ -239,13 +239,23 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>aws</strong> (8) — AWS service design and troubleshooting patterns.</summary>
+<summary><strong>aws</strong> (18) — AWS service patterns, EKS, and AI DevOps Agent operations.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
+| `agent-instruction-authoring` | Write SKILL.md instructions that land in the AWS DevOps Agent. | — |
+| `agent-skills-debugging` | Debug skills that don't load, return empty, or get ignored. | — |
+| `agent-skills-harness-guide` | Run the behaviour harness and interpret eval results. | — |
+| `agent-skills-import-and-harness` | Import skills to agentspace respecting API constraints. | — |
+| `agent-skills-metric-verification` | Verify metric names exist before writing skill queries. | — |
+| `agent-skills-new-skill-checklist` | Scaffold, validate and import a new agent skill. | — |
+| `agent-skills-readonly-invariant` | Enforce the agent read-only safety invariant. | — |
+| `agent-skills-sandbox-development` | Build executable skills for the agent sandbox. | — |
+| `aws-devops-agent-skills` | Operate the AWS DevOps Agent skill catalog end-to-end. | — |
 | `cloudfront-patterns` | Configure CloudFront origins, caching and WAF. | — |
 | `cost-explorer` | Analyze AWS spend via Cost Explorer and CUR Athena. | — |
 | `eks-management` | Manage EKS nodes, Karpenter, IRSA and upgrades. | — |
+| `eks-node-troubleshooting` | Diagnose NotReady nodes, spot interruptions and kubelet. | — |
 | `iam-patterns` | Design least-privilege IAM roles and policies. | — |
 | `lambda-patterns` | Design Lambda cold start, VPC and observability. | — |
 | `rds-patterns` | Design RDS sizing, failover and backup strategy. | — |
@@ -325,14 +335,15 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>infrastructure</strong> (13) — GitOps, Helm, service mesh, and cluster infrastructure.</summary>
+<summary><strong>infrastructure</strong> (14) — GitOps, Helm, service mesh, and cluster infrastructure.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `argocd-patterns` | Configure ApplicationSets, sync waves and hooks. | — |
 | `cosign-image-signing` | Sign and verify container images with cosign. | — |
 | `external-secrets-aws-sm` | Sync AWS Secrets Manager into Kubernetes secrets. | — |
-| `helm-chart-app` | Deploy apps with the shared application Helm chart. | — |
+| `gitops-environments` | Map GitOps repos, branches and clusters per environment. | — |
+| `helm-chart-app` | Deploy apps with the shared application Helm chart. | `references/` |
 | `helm-chart-cronworkflow` | Schedule Argo CronWorkflows via the shared chart. | — |
 | `helmfile-applicationset` | Register services in GitOps ApplicationSets. | — |
 | `helmfile-k8s-addon` | Package cluster addons as helmfile releases. | — |
@@ -373,25 +384,36 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>observability</strong> (17) — Telemetry pipelines, query languages, and signal correlation.</summary>
+<summary><strong>observability</strong> (28) — Telemetry pipelines, query languages, and signal correlation.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `alertmanager-slack-config` | Route Alertmanager alerts to Slack with context. | — |
+| `cardinality-explosion-finder` | Detect and attribute TSDB cardinality explosions. | `references/` |
 | `fluent-bit-loki-pipeline` | Ship logs to Loki with labels and multiline parsing. | — |
 | `fluent-bit-vs-otel-logs` | Compare Fluent Bit and OTel log collection paths. | — |
 | `grafana-cross-signal-correlation` | Link metrics, traces, logs and profiles in Grafana. | — |
+| `kafka-pipeline-health` | Diagnose Kafka consumer lag and partition health. | `references/` |
 | `kubelet-scrape-architecture` | Understand kubelet and cAdvisor scrape paths. | — |
+| `kuma-synthetic-status` | Monitor endpoint availability via Uptime Kuma. | — |
+| `log-pattern-analyzer` | Detect anomalous log patterns with LogQL. | `references/` |
 | `loki-logql-patterns` | Query logs with LogQL filters and aggregations. | — |
 | `monitoring-stack-overview` | Navigate the monitoring stack topology. | — |
 | `multicluster-label-strategy` | Align cluster labels for multi-cluster queries. | — |
+| `observability-tooling` | Map signals to backends and choose the right tool. | `references/` |
 | `otel-collector-multi-cluster` | Design multi-cluster OTel Collector pipelines. | — |
 | `otel-ebpf-instrumentation` | Instrument services with eBPF, no code changes. | — |
+| `otel-pipeline-review` | Audit OTel pipeline config for loss and inefficiency. | `references/` |
+| `otel-pipeline-troubleshooting` | Debug missing spans, logs or metrics in the pipeline. | `references/` |
 | `pyroscope-profiling-patterns` | Profile CPU and memory continuously with Pyroscope. | — |
 | `streaming-aggregation` | Cut cardinality with streaming aggregation rules. | — |
+| `tempo-trace-investigation` | Investigate distributed traces in Tempo with TraceQL. | `references/` |
 | `tempo-traceql-patterns` | Query traces with TraceQL selectors and aggregates. | — |
+| `tempo-v3-kafka-operations` | Operate Tempo v3 Kafka ingest and block-builder. | — |
+| `victoriametrics-investigation` | Run diagnostic procedures on VictoriaMetrics clusters. | `references/` |
 | `victoriametrics-troubleshooting` | Debug VictoriaMetrics ingest and query failures. | — |
 | `victoriametrics-tuning` | Tune VictoriaMetrics retention, memory and dedup. | — |
+| `vm-capacity-review` | Project VictoriaMetrics storage and resource needs. | `references/` |
 | `vm-cardinality-management` | Find and cut high-cardinality metric series. | — |
 | `vmalert-configuration` | Configure VMAlert rules, groups and notifiers. | — |
 
@@ -439,17 +461,25 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>sre</strong> (7) — Reliability engineering: SLOs, incidents, and error budgets.</summary>
+<summary><strong>sre</strong> (15) — Reliability engineering: SLOs, incidents, triage, and error budgets.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `alerting-strategy` | Design symptom-based alerts and cut fatigue. | — |
+| `capacity-projection` | Project resource exhaustion dates with trend analysis. | `references/` |
+| `deploy-correlation-checker` | Correlate deploys with metric anomalies. | `references/` |
 | `error-budget-framework` | Track error budgets and burn rate alerts. | — |
 | `incident-response-runbook` | Run incident command, severity and comms. | — |
+| `incident-skip-criteria` | Decide when NOT to investigate an alert. | `references/` |
+| `incident-triage` | Classify severity and route incidents. | — |
+| `investigation-cost-guardrail` | Cap investigation cost vs problem impact. | `references/` |
+| `metric-correlation-analysis` | Find correlated signals for root cause analysis. | `references/` |
 | `post-mortem-templates` | Write blameless post-mortems with actions. | — |
 | `root-cause-analysis` | Correlate signals to prove root cause. | — |
 | `runbook-authoring` | Write actionable operational runbooks. | — |
 | `sla-slo-design` | Define SLIs, SLOs and reliability targets. | — |
+| `slo-burn-rate-calculator` | Calculate multi-window burn rate alerts. | `references/` |
+| `symptom-router` | Route symptoms to the correct investigation skill. | `references/` |
 
 </details>
 
@@ -497,7 +527,7 @@ frontmatter keys, the description limit, category consistency, resolvable
 
 ```bash
 python3 tools/validate_skills.py
-# validated 132 skills, 0 error(s)
+# validated 226 skills, 0 error(s)
 ```
 
 It requires only the Python standard library and exits non-zero on any failure,

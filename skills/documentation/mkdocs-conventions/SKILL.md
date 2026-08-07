@@ -396,3 +396,30 @@ pages:
 - PyMdown extensions: https://facelessuser.github.io/pymdown-extensions/
 - <org> docs (to be inventoried later): `<workspace>/<central-docs-portal>`
 - Related: `markdown-docs`, `diagram-patterns`, `api-docs-patterns`
+
+## Quick Start Template
+
+Copy `references/mkdocs-template.yml` for a production-ready `mkdocs.yml` with:
+- Material theme (light/dark toggle)
+- All recommended features enabled (instant nav, search suggest, code copy)
+- Mermaid fences configured
+- git-revision-date plugin
+- `--strict` mode
+- Full PyMdown Extensions set (highlights, tabs, admonitions, tasklists)
+
+```bash
+cp references/mkdocs-template.yml /path/to/project/mkdocs.yml
+# Then: search-replace <placeholders> with your project values
+```
+
+## Related Skills
+
+- `markdown-docs` — Markdown style rules
+- `diagram-patterns` — Mermaid / ASCII / drawio decision framework
+- `api-docs-patterns` — OpenAPI/proto documentation generation
+
+## When NOT to use
+
+- **GitHub/GitLab wikis** — different rendering engine and navigation model.
+- **Single-file READMEs** — for a single doc, just write markdown; MkDocs is for multi-page sites.
+- **API reference generation** — use OpenAPI/proto generators; MkDocs hosts the output but doesn't generate it.

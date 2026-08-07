@@ -1,0 +1,132 @@
+# Production-ready MkDocs Material template
+# Copy this file, replace <placeholders>, delete sections you don't need.
+# Build: docker run --rm -v $(pwd):/docs squidfunk/mkdocs-material build --strict
+
+site_name: "<Project Name> Docs"
+site_url: "https://docs.<org-domain>/<project>/"
+site_description: "<One-liner describing the site>"
+repo_url: "https://gitlab.<org-domain>/<group>/<repo>"
+repo_name: "<group>/<repo>"
+edit_uri: "edit/development/docs/"
+
+# Theme
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant       # XHR page loading (SPA feel)
+    - navigation.tracking      # URL updates on scroll
+    - navigation.tabs          # Top-level sections as tabs
+    - navigation.sections      # Expand sections in sidebar
+    - navigation.expand        # Auto-expand nav tree
+    - navigation.indexes       # Section index pages (index.md)
+    - navigation.top           # Back-to-top button
+    - search.suggest           # Search suggestions
+    - search.highlight         # Highlight search terms on page
+    - content.code.copy        # Copy button on code blocks
+    - content.code.annotate    # Code annotations
+    - content.tabs.link        # Sync tabs across page
+    - toc.follow               # TOC follows scroll
+  icon:
+    repo: fontawesome/brands/gitlab
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-\.]+'   # Better search for kebab-case/dotted names
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+  # - mike                     # Uncomment for multi-version docs
+  # - minify:
+  #     minify_html: true
+
+# Extensions
+markdown_extensions:
+  # Python-Markdown built-ins
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - tables
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+
+  # PyMdown Extensions
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.critic
+
+  # Admonitions
+  - admonition
+
+# Navigation (customize per project)
+nav:
+  - Home: index.md
+  - Getting Started:
+      - getting-started/index.md
+      - getting-started/installation.md
+      - getting-started/quick-start.md
+  - Architecture:
+      - architecture/index.md
+      - architecture/overview.md
+      - architecture/decisions.md
+  - Configuration:
+      - configuration/index.md
+      - configuration/env-vars.md
+      - configuration/secrets.md
+  - Runbooks:
+      - runbooks/index.md
+  - API Reference:
+      - api/index.md
+  - ADRs:
+      - adr/index.md
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/gitlab
+      link: "https://gitlab.<org-domain>/<group>"
+  # version:                   # Uncomment for mike versioning
+  #   provider: mike
+
+# Strict mode catches broken links during build
+strict: true
+
+# Watch additional dirs during `mkdocs serve`
+watch:
+  - docs
+  - overrides

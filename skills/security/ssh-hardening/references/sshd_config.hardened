@@ -1,0 +1,49 @@
+# /etc/ssh/sshd_config — Hardened baseline
+# Apply with: sudo cp sshd_config.hardened /etc/ssh/sshd_config && sudo sshd -t && sudo systemctl reload sshd
+# ALWAYS test with `sshd -t` before reload to avoid locking yourself out.
+
+# --- Authentication ---
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+KbdInteractiveAuthentication no
+UsePAM yes
+AuthenticationMethods publickey
+
+# --- Key exchange and ciphers (modern, post-quantum-ready) ---
+KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+HostKeyAlgorithms ssh-ed25519,rsa-sha2-512,rsa-sha2-256
+
+# --- Session limits ---
+MaxAuthTries 3
+MaxSessions 5
+LoginGraceTime 30
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# --- Restrict features ---
+X11Forwarding no
+AllowTcpForwarding no
+PermitTunnel no
+AllowAgentForwarding no
+PermitUserEnvironment no
+DisableForwarding yes
+
+# --- Logging ---
+LogLevel VERBOSE
+SyslogFacility AUTH
+
+# --- Network ---
+Port 22
+AddressFamily inet
+ListenAddress 0.0.0.0
+
+# --- Restrict access (uncomment and customize) ---
+# AllowUsers deploy admin
+# AllowGroups ssh-users
+
+# --- Banner ---
+Banner /etc/ssh/banner.txt

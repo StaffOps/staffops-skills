@@ -150,3 +150,16 @@ Instantaneous metrics during warm-up or low-traffic periods give false sense of 
 - Per-component flags: `*_common_flags.md`
 - Source: `lib/fs/fsutil/concurrency.go` (fs.maxConcurrency default)
 - Troubleshooting: https://docs.victoriametrics.com/victoriametrics/troubleshooting/
+
+## When NOT to use
+
+- For diagnosing VM cluster failures (OOM, disk full, split brain) → use `victoriametrics-troubleshooting`
+- For cardinality reduction strategies → use `vm-cardinality-management`
+- For streaming aggregation config → use `streaming-aggregation`
+
+## Related skills
+
+- `victoriametrics-troubleshooting` — failure diagnosis and capacity planning
+- `vm-cardinality-management` — reducing series count before tuning ingestion
+- `streaming-aggregation` — cardinality reduction at scrape time
+- `kubelet-scrape-architecture` — tuning the biggest metrics source

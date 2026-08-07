@@ -1,7 +1,7 @@
 ---
 name: python-cli-tools
-description: "Build distributable CLIs with Click or Typer."
-version: 1.0.0
+description: "Use when building a pip-installable CLI with subcommands using Click or Typer, configuring entry points, or migrating from argparse to a proper CLI framework. Covers Click decorators, Typer type-hint patterns, testing CLIs, and packaging."
+version: 1.1.0
 author: Carlos Felipe Gomes
 license: MIT
 platforms: [linux, macos, windows]
@@ -9,284 +9,258 @@ metadata:
   hermes:
     tags: [python, cli, click, typer, argparse, entry-points]
     category: development
-    related_skills: [python-scripting, python-packaging, shell-cli-design]
+    related_skills: [python-scripting, python-packaging, python-testing]
 ---
+
 # Python CLI Tools
 
-Building a Python command-line tool that's genuinely distributable and
-installable — not just a script with `argparse`, but a package with a real
-entry point, subcommands, and the same interface discipline covered in
-`shell-cli-design` (streams, exit codes) applied in Python. Reach for this
-once a tool has outgrown a single-file script, per `bash-scripting`'s
-comparison table and `python-scripting`'s skeleton.
+Building installable CLIs with Click or Typer — subcommands, options, and proper exit codes.
 
 ## When to Use
 
-Use when a script needs to be installed and run as a real command (not
-`python script.py`), when it needs multiple subcommands with distinct
-options, or when packaging a tool for others to `pip install`.
+- Script needs to be `pip install`-able as a real command
+- Tool needs multiple subcommands (`mytool init`, `mytool run`, `mytool status`)
+- Need --help auto-generated from code
+- Outgrew single-file argparse script
 
-## Click vs Typer vs argparse
+## When NOT to Use
 
-| Library | Style | When to choose it |
-| --- | --- | --- |
-| `argparse` | Stdlib, imperative, verbose | No dependency wanted; a single simple script — see `python-scripting` |
-| `click` | Decorator-based, mature, huge ecosystem | The de facto standard for a real CLI package |
-| `typer` | Type-hint-driven, built on Click | Prefer type hints as the source of truth; less boilerplate |
+- Single script, no install needed → `python-scripting` (argparse skeleton)
+- Interactive TUI with widgets → use `textual` or `rich`
+- Just wrapping shell commands → Bash script may suffice
 
-`click` is the safe, most broadly compatible default for a distributable
-tool. `typer` generates the same underlying Click machinery from function
-signatures and type hints, which is less code for the equivalent behavior —
-a reasonable modern choice when the project's dependency list already
-leans toward type-hint-first style throughout.
+---
 
-## A Click CLI with subcommands
+## Click vs Typer — Decision
+
+| | Click | Typer |
+|--|-------|-------|
+| Style | Decorators + explicit types | Type hints as source of truth |
+| Maturity | 10+ years, huge ecosystem | Built on Click, newer |
+| Boilerplate | More explicit | Less code |
+| When | Complex CLIs, plugins, legacy | New projects, type-hint-first |
+
+**Default choice**: Click (broader ecosystem, more docs). Typer if team already uses type hints everywhere.
+
+---
+
+## Click — Complete Example
 
 ```python
-# src/mytool/cli.py
+# src/mypackage/cli.py
 import click
+import sys
 
 
 @click.group()
-@click.option("-v", "--verbose", is_flag=True, help="Enable verbose output.")
-@click.pass_context
-def cli(ctx: click.Context, verbose: bool) -> None:
-    """mytool -- does useful things."""
-    ctx.ensure_object(dict)
-    ctx.obj["verbose"] = verbose
+@click.version_option()
+def cli():
+    """My tool — does useful things."""
+    pass
 
 
 @cli.command()
-@click.argument("path", type=click.Path(exists=True, path_type=str))
-@click.option("-o", "--output", type=click.Path(), help="Output file.")
-@click.option("--format", type=click.Choice(["json", "text"]), default="text")
-@click.pass_context
-def process(ctx: click.Context, path: str, output: str | None, format: str) -> None:
-    """Process PATH and produce output."""
-    if ctx.obj["verbose"]:
-        click.echo(f"processing {path}", err=True)
-    # ... actual work ...
+@click.argument("name")
+@click.option("--count", "-c", default=1, help="Number of greetings")
+@click.option("--shout/--no-shout", default=False, help="Uppercase output")
+def hello(name: str, count: int, shout: bool):
+    """Greet NAME."""
+    msg = f"Hello, {name}!"
+    if shout:
+        msg = msg.upper()
+    for _ in range(count):
+        click.echo(msg)
 
 
 @cli.command()
-@click.confirmation_option(prompt="Are you sure you want to delete everything?")
-def clean() -> None:
-    """Remove generated files."""
-    click.echo("cleaned")
+@click.argument("path", type=click.Path(exists=True))
+@click.option("--output", "-o", type=click.File("w"), default="-")
+@click.option("--format", "fmt", type=click.Choice(["json", "yaml"]), default="json")
+def convert(path: str, output, fmt: str):
+    """Convert file at PATH to specified format."""
+    import json
+    from pathlib import Path as P
+
+    data = json.loads(P(path).read_text())
+    
+    if fmt == "json":
+        output.write(json.dumps(data, indent=2))
+    elif fmt == "yaml":
+        import yaml
+        output.write(yaml.dump(data))
+    
+    click.echo(f"✓ Converted to {fmt}", err=True)
 
 
 if __name__ == "__main__":
     cli()
 ```
 
-`click.Path(exists=True)` validates the argument is an actually-existing
-path **before** the command function even runs — free validation with a
-clear, consistent error message, instead of manually checking
-`os.path.exists()` inside every command and writing a custom error for
-each. `click.Choice([...])` is the same idea for enumerated options,
-directly analogous to `argparse`'s `choices=`.
+### Click patterns cheat sheet
 
-## Entry points: making it a real installed command
+```python
+# Required argument
+@click.argument("name")
+
+# Optional with default
+@click.option("--port", "-p", default=8080, type=int)
+
+# Boolean flag
+@click.option("--verbose/--quiet", default=False)
+
+# Choice enum
+@click.option("--env", type=click.Choice(["dev", "prd", "hml"]))
+
+# File (auto-opens, handles "-" as stdin/stdout)
+@click.option("--output", type=click.File("w"), default="-")
+
+# Path (validates existence)
+@click.argument("config", type=click.Path(exists=True, dir_okay=False))
+
+# Password (hidden input)
+@click.option("--password", prompt=True, hide_input=True)
+
+# Progress bar
+with click.progressbar(items) as bar:
+    for item in bar:
+        process(item)
+
+# Colored output
+click.secho("Error!", fg="red", bold=True, err=True)
+click.secho("Success!", fg="green")
+
+# Exit with code
+raise SystemExit(1)  # or ctx.exit(1)
+```
+
+---
+
+## Typer — Complete Example
+
+```python
+# src/mypackage/cli.py
+from pathlib import Path
+from typing import Annotated, Optional
+
+import typer
+
+app = typer.Typer(help="My tool — does useful things.")
+
+
+@app.command()
+def hello(
+    name: str,
+    count: Annotated[int, typer.Option("--count", "-c", help="Greetings")] = 1,
+    shout: Annotated[bool, typer.Option("--shout/--no-shout")] = False,
+):
+    """Greet NAME."""
+    msg = f"Hello, {name}!"
+    if shout:
+        msg = msg.upper()
+    for _ in range(count):
+        typer.echo(msg)
+
+
+@app.command()
+def convert(
+    path: Annotated[Path, typer.Argument(help="Input file", exists=True)],
+    output: Annotated[Path, typer.Option("-o", "--output")] = Path("-"),
+    fmt: Annotated[str, typer.Option(help="Format")] = "json",
+):
+    """Convert file to specified format."""
+    import json
+
+    data = json.loads(path.read_text())
+    result = json.dumps(data, indent=2)
+    
+    if str(output) == "-":
+        typer.echo(result)
+    else:
+        output.write_text(result)
+        typer.echo(f"✓ Written to {output}", err=True)
+
+
+if __name__ == "__main__":
+    app()
+```
+
+---
+
+## Packaging the CLI
 
 ```toml
 # pyproject.toml
-[project]
-name = "mytool"
-dependencies = ["click>=8.1"]
-
 [project.scripts]
-mytool = "mytool.cli:cli"
+mytool = "mypackage.cli:cli"      # Click
+# mytool = "mypackage.cli:app"    # Typer (needs typer[all] or typer.main.get_command())
 ```
 
+After `pip install -e .`:
 ```bash
-pip install -e .
-mytool process data.csv --format json      # now a real command, not `python -m mytool`
+mytool --help
+mytool hello World --count 3
+mytool convert data.json -o output.yaml --format yaml
 ```
 
-The `[project.scripts]` entry — see `python-packaging` for the full
-`pyproject.toml` picture — is what turns a Python function into an
-installed shell command available on `PATH`. Without it, users would need
-`python -m mytool.cli` or similar, which is a materially worse experience
-for anyone installing the tool.
+---
 
-## Streams and exit codes: the same discipline as shell-cli-design
+## Testing CLIs
 
-```python
-import click
-import sys
-
-@cli.command()
-@click.argument("path")
-def process(path: str) -> None:
-    try:
-        result = do_work(path)
-    except FileNotFoundError:
-        click.echo(f"error: file not found: {path}", err=True)
-        sys.exit(1)
-
-    click.echo(result.summary)          # DATA -> stdout
-    click.echo("processing complete", err=True)   # DIAGNOSTICS -> stderr
-```
-
-`click.echo(..., err=True)` routes to stderr — the exact same stream
-discipline covered in `shell-cli-design`: data the tool produces goes to
-stdout so it composes in a pipeline, diagnostics go to stderr so they don't
-pollute that data. This matters just as much for a Python CLI as it does
-for a shell script; the language doesn't change the contract other tools
-and scripts expect.
-
-```python
-import sys
-
-def main() -> int:
-    try:
-        run()
-    except KeyboardInterrupt:
-        return 130                       # matches the shell convention: 128 + SIGINT
-    except SomeSpecificError as e:
-        click.echo(f"error: {e}", err=True)
-        return 1
-    return 0
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
-
-Click commands `sys.exit()` with the code passed to `sys.exit()`/`raise
-SystemExit()` inside them automatically — but for consistency with shell
-tooling's conventions (0 success, 1 general error, 2 usage error, 130 for
-Ctrl-C), it's worth being deliberate about which code a given failure
-returns rather than always defaulting to a bare `sys.exit(1)`.
-
-## Reading from stdin
-
-```python
-import click
-import sys
-
-@cli.command()
-@click.argument("input", type=click.File("r"), default="-")
-def process(input: click.utils.LazyFile) -> None:
-    """Process INPUT (use - for stdin)."""
-    content = input.read()
-```
-
-```bash
-mytool process data.txt
-cat data.txt | mytool process -        # the "-" convention, same as most Unix tools
-```
-
-`click.File("r")` with `default="-"` gives the same `-` means stdin
-convention that `shell-cli-design` covers for shell scripts — supporting it
-is what makes a tool composable in a pipeline rather than only usable
-against a named file.
-
-## Progress bars and interactive prompts
-
-```python
-import click
-import time
-
-@cli.command()
-@click.argument("items", nargs=-1)
-def process_all(items: tuple[str, ...]) -> None:
-    with click.progressbar(items, label="Processing") as bar:
-        for item in bar:
-            time.sleep(0.1)   # actual work here
-
-@cli.command()
-def configure() -> None:
-    name = click.prompt("Enter your name")
-    confirmed = click.confirm("Proceed?")
-```
-
-Both `click.progressbar` and `click.prompt`/`click.confirm` automatically
-detect whether stdout/stdin is a real terminal and degrade gracefully when
-not (no progress bar spinner corrupting piped output; `confirm()` needs an
-explicit non-interactive path for CI, similar to `shell-cli-design`'s
-`[[ -t 0 ]]` TTY check before prompting).
-
-```python
-@cli.command()
-@click.option("--force", is_flag=True, help="Skip the confirmation prompt.")
-def delete(force: bool) -> None:
-    if not force and not click.confirm("Delete everything?"):
-        click.echo("aborted", err=True)
-        sys.exit(1)
-```
-
-A `--force` flag that bypasses only the *prompt*, not any underlying
-validation — the same principle from `shell-cli-design`'s treatment of
-`--force` in shell tools.
-
-## Testing a Click CLI
+### Click (CliRunner)
 
 ```python
 from click.testing import CliRunner
-from mytool.cli import cli
+from mypackage.cli import cli
 
-def test_process_command():
+def test_hello():
     runner = CliRunner()
-    result = runner.invoke(cli, ["process", "data.csv", "--format", "json"])
+    result = runner.invoke(cli, ["hello", "World", "--count", "2"])
     assert result.exit_code == 0
-    assert "processed" in result.output
+    assert "Hello, World!" in result.output
+    assert result.output.count("Hello, World!") == 2
 
-def test_missing_file():
+def test_hello_shout():
     runner = CliRunner()
-    result = runner.invoke(cli, ["process", "/nonexistent"])
+    result = runner.invoke(cli, ["hello", "World", "--shout"])
+    assert "HELLO, WORLD!" in result.output
+
+def test_missing_arg():
+    runner = CliRunner()
+    result = runner.invoke(cli, ["hello"])  # missing NAME
     assert result.exit_code != 0
 ```
 
-`CliRunner` invokes the CLI in-process (no actual subprocess spawned),
-capturing `stdout`/`stderr` and the exit code directly — fast, and avoids
-the overhead and platform-dependence of testing through real subprocess
-invocation. This pairs directly with the fixture and assertion patterns in
-`python-testing`.
-
-## Configuration precedence, same as shell-cli-design
+### Typer (CliRunner from typer.testing)
 
 ```python
-import os
-import click
+from typer.testing import CliRunner
+from mypackage.cli import app
 
-@cli.command()
-@click.option("--format", envvar="MYTOOL_FORMAT", default="text")
-def process(format: str) -> None:
-    ...
+runner = CliRunner()
+
+def test_hello():
+    result = runner.invoke(app, ["hello", "World"])
+    assert result.exit_code == 0
+    assert "Hello, World!" in result.output
 ```
 
-```bash
-mytool process --format json          # flag wins
-MYTOOL_FORMAT=json mytool process      # env var, if no flag given
-mytool process                          # falls back to the default
-```
-
-`envvar=` on a Click option implements the same flags-override-environment
-precedence documented in `shell-cli-design` — flag beats environment
-variable beats built-in default, in that order, matching what users expect
-from command-line tools regardless of implementation language.
+---
 
 ## Pitfalls
 
-- **Skipping `[project.scripts]`** — the tool never becomes a real
-  installed command; users are stuck with `python -m` invocations.
-- **Writing diagnostics to stdout** (`click.echo(msg)` without `err=True`)
-  — breaks piping the tool's actual output, exactly as in shell scripts.
-- **A `--force` flag that also skips genuine validation**, not just the
-  confirmation prompt.
-- **Not testing via `CliRunner`** — falling back to spawning real
-  subprocesses in tests, which is slower and less portable.
-- **Choosing `argparse` for a genuinely multi-command distributable tool**
-  — workable, but `click`'s subcommand and validation machinery removes a
-  lot of boilerplate `argparse` requires to be written by hand.
-- **Not supporting `-` for stdin** on a command that reads a file — breaks
-  composability with the rest of a pipeline.
+| Mistake | Fix |
+|---------|-----|
+| `print()` instead of `click.echo()` | `echo` handles encoding/piping correctly |
+| Mixing stdout data with status messages | Data → stdout, status → stderr (`err=True`) |
+| No `--help` on subcommands | Add docstrings to every command function |
+| Hard-coding colors without checking terminal | Use `click.style()` which respects `NO_COLOR` |
+| No exit codes | Return/raise appropriate codes (0=ok, 1=user error, 2=system error) |
+| Not testing the CLI end-to-end | Use `CliRunner` — it catches regressions in arg parsing |
 
-## Reference
+---
 
-- `shell-cli-design` — the interface conventions (streams, exit codes,
-  config precedence) this skill applies in Python
-- `python-scripting` — `argparse`-based single-script CLIs, before a
-  project outgrows that
-- `python-packaging` — the `pyproject.toml`/entry-point mechanics in full
-- `python-testing` — `pytest` patterns applicable to `CliRunner`-based tests
+## Related Skills
+
+- `python-scripting` — single-file argparse for simple scripts
+- `python-packaging` — pyproject.toml entry points
+- `python-testing` — testing patterns (CliRunner tests live in your test suite)

@@ -369,6 +369,19 @@ aws lambda update-function-configuration \
   --timeout 30
 ```
 
+## When NOT to use
+
+- Designing ECS/EKS services (long-running) — use `eks-management`
+- Configuring IAM execution roles (policy logic) — use `iam-patterns`
+- Analyzing Lambda cost vs container cost — use `cost-explorer`
+
+## Related skills
+
+- `iam-patterns` — execution role and resource policy design
+- `cloudfront-patterns` — Lambda@Edge and CloudFront Functions
+- `cost-explorer` — Lambda invocation and duration cost analysis
+- `python-fastapi-patterns` — when the workload outgrows Lambda and needs a service
+
 ## Anti-patterns
 
 - ❌ **Monolithic Lambda** — single function doing everything; split by responsibility

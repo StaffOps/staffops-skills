@@ -246,229 +246,228 @@ particular chat session's task list.
 <details>
 <summary>Expand for the complete per-repo survey and per-skill deep-dive</summary>
 
-## PARTE 1 — Em dúvida (survey, decida o que vale olhar de perto)
+## PART 1 — Uncertain (survey, decide what is worth a closer look)
 
 ### 1. BagelHole/DevOps-Security-Agent-Skills — 163 skills
 
-Catálogo gerado/templated (frontmatter idêntico em todas, descrições curtas, sem versão de
-Helm chart nem contexto real). Muita sobreposição com o que o staffops-skills já cobre bem
-(AWS/Azure/GCP básico, K8s, observability, secrets, scanning). O diferencial real está em
-AI/LLM-ops e AI-security — algo que o catálogo atual não tem.
+Generated/templated catalog (identical frontmatter across all, short descriptions, no Helm
+chart version or real context). Heavy overlap with what staffops-skills already covers well
+(basic AWS/Azure/GCP, K8s, observability, secrets, scanning). The real differentiator is in
+AI/LLM-ops and AI-security — something the current catalog lacks entirely.
 
-Categorias: compliance/ (18), devops/ (39), infrastructure/ (71), security/ (35).
+Categories: compliance/ (18), devops/ (39), infrastructure/ (71), security/ (35).
 
-Top picks (gap real vs. catálogo atual):
+Top picks (real gaps vs. current catalog):
 
-| Skill | Por quê |
+| Skill | Why |
 |---|---|
-| `security/ai/mcp-server-security` | Segurança de MCP servers (transport encryption, tool authz, audit log) — nada equivalente hoje |
-| `security/ai/ai-agent-security`, `prompt-injection-defense` | Defesa em profundidade para sistemas agênticos |
-| `security/ai/ai-red-teaming` | Metodologia de red-team para jailbreak/exfiltração |
-| `devops/ai/llmops-platform-engineering`, `model-registry-governance` | CI/CD, promotion, eval gates, governance de modelos |
-| `devops/ai/rag-observability-evals`, `agent-evals` | Métricas de qualidade de RAG/agentes |
+| `security/ai/mcp-server-security` | MCP server security (transport encryption, tool authz, audit log) — no equivalent today |
+| `security/ai/ai-agent-security`, `prompt-injection-defense` | Defense-in-depth for agentic systems |
+| `security/ai/ai-red-teaming` | Red-team methodology for jailbreak/exfiltration |
+| `devops/ai/llmops-platform-engineering`, `model-registry-governance` | CI/CD, promotion, eval gates, model governance |
+| `devops/ai/rag-observability-evals`, `agent-evals` | RAG/agent quality metrics |
 | `infrastructure/networking/llm-gateway` | LiteLLM Proxy: rate limiting, semantic cache, cost tracking |
-| `infrastructure/local-ai/multi-tenant-llm-hosting`, `llm-inference-scaling`, `gpu-kubernetes-operations` | Isolamento multi-tenant e autoscaling de inferência |
+| `infrastructure/local-ai/multi-tenant-llm-hosting`, `llm-inference-scaling`, `gpu-kubernetes-operations` | Multi-tenant isolation and inference autoscaling |
 | `devops/orchestration/model-serving-kubernetes` | KServe/Triton canary+A/B+GPU |
-| `infrastructure/iac/opentofu-migration` | Playbook de migração Terraform→OpenTofu |
-| `security/scanning/supply-chain-attack-response` | Framing de IR para supply chain |
+| `infrastructure/iac/opentofu-migration` | Terraform→OpenTofu migration playbook |
+| `security/scanning/supply-chain-attack-response` | IR framing for supply chain |
 | `compliance/frameworks/*` | SOC2, HIPAA, PCI-DSS, ISO27001, GDPR, FedRAMP |
-| `devops/developer-experience/devcontainers-nix` | Categoria DX/onboarding ausente |
+| `devops/developer-experience/devcontainers-nix` | Missing DX/onboarding category |
 
-Veredito: vale minerar só a seção `ai/` (~17 skills) como fonte de gaps reais.
+Verdict: worth mining only the `ai/` section (~17 skills) as a source of real gaps.
 
 ### 2. vercel-labs/agent-skills — 9 skills
 
-Foco React/Next.js/Vercel. `vercel-optimize` e `react-best-practices` usam
-`references/`, `scripts/`, `test-cases.json` — estrutura de "gate determinístico →
-evidência" parecida com o estilo do catálogo atual.
+Focus on React/Next.js/Vercel. `vercel-optimize` and `react-best-practices` use
+`references/`, `scripts/`, `test-cases.json` — a "deterministic gate →
+evidence" structure similar to the current catalog's style.
 
-| Skill | Descrição |
+| Skill | Description |
 |---|---|
-| `deploy-to-vercel` | Deploy com preview por padrão |
-| `vercel-cli-with-tokens` | Deploy via CLI com token |
-| `vercel-optimize` | Auditoria de custo/performance data-driven |
-| `vercel-react-best-practices` | 70 regras de performance React/Next |
-| `vercel-composition-patterns` | Padrões de composição React |
+| `deploy-to-vercel` | Deploy with preview by default |
+| `vercel-cli-with-tokens` | Deploy via CLI with token |
+| `vercel-optimize` | Data-driven cost/performance audit |
+| `vercel-react-best-practices` | 70 React/Next performance rules |
+| `vercel-composition-patterns` | React composition patterns |
 | `vercel-react-view-transitions` | View Transition API |
-| `vercel-react-native-skills` | Boas práticas RN/Expo |
-| `web-design-guidelines` | Revisão de UI contra guidelines de acessibilidade |
-| `writing-guidelines` | Revisão de prosa contra handbook de estilo |
+| `vercel-react-native-skills` | RN/Expo best practices |
+| `web-design-guidelines` | UI review against accessibility guidelines |
+| `writing-guidelines` | Prose review against style handbook |
 
-Veredito: talvez, só a metodologia de `vercel-optimize` e o manifesto `skills.sh.json`.
+Verdict: maybe, only the `vercel-optimize` methodology and the `skills.sh.json` manifest.
 
 ### 3. nextlevelbuilder/ui-ux-pro-max-skill — 6 skills
 
-Mega-skill com banco de dados embutido (84 estilos, 192 paletas, 74 pares de fonte, 98
-diretrizes de UX). Zero sobreposição com DevOps/SRE. Veredito: não.
+Mega-skill with embedded database (84 styles, 192 palettes, 74 font pairs, 98
+UX guidelines). Zero overlap with DevOps/SRE. Verdict: no.
 
 ### 4. bencium/bencium-marketplace — 15 skills
 
-Skills meta-cognitivas agnósticas de domínio que interessam:
+Domain-agnostic meta-cognitive skills of interest:
 
-| Skill | Por quê |
+| Skill | Why |
 |---|---|
-| `vanity-engineering-review` | Lente para pegar over-engineering |
-| `negentropy-lens` | Framework de decisão para trade-offs de arquitetura |
-| `human-architect-mindset` | O que deve ficar humano vs. IA gerar |
-| `emotion-statusline` (hook, não skill) | Classificador de "estado emocional" do agente, sinaliza risco de reward-hacking |
+| `vanity-engineering-review` | Lens for catching over-engineering |
+| `negentropy-lens` | Decision framework for architecture trade-offs |
+| `human-architect-mindset` | What should stay human vs. AI-generated |
+| `emotion-statusline` (hook, not skill) | Agent "emotional state" classifier, signals risk of reward-hacking |
 
-Veredito: talvez, só esses 4 itens.
+Verdict: maybe, only these 4 items.
 
 ### 5. AccessLint/skills — 3 skills
 
-`audit`, `scan`, `diff` — auditoria WCAG 2.2 via CDP (live DOM). Veredito: não, a menos que
-a org tenha UIs internas com requisito de acessibilidade.
+`audit`, `scan`, `diff` — WCAG 2.2 audit via CDP (live DOM). Verdict: no, unless the
+org has internal UIs with accessibility requirements.
 
 ### 6. mattpocock/skills — ~38 skills
 
-Repo com filosofia própria (`CONTEXT.md`), instalável como plugin Claude Code ou via
+Repo with its own philosophy (`CONTEXT.md`), installable as a Claude Code plugin or via
 `skills.sh`.
 
-A skill "handoff" — duas versões:
-- **`handoff`** (estável): gera documento de handoff no diretório temp do SO, referencia
-  specs/ADRs/PRs por path, redige segredos/PII, seção "suggested skills".
+The "handoff" skill — two versions:
+- **`handoff`** (stable): generates a handoff document in the OS temp directory, references
+  specs/ADRs/PRs by path, redacts secrets/PII, "suggested skills" section.
   `disable-model-invocation: true`.
-- **`claude-handoff`** (experimental): mesma lógica, mas dispara um agente em background
-  (`claude --bg --name "..." "<resumo>"`) já seedado com o resumo.
+- **`claude-handoff`** (experimental): same logic, but fires a background agent
+  (`claude --bg --name "..." "<summary>"`) already seeded with the summary.
 
-Outras que interessam: `diagnosing-bugs`, `code-review` (dual review), `git-guardrails-claude-code`
-(hook PreToolUse bloqueando git ops destrutivos), `wayfinder`/`to-tickets`, `writing-great-skills`.
+Others of interest: `diagnosing-bugs`, `code-review` (dual review), `git-guardrails-claude-code`
+(PreToolUse hook blocking destructive git ops), `wayfinder`/`to-tickets`, `writing-great-skills`.
 
-Veredito: sim para um subconjunto — handoff, git-guardrails, diagnosing-bugs, wayfinder.
+Verdict: yes for a subset — handoff, git-guardrails, diagnosing-bugs, wayfinder.
 
-## PARTE 2 — Com certeza (deep dive completo)
+## PART 2 — Definitely (full deep dive)
 
 ### 2.1 AlmogBaku/debug-skill
 
-CLI Go (`dap`) + SKILL.md fino. Debugger real via DAP protocol, daemon+socket Unix, não
-print-debugging. Suporta Python/Go/Node/Rust/C/C++ (falta .NET).
+Go CLI (`dap`) + thin SKILL.md. Real debugger via DAP protocol, daemon+Unix socket, not
+print-debugging. Supports Python/Go/Node/Rust/C/C++ (missing .NET).
 
-Mecânica-chave: todo comando bloqueante retorna automaticamente localização + código-fonte
-ao redor + variáveis locais + call stack + stdout/stderr bufferizado. Multi-sessão isolada
-por socket nomeado. Metodologia: "two strikes, rethink", bisection por wolf-fence,
-breakpoint condicional como assertion de runtime.
+Key mechanics: every blocking command automatically returns location + surrounding source
+code + local variables + call stack + buffered stdout/stderr. Multi-session isolated
+by named socket. Methodology: "two strikes, rethink", bisection via wolf-fence,
+conditional breakpoint as runtime assertion.
 
-Preservar: auto-context a cada comando bloqueante; daemon invisível; truncamento explícito.
+Keep: auto-context on every blocking command; invisible daemon; explicit truncation.
 
-Corrigir: adicionar backend .NET; debug remoto em Kubernetes nativo (port-forward);
-reaper de daemons órfãos no início da sessão; decision trees por linguagem do stack real.
+Fix: add .NET backend; native Kubernetes remote debug (port-forward);
+orphan daemon reaper at session start; decision trees per real-stack language.
 
 ### 2.2 anthropics/skills — pdf
 
-Operações de PDF completas. Parte mais rica: preenchimento de formulário — árvore de
-decisão de 3 níveis (estrutura → visual → híbrido), dois gates de validação que falham
-alto, round-trip de verificação visual.
+Complete PDF operations. Richest part: form filling — 3-level decision tree
+(structure → visual → hybrid), two validation gates that fail loudly, visual
+verification round-trip.
 
-Corrigir: decisão clara de quando OCR é necessário; endurecer watermark/encrypt/extração
-de imagem; script dispatcher único; documentar fragilidade da heurística de checkbox.
+Fix: clear decision on when OCR is required; harden watermark/encrypt/image
+extraction; single dispatcher script; document checkbox heuristic fragility.
 
 ### 2.3 anthropics/skills — frontend-design
 
-Design visual distintivo, persona + processo, zero scripts. Nomeia 3 clichês exatos de
-"design gerado por IA" e instrui evitá-los. Duas passadas: brainstorm de token system →
-auto-crítica → só então código.
+Distinctive visual design, persona + process, zero scripts. Names 3 exact clichés of
+"AI-generated design" and instructs avoiding them. Two passes: token system brainstorm →
+self-critique → only then code.
 
-Corrigir: template de token system estruturado; operacionalizar screenshot/auto-crítica;
-contraste WCAG AA obrigatório; lint objetivo leve.
+Fix: structured token system template; operationalize screenshot/self-critique;
+mandatory WCAG AA contrast; lightweight objective lint.
 
 ### 2.4 anthropics/skills — mcp-builder
 
-4 fases: pesquisa (spec/SDK ao vivo) → implementação (schemas, DRY, tool annotations) →
-review/test → avaliação (qualidade medida por sucesso de tarefa do LLM downstream, não
+4 phases: research (live spec/SDK) → implementation (schemas, DRY, tool annotations) →
+review/test → evaluation (quality measured by downstream LLM task success, not
 coverage).
 
-Corrigir: teto de quantidade de tools (hoje tende a inchar); plugar em
-`external-secrets-aws-sm` e `bdc-telemetry-standard` já existentes; sanitização real em
-vez de OWASP genérico; guidance de deploy Dockerfile/Helm.
+Fix: tool count ceiling (currently tends to bloat); plug into existing
+`external-secrets-aws-sm` and `bdc-telemetry-standard`; real sanitization instead
+of generic OWASP; deploy guidance for Dockerfile/Helm.
 
 ### 2.5 anthropics/skills — skill-creator
 
-Meta-skill para criar/editar/avaliar/otimizar skills. Grader (objetivo) → comparator
-(cego) → analyst (não-cego, só no fim). Heurística: 3 transcrições escrevendo o mesmo
-helper → promover para `scripts/`. Otimização de descrição via loop train/test blindado.
+Meta-skill for creating/editing/evaluating/optimizing skills. Grader (objective) → comparator
+(blind) → analyst (non-blind, only at the end). Heuristic: 3 transcripts writing the same
+helper → promote to `scripts/`. Description optimization via blind train/test loop.
 
-Corrigir: generalizar o executor (não fixar em `claude -p`); versionamento real ligado ao
-git; `quick_validate` checando referências quebradas; budget cap visível antes de rodar;
-checar colisão de trigger com as 100+ skills já existentes.
+Fix: generalize the executor (don't hardcode `claude -p`); real versioning tied to
+git; `quick_validate` checking broken references; visible budget cap before running;
+check trigger collision with 100+ existing skills.
 
 ### 2.6 ComposioHQ/awesome-claude-skills — 6 skills
 
-Maturidade de implementação varia muito: `webapp-testing` tem código real testado;
-`video-downloader` tem script real cru; `skill-share`, `image-enhancer`,
-`invoice-organizer`, `file-organizer` são prosa pura sem nenhum artefato executável.
+Implementation maturity varies greatly: `webapp-testing` has real tested code;
+`video-downloader` has a raw real script; `skill-share`, `image-enhancer`,
+`invoice-organizer`, `file-organizer` are pure prose with no executable artifacts.
 
-**webapp-testing** (o mais forte): scripts como caixa-preta (`--help` antes de ler
-source), `with_server.py` sobe múltiplos servidores com cleanup garantido no `finally`,
-"reconhecimento antes da ação" (screenshot + DOM dump + `networkidle` obrigatório).
-Corrigir: sem framework de assertion; sem mock de rede; sem a11y check; sem regressão
-visual.
+**webapp-testing** (the strongest): scripts as black-box (`--help` before reading
+source), `with_server.py` spins up multiple servers with guaranteed cleanup in `finally`,
+"reconnaissance before action" (screenshot + DOM dump + mandatory `networkidle`).
+Fix: no assertion framework; no network mocking; no a11y check; no visual regression.
 
-**video-downloader**: script real via yt-dlp. Corrigir: sem playlist, sem retry, sem
-sanitização de filename, sem aviso de ToS.
+**video-downloader**: real script via yt-dlp. Fix: no playlist, no retry, no
+filename sanitization, no ToS warning.
 
-**Os 4 stubs**: `image-enhancer` tem exemplo de output fabricado. `invoice-organizer` e
-`file-organizer` têm o melhor padrão comum (plano → confirmação → execução, copiar por
-padrão) mas "log de undo" nunca especificado. Reconstruir = escrever implementação real do
-zero para todos os 4.
+**The 4 stubs**: `image-enhancer` has fabricated output example. `invoice-organizer` and
+`file-organizer` have the best common pattern (plan → confirmation → execution, copy by
+default) but "undo log" is never specified. Rebuilding = writing a real implementation from
+scratch for all 4.
 
-### 2.7 obra/superpowers — systematic-debugging (item de destaque)
+### 2.7 obra/superpowers — systematic-debugging (standout item)
 
-De longe a skill mais rigorosa das 15. Lei de Ferro: "NO FIXES WITHOUT ROOT CAUSE
-INVESTIGATION FIRST". 4 fases obrigatórias em ordem (investigação → padrão → hipótese →
-implementação). Regra mais afiada: 3+ correções falhadas ⇒ problema de arquitetura, não
-mais uma hipótese. Andaimes anti-racionalização: red-flags de auto-fala, tabela de sinais
-do parceiro humano, tabela de racionalizações comuns. Pressure-tested contra si mesma com
-cenários adversariais documentados.
+By far the most rigorous skill of the 15. Iron Law: "NO FIXES WITHOUT ROOT CAUSE
+INVESTIGATION FIRST". 4 mandatory phases in order (investigation → pattern → hypothesis →
+implementation). Sharpest rule: 3+ failed fixes ⇒ architecture problem, not just another
+hypothesis. Anti-rationalization scaffolding: self-talk red-flags, human partner signal
+table, common rationalization table. Pressure-tested against itself with documented
+adversarial scenarios.
 
-Arquivos de apoio: `root-cause-tracing.md`, `defense-in-depth.md` (4 camadas),
+Supporting files: `root-cause-tracing.md`, `defense-in-depth.md` (4 layers),
 `condition-based-waiting.md`, `find-polluter.sh`.
 
-Corrigir: ligar a Fase 1 ao stack real de observability (Tempo/Loki/VictoriaMetrics) em
-vez de "adicione instrumentação" genérico; time-boxing por fase + branch por severidade de
-incidente (SEV1 precisa estancar sangramento antes do processo completo); contador de
-tentativas auditável (não autoreportado); exemplos em Go/Python/.NET em vez de TS/JS; saída
-de Fase 1 alimentando `post-mortem-templates`/`root-cause-analysis` diretamente.
+Fix: connect Phase 1 to the real observability stack (Tempo/Loki/VictoriaMetrics) instead
+of generic "add instrumentation"; time-boxing per phase + branching by incident severity
+(SEV1 needs to stop the bleeding before the full process); auditable attempt counter
+(not self-reported); examples in Go/Python/.NET instead of TS/JS; Phase 1 output feeding
+`post-mortem-templates`/`root-cause-analysis` directly.
 
 ### 2.8 Linked-API/linkedin-skills — 2 skills
 
-Achado crítico: 100% dependente de um produto pago (Linked API) rodando browser remoto
-real logado no LinkedIn. `linkedin-growth` (pipeline de leads) é sofisticado: SQLite
-orquestrando importação → qualificação via LLM barato em lotes → atribuição por conta com
-menor razão fila/limite → scheduler com lock por liveness de PID → classificação de erro
-por padrão temporal → reatribuição entre contas.
+Critical finding: 100% dependent on a paid product (Linked API) running a real remote
+browser logged into LinkedIn. `linkedin-growth` (lead pipeline) is sophisticated: SQLite
+orchestrating import → qualification via cheap LLM in batches → assignment to account with
+lowest queue/limit ratio → scheduler with PID liveness lock → error classification by
+temporal pattern → cross-account reassignment.
 
-Preservar (reusável independente do vendor): separação política (código determinístico)
-vs. julgamento (só fit-com-ICP vai pro LLM); distribuição balanceada por runway; lock por
-liveness; pacing por último sucesso; ICP como estado durável.
+Keep (reusable independent of the vendor): separation of policy (deterministic code)
+vs. judgment (only ICP-fit goes to LLM); balanced distribution by runway; liveness
+lock; pacing by last success; ICP as durable state.
 
-Corrigir: abstrair uma interface `LinkedInBackend` pluggable; adicionar aviso explícito de
-risco de ToS/banimento de conta (o original normaliza sem avisar); supressão contra
-contatos já feitos por outro canal.
+Fix: abstract a pluggable `LinkedInBackend` interface; add explicit ToS/account-ban
+risk warning (the original normalizes without warning); suppression against contacts
+already made through another channel.
 
-### 2.9 ayghri/i-have-adhd — 1 skill + harness de eval
+### 2.9 ayghri/i-have-adhd — 1 skill + eval harness
 
-Multi-harness (não é Cursor-específico). Muda como o agente comunica: 5 fatos causais → 10
-regras → 6 exceções → checklist de 5 itens antes de enviar. Ativação só explícita, opt-in
-de "sempre ligado" via arquivo-flag.
+Multi-harness (not Cursor-specific). Changes how the agent communicates: 5 causal facts → 10
+rules → 6 exceptions → 5-item checklist before sending. Activation only explicit, opt-in
+for "always on" via flag file.
 
-O harness de eval é a parte mais valiosa: 14 casos cobrindo 12 categorias, rubrica
-ponderada de 5 dimensões julgada cega, release gate com cap de orçamento, resumability,
-enforcement de pareamento, flags de isolamento documentados.
+The eval harness is the most valuable part: 14 cases covering 12 categories, weighted
+5-dimension rubric judged blind, release gate with budget cap, resumability,
+pairing enforcement, documented isolation flags.
 
-Corrigir: scoring manual hoje (adicionar subcomando `judge` automatizado); só 2 runners de
-exemplo; extrair o harness como utilitário reusável separado de qualquer skill específica;
-sem tracking longitudinal de regressão.
+Fix: scoring is manual today (add automated `judge` subcommand); only 2 example runners;
+extract the harness as a reusable utility separate from any specific skill;
+no longitudinal regression tracking.
 
-## Observações transversais
+## Cross-cutting observations
 
-1. Maturidade de implementação varia muito entre as 6 do ComposioHQ — o ganho de maior
-   alavancagem nos 4 stubs é simplesmente shippar código de verdade.
-2. "Plano → confirmação → execução" e "script como caixa-preta, `--help` primeiro" são os
-   dois primitivos mais reusáveis para virar convenção transversal do catálogo inteiro.
-3. `systematic-debugging` é o padrão-ouro — precisa de menos retrabalho estrutural e mais
-   aprofundamento de domínio.
-4. O harness de eval do i-have-adhd e do skill-creator resolvem o mesmo problema de
-   ângulos diferentes — vale unificar num único harness interno.
-5. Nenhuma das 15 skills trata segurança/privacidade dos dados que toca — gap sistêmico.
+1. Implementation maturity varies greatly across the 6 ComposioHQ skills — the highest-leverage
+   gain on the 4 stubs is simply shipping real code.
+2. "Plan → confirmation → execution" and "script as black-box, `--help` first" are the
+   two most reusable primitives to turn into a cross-cutting convention for the entire catalog.
+3. `systematic-debugging` is the gold standard — needs less structural rework and more
+   domain deepening.
+4. The eval harness from i-have-adhd and skill-creator solve the same problem from
+   different angles — worth unifying into a single internal harness.
+5. None of the 15 skills addresses security/privacy of the data they touch — systemic gap.
 
 </details>

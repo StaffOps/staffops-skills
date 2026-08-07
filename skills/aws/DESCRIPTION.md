@@ -1,8 +1,8 @@
 # aws
 
-AWS service design and troubleshooting patterns.
+AWS service patterns, EKS troubleshooting, and AI DevOps Agent operations.
 
-8 skills.
+18 skills.
 
 - **cloudfront-patterns** — Configure CloudFront origins, caching and WAF.
 - **cost-explorer** — Analyze AWS spend via Cost Explorer and CUR Athena.

@@ -1,276 +1,216 @@
 ---
 name: llm-app-security
-description: "Isolate tenants, moderate output, and rate-limit LLM apps."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [ai, llm, application-security, multi-tenant, rate-limiting, output-moderation, abuse-prevention]
-    category: ai
-    related_skills: [ai-agent-security, prompt-injection-defense, llm-caching, llm-cost-optimization, agent-observability, ai-security-hardening]
+description: "Use when building application-layer security for LLM-powered features — output validation, PII filtering, content moderation, output format enforcement, and preventing the application from acting on hallucinated or manipulated LLM responses."
 ---
 # LLM Application Security
 
-The traditional-appsec surface of a customer- or multi-tenant-facing LLM
-*application* -- a chatbot, a Q&A product, an API that wraps a model call --
-which may hold no agentic tool access at all. This is deliberately **not**
-`ai-agent-security` (the threat model for an agent that already holds tool,
-file, or network capability, and what bounds the damage once it acts) and
-deliberately **not** `prompt-injection-defense` (the specific mechanism of
-an instruction smuggled inside content the model reads, and the layered
-defenses against it). Both of those skills matter for the same application
-if it happens to have tool access or reads untrusted content -- but this
-skill's job starts one level up: tenant data isolation, the request-size and
-encoding checks that have nothing to do with injection, output content
-moderation as a policy/brand-safety concern rather than a security
-detection, and abuse of the service itself (scraping, automation) by an
-otherwise-authenticated caller. Read the two sibling skills first if the
-system in question is agentic or processes untrusted third-party content --
-this skill assumes those concerns are handled elsewhere and covers what is
-left over.
+## When to use
 
-## When to Use
+- Building a user-facing feature powered by LLM responses
+- Need to validate/sanitize LLM output before it reaches users or systems
+- Implementing PII detection and redaction in LLM I/O
+- Enforcing output format (JSON schema, enum values) from LLM responses
+- Preventing hallucinated URLs, code, or commands from being executed
+- Adding content moderation to chat interfaces
 
-Reach for this skill when designing, reviewing, or hardening an
-LLM-serving application that:
+## When NOT to use
 
-- Serves more than one customer or tenant from shared infrastructure (a
-  shared vector store, a shared fine-tuned model, a shared cache, or a
-  shared conversation-history store)
-- Exposes an API or UI where end users submit free-text input and see the
-  model's output rendered back to them
-- Charges per seat, per tenant, or per API key, and therefore has a
-  concrete stake in one caller not extracting disproportionate value
-- Has a content policy, brand-safety bar, or PII-handling obligation that
-  applies to what the model is allowed to say back, independent of whether
-  the input was adversarial
-- Is being reviewed for launch and the checklist so far has covered
-  authentication and authorization but not tenant data boundaries,
-  output review, or abuse detection
+- Defending against prompt injection in inputs (use `prompt-injection-defense`)
+- Securing the agent's tool permissions (use `ai-agent-security`)
+- Infrastructure-level hardening (use `ai-security-hardening`)
+- Model supply chain concerns (use `model-supply-chain-security`)
 
-Do not reach for this skill to reason about tool-permission scoping (that
-is `ai-agent-security`) or about detecting instructions smuggled in
-retrieved/fetched content (that is `prompt-injection-defense`). If the
-answer to "does this app have tool access beyond the model call itself" is
-yes, read that skill's exposure checklist too -- the two threat models
-compose, they do not substitute for each other.
+## Steps
 
-## 1. Multi-Tenant Isolation
+1. **Validate LLM output against schema** — never trust free-form:
+   ```python
+   from pydantic import BaseModel, validator
+   from enum import Enum
 
-The isolation question for an LLM app is not "can Tenant A authenticate as
-Tenant B" (ordinary authz) -- it is "can Tenant A's data end up *inside a
-response served to* Tenant B" through a shared component that was never
-designed with a tenant boundary in mind. Three concrete places this leaks:
+   class Severity(str, Enum):
+       low = "low"
+       medium = "medium"
+       high = "high"
+       critical = "critical"
 
-**Shared vector store / RAG index.** If tenants share one vector index
-without a per-tenant scope on every read and write, a similarity search run
-for Tenant B's query can return Tenant A's chunks -- there is no implicit
-boundary in the index itself, embeddings from different tenants sit in the
-same vector space unless something enforces a filter. Concretely, every
-`upsert` and every `query` needs a tenant identifier applied consistently:
-a dedicated namespace per tenant (where the vector database supports
-namespaces natively), or, failing that, a mandatory metadata filter
-(`tenant_id == X`) applied on every retrieval call with no code path that
-skips it. The failure mode to design against specifically is a *new* query
-path added later (an admin debug tool, an analytics job, a "search across
-everything" feature) that queries the shared index directly and forgets the
-filter -- treat the tenant filter as a property of the query client, not
-something each call site has to remember to add.
+   class TriageResult(BaseModel):
+       category: str
+       severity: Severity
+       summary: str  # Max 500 chars
+       suggested_action: str
+       confidence: float  # 0.0-1.0
 
-**Tenant-scoped cache keys.** `llm-caching` in this catalog defines the
-exact-match cache key as a hash over `model_id_with_version, messages,
-temperature, top_p, top_k, max_tokens, tool_definitions, system_prompt` --
-that composition is correct for a single-tenant service, but in a
-multi-tenant app it is missing a dimension: if two tenants happen to send
-byte-identical prompts (a common onboarding question, a shared template),
-an exact-match cache keyed without a tenant identifier serves Tenant A's
-cached response, generated against Tenant A's context, to Tenant B. Add
-`tenant_id` as an explicit component of every cache key in a multi-tenant
-app -- exact-match and semantic alike -- even when the prompt text is
-otherwise identical across tenants. The same applies to conversation-history
-storage: a session store keyed only by `session_id` with no tenant check on
-read is one off-by-one session-ID collision (or one predictable ID) away
-from returning another tenant's conversation history as if it were the
-current one. Store the tenant identifier alongside the session and verify
-it on every read, not only at session creation.
+       @validator("summary")
+       def summary_length(cls, v):
+           if len(v) > 500:
+               return v[:500]
+           return v
 
-**The shared system prompt as a data-leak vector.** A system prompt that is
-templated per tenant (injecting the tenant's name, tier, entitlements, or a
-tenant-specific policy snippet into a base template) is itself tenant data,
-and a bug in how that template is assembled -- a caching layer that treats
-the *rendered* system prompt as reusable across tenants, a build step that
-bakes one tenant's example data into what was meant to be a generic
-template, a debug log that captures one tenant's fully rendered prompt and
-replays it as a fixture for another -- leaks Tenant A's configuration or
-example data into Tenant B's session. Treat a per-tenant system prompt as
-sensitive, tenant-scoped data with the same handling discipline as the
-RAG index and the cache: never cache the rendered prompt across tenants,
-and audit any example/fixture data checked into tests or docs for whether
-it was actually copied from a real tenant's live configuration.
+       @validator("confidence")
+       def confidence_range(cls, v):
+           return max(0.0, min(1.0, v))
 
-## 2. Input Validation -- The Traditional Appsec Surface, Not Injection
+   # Use structured output (Anthropic/OpenAI support this natively)
+   response = client.messages.create(
+       model="claude-sonnet-4-20250514",
+       messages=[...],
+       # Force JSON output matching schema
+       response_format={"type": "json_object"}
+   )
 
-This section is explicitly not about detecting an instruction smuggled in
-the input -- `prompt-injection-defense` owns that. This is the input
-handling any HTTP-facing service needs regardless of what sits behind it:
+   # Parse + validate — reject if malformed
+   try:
+       result = TriageResult.model_validate_json(response.content[0].text)
+   except ValidationError as e:
+       log.warning(f"LLM output failed validation: {e}")
+       return fallback_response()
+   ```
 
-**Request size limits.** A single oversized input is a resource-exhaustion
-vector independent of anything the model does with it: a multi-megabyte
-payload consumes memory and CPU in whatever pre-processing runs before the
-model call (tokenization, chunking, logging), and a sufficiently large
-context window request measurably increases per-call latency and cost
-before any content-based check even runs. Enforce a maximum request body
-size and a maximum token count at the edge (gateway or application layer)
-before the payload reaches tokenization -- this is standard DoS-prevention
-sizing, not a content-inspection step, and it belongs in front of every
-other check in this section because an oversized payload can make those
-checks themselves expensive to run.
+2. **PII detection and redaction** on both input and output:
+   ```python
+   import re
 
-**Rate limiting per API key and per tenant.** Distinct from the abuse
-detection in section 4 (which looks for a *pattern* across many requests),
-this is the baseline throughput cap every API needs: a fixed requests-per-
-second and concurrent-connection ceiling per credential, enforced at the
-gateway, returning a standard rate-limit response rather than queuing or
-degrading service for every other caller. This is the same discipline any
-API applies to any expensive backend call -- the LLM call being in the
-middle does not change the shape of the control, only how expensive
-exceeding it turns out to be. If the model behind this app is self-hosted
-rather than a third-party API, layer this flat per-caller cap with
-`ai-security-hardening`'s inference-server-specific limiting (a cost-scoped
-token-bucket keyed to estimated request cost, plus serving-framework
-concurrency/queue-depth caps) -- they compose rather than substitute: this
-one bounds throughput per caller regardless of backend, that one bounds
-what a single request can do to a shared GPU-batched serving pool.
+   PII_PATTERNS = {
+       "email": r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
+       "cpf": r'\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b',
+       "phone_br": r'\b\+?55?\s?\(?\d{2}\)?\s?\d{4,5}-?\d{4}\b',
+       "credit_card": r'\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b',
+       "aws_key": r'\bAKIA[0-9A-Z]{16}\b',
+   }
 
-**Output-encoding for input that gets echoed back.** If the application
-displays the user's own input back to them anywhere in the UI -- a chat
-transcript showing "you asked: <input>", a ticket confirmation quoting the
-submitted text, a log viewer rendering stored prompts -- the LLM call in
-the middle of that round-trip does not remove the need for ordinary
-output-encoding discipline. Text that a user submitted, that never passed
-through the model at all, can still contain `<script>` or event-handler
-HTML if the rendering layer treats it as trusted markup instead of escaping
-it. This is unrelated to what the model does with the input; it is the same
-XSS-prevention rule that applies to any user-generated content rendered in
-a browser, and it is easy to skip specifically in an LLM app because
-attention gets focused on "what will the model do with this text" and the
-more mundane "what will the browser do with this text" gets missed.
+   def redact_pii(text: str) -> tuple[str, list[str]]:
+       """Returns (redacted_text, list_of_detected_types)."""
+       detected = []
+       for pii_type, pattern in PII_PATTERNS.items():
+           if re.search(pattern, text):
+               detected.append(pii_type)
+               text = re.sub(pattern, f"[REDACTED_{pii_type.upper()}]", text)
+       return text, detected
 
-## 3. Output Controls -- Content Policy, Not Injection Detection
+   # Apply to both input (before sending to LLM) and output (before showing user)
+   clean_input, input_pii = redact_pii(user_message)
+   if input_pii:
+       log.info(f"Redacted PII from input: {input_pii}")
 
-`prompt-injection-defense`'s Layer 3 output validation is about parsing a
-model's proposed *action* into a strict, structured shape before a
-privileged tool call executes on it -- a security control against a
-manipulated instruction. This section is a different concern entirely:
-filtering the model's *generated text* for content-policy, brand-safety,
-and PII-in-output reasons before it reaches an end user, in an application
-that may take no privileged action at all -- it just returns text.
+   response = call_llm(clean_input)
+   clean_output, output_pii = redact_pii(response)
+   if output_pii:
+       log.warning(f"LLM leaked PII in output: {output_pii}")
+   ```
 
-The common pattern is a moderation pass inserted between generation and
-delivery: either a lightweight classifier (a toxicity/content-policy model
-run against the output) or a second LLM call ("does this response violate
-policy X, Y, Z -- answer yes/no with reason") gating whether the raw
-generation is returned as-is, redacted, or replaced with a fallback
-message. Be honest about what this costs, and size it against the actual
-risk rather than adding it reflexively: a second-pass classifier adds a
-fixed, usually small latency and cost increment; a second full LLM call
-roughly doubles both the latency and the token cost of the turn, in the
-same shape `llm-cost-optimization`'s model-selection framing scores as a
-"low-medium stakes, high volume" workload -- a bulk-classification task, not a
-compose-quality one, so the cheapest model tier that clears the accuracy
-bar for the specific policy being checked is usually sufficient here, not
-the same tier used for the primary generation.
+3. **Output content moderation** — block harmful outputs:
+   ```python
+   BLOCKED_PATTERNS = [
+       r'(?i)(password|secret|token)\s*[:=]\s*\S+',  # Credential-like output
+       r'(?i)rm\s+-rf\s+/',  # Destructive commands
+       r'(?i)(drop|delete)\s+(table|database|schema)',  # SQL DDL
+       r'https?://(?!internal\.|docs\.|grafana\.)',  # External URLs (hallucinated)
+   ]
 
-PII-in-output deserves a separate mention from generic content moderation:
-a RAG-backed app that retrieves real customer records as context can
-regurgitate a name, email, or account number verbatim in a response to a
-*different* user who has no business seeing that record, even with zero
-adversarial input on anyone's part -- the retrieval step surfaced data the
-generation step then repeated. This is a retrieval-scoping problem as much
-as an output-filtering one: the fix belongs partly in section 1 (does the
-retrieval query respect the requesting user's own access scope, not just
-their tenant) and partly here (does anything downstream of retrieval
-recognize and redact PII patterns before the response leaves the service),
-and treating it as solved by output filtering alone misses the retrieval
-half of the bug.
+   def moderate_output(text: str) -> tuple[str, bool]:
+       """Returns (text, was_modified)."""
+       modified = False
+       for pattern in BLOCKED_PATTERNS:
+           if re.search(pattern, text):
+               text = re.sub(pattern, "[BLOCKED_CONTENT]", text)
+               modified = True
+       return text, modified
+   ```
 
-## 4. Abuse Prevention
+4. **Prevent hallucinated action execution**:
+   ```python
+   # NEVER execute LLM-generated code/commands without validation
+   def safe_execute_suggestion(llm_suggestion: dict) -> dict:
+       action = llm_suggestion.get("action")
+       target = llm_suggestion.get("target")
 
-An authenticated, rate-limited-within-normal-bounds caller can still be
-extracting disproportionate value or degrading the service for others in
-ways that per-request rate limits (section 2) do not catch, because each
-individual request looks legitimate. What distinguishes abuse from normal
-usage is the *pattern* across many requests, not any single one:
+       # Allowlist of valid actions
+       VALID_ACTIONS = {"restart_pod", "scale_deployment", "check_logs", "query_metric"}
+       if action not in VALID_ACTIONS:
+           return {"error": f"Action '{action}' not in allowlist"}
 
-- **Query rate sustained well above the human-plausible ceiling** for the
-  product surface in question -- a chat UI answering one message every few
-  seconds around the clock is a different signal than the same rate on an
-  API key with no UI in front of it at all, so the threshold has to be set
-  per surface, not as one global number.
-- **Query diversity/entropy as a scraping signal.** A caller issuing many
-  small, systematically varied queries against a proprietary knowledge base
-  (walking through a term list, an ID range, or an alphabet-by-alphabet
-  sweep) looks like abuse even at a request rate that would pass a normal
-  rate limit -- the tell is in the *shape* of the query sequence, not its
-  speed. Tracking the entropy of the query stream per caller (are
-  successive queries near-duplicates of each other, or do they look like a
-  systematic sweep of the underlying corpus) catches an extraction pattern
-  that a flat requests-per-second cap does not.
-- **Cost-per-user outlier detection.** Track per-caller spend (tokens x
-  price, the same `agent_llm_cost_dollars_total` metric `agent-observability`
-  defines and `llm-cost-optimization`'s budget section assumes is already
-  instrumented) as a distribution across the whole caller population, and
-  flag outliers relative to that distribution rather than only against a
-  fixed absolute cap -- a caller running 20x
-  the median spend of comparable accounts is a signal worth a look even if
-  it is still under whatever hard budget ceiling is configured, because the
-  hard ceiling is a backstop against runaway cost, not a definition of
-  normal usage.
+       # Validate target exists
+       if action == "restart_pod" and not pod_exists(target):
+           return {"error": f"Pod '{target}' does not exist (hallucinated?)"}
 
-The response to a detected abuse pattern does not have to be an immediate
-hard block -- a step-up challenge, a tightened rate limit specifically for
-that caller, or a flag for manual review are all proportionate first
-responses, reserving an outright ban for a pattern that repeats after a
-lighter intervention.
+       # Execute only after validation
+       return execute_action(action, target)
+   ```
+
+5. **Rate limit and quota per user session**:
+   ```python
+   from datetime import datetime, timedelta
+
+   class SessionGuard:
+       def __init__(self, max_messages=50, max_tokens=100_000, window=timedelta(hours=1)):
+           self.max_messages = max_messages
+           self.max_tokens = max_tokens
+           self.window = window
+
+       async def check(self, session_id: str) -> bool:
+           key = f"session:{session_id}"
+           usage = await redis.hgetall(key)
+           msg_count = int(usage.get("messages", 0))
+           token_count = int(usage.get("tokens", 0))
+
+           if msg_count >= self.max_messages:
+               raise RateLimitExceeded("Message limit reached")
+           if token_count >= self.max_tokens:
+               raise RateLimitExceeded("Token budget exhausted")
+           return True
+   ```
+
+6. **Logging for security forensics** (without logging sensitive content):
+   ```python
+   # Log decisions and anomalies, NOT full prompts/responses
+   audit_log.info("llm_interaction",
+       session_id=session_id,
+       user_id=user_id,
+       input_token_count=input_tokens,
+       output_token_count=output_tokens,
+       pii_detected_in_input=bool(input_pii),
+       pii_detected_in_output=bool(output_pii),
+       output_moderated=was_modified,
+       validation_passed=True,
+       model=model_used,
+       latency_ms=latency,
+   )
+   ```
+
+## Decision tree
+
+```
+IF building chat interface (user sees raw LLM output):
+  → PII redaction on output (step 2)
+  → Content moderation (step 3)
+  → Rate limiting per session (step 5)
+IF LLM output drives automated action:
+  → Schema validation mandatory (step 1)
+  → Action allowlist (step 4)
+  → Never execute generated code directly
+IF LLM processes user-uploaded documents:
+  → PII redaction on input (step 2)
+  → Size limits on input
+  → Scan for injection patterns (see prompt-injection-defense)
+IF compliance requirement (LGPD, GDPR):
+  → PII redaction on BOTH directions
+  → Audit logging without content (step 6)
+  → Retention policy on LLM interaction logs
+```
 
 ## Anti-patterns
 
-- Building this skill's controls into an agentic system and assuming they
-  cover tool-abuse or exfiltration risk -- they do not; that threat model
-  is `ai-agent-security`'s, and an app with tool access needs both skills,
-  not one instead of the other.
-- Treating a request-size limit or a rate limiter as a substitute for
-  prompt-injection detection, or vice versa -- they defend against
-  unrelated failure modes and neither one covers the other's gap.
-- A shared vector index or cache queried without a tenant filter applied
-  at the client level, relying on every future call site to remember to
-  add one -- the first debug tool or analytics job that queries directly
-  is the leak.
-- Caching an exact-match or semantic response keyed on prompt content alone
-  in a multi-tenant app, omitting `tenant_id` from the key, so two tenants
-  with an identical prompt receive each other's cached response.
-- Treating a per-tenant rendered system prompt as safe to cache or log
-  across tenants because "it's just a template" -- the rendered instance
-  is tenant data the moment tenant-specific values are substituted into it.
-- Skipping output-encoding on user input that gets echoed back in a UI on
-  the reasoning that "it went through the LLM, so it's been processed" --
-  the model call does not sanitize markup, and input that bypasses the
-  model entirely (a stored, later-rendered field) is not processed at all.
-- Running full content moderation as a second complete LLM call at the
-  primary model's quality tier without checking whether a cheaper
-  classifier or smaller model clears the accuracy bar for that specific
-  policy check, silently doubling cost and latency for no quality gain.
-- Relying on output PII filtering alone to catch a RAG pipeline that
-  retrieved a record the current user should never have seen -- the bug is
-  in retrieval scope, and output filtering only catches the shapes of PII
-  it was built to recognize.
-- Setting a single global rate limit and calling abuse prevention done --
-  a scraping pattern (high query diversity, low per-request cost) and a
-  cost-outlier pattern (low rate, high per-call cost) both slip under a
-  rate-only threshold that was tuned for neither.
-- Reaching for an outright ban as the first response to a detected abuse
-  signal instead of a proportionate step-up (tighter limit, manual review
-  flag), turning a false-positive detection into an unnecessary customer
-  outage.
+- ❌ Displaying raw LLM output to users without moderation
+- ❌ Executing LLM-suggested commands/code without allowlist validation
+- ❌ No PII filtering (LLM can hallucinate or repeat PII from training)
+- ❌ Trusting LLM JSON output without schema validation
+- ❌ Logging full prompts/responses (PII + storage explosion)
+- ❌ No rate limiting (abuse via chat flooding)
+- ❌ Hallucinated URLs rendered as clickable links (phishing vector)
+
+## Related skills
+
+- `prompt-injection-defense` — input-side defense
+- `ai-agent-security` — agent tool permission scoping
+- `ai-security-hardening` — infrastructure layer
+- `rag-observability-evals` — ensuring grounded outputs

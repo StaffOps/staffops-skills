@@ -237,3 +237,15 @@ each tier, plus the known fragility of the checkbox-detection heuristic
 - pytesseract: https://github.com/madmaze/pytesseract
 - Related: `markdown-docs` (authoring a new document instead of
   manipulating an existing PDF)
+
+## When NOT to use
+
+- **Creating documents from scratch** — write in Markdown/LaTeX/DOCX first, then export to PDF.
+- **Editable document workflows** — PDFs are final-form; use source formats for collaboration.
+- **OCR of handwritten text** — specialized ML models are better than generic PDF tools.
+
+## Related skills
+
+- [invoice-organizer](../documentation/invoice-organizer/SKILL.md) — processing PDF invoices specifically.
+- [file-organizer](../documentation/file-organizer/SKILL.md) — managing PDF files in directory structures.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating batch PDF operations.

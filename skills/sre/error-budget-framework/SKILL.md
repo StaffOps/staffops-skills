@@ -1,23 +1,95 @@
 ---
 name: error-budget-framework
-description: "Track error budgets and burn rate alerts."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [error, budget, framework, sre]
-    category: sre
-    related_skills: [sla-slo-design, alerting-strategy, vmalert-configuration]
+description: "Use when implementing error budget tracking, burn rate alerting, or defining budget exhaustion policies. Provides complete VMRule recording rules and alert rules (copy-paste ready), multi-window burn rate thresholds (Google SRE workbook), budget policy enforcement tiers, Alertmanager routing for SLO alerts, and Grafana dashboard panel queries."
 ---
 # Error Budget Framework
 
 Operational framework for managing error budgets at <org>. Translates SLO targets into actionable budgets, burn rate alerts, and escalation policies using VictoriaMetrics + VMAlert.
 
-## When to Use
+## When to use
 
-Use when implementing error budget tracking, burn rate alerting, or defining budget exhaustion policies. Covers budget calculation, multi-window burn rate alerts (Google SRE workbook), VMAlert recording rules, budget policies, and <org>-specific VictoriaMetrics patterns.
+- Setting up burn rate alerting for a service with defined SLOs
+- Service is burning error budget too fast (need policy enforcement)
+- Quarterly review: checking budget consumption trends
+- Need to decide whether to deploy (budget check)
+- Creating Grafana dashboard for budget visibility
+
+## When NOT to use
+
+- Defining the SLO targets themselves → use `sla-slo-design`
+- Writing the runbook for burn rate alerts → use `runbook-authoring`
+- Configuring Alertmanager routing → use `alerting-strategy`
+- Active incident response → use `incident-response-runbook`
+
+## Steps: Implement error budget for a service
+
+1. **Confirm SLO exists** (from `sla-slo-design`) — you need the target number
+2. **Deploy recording rules** (copy from section below, replace SERVICE_NAME and target)
+3. **Deploy alert rules** (multi-window burn rate, copy from section below)
+4. **Create Grafana dashboard** (budget remaining gauge + burn rate stat)
+5. **Define policy** (what happens at 50%/25%/5%/0% remaining)
+6. **Communicate to team** (weekly SLO review, Slack notifications)
+7. **Automate enforcement** (ArgoCD sync disable at 0% — manual override by IC)
+
+## Decision tree: What to do when budget is burning
+
+```
+BURN RATE ALERT FIRED
+│
+├─ CRITICAL (14.4x) — budget gone in ~2h
+│  ├─ Is there a deploy in the last 30min?
+│  │  ├─ YES → ROLLBACK immediately, then investigate
+│  │  └─ NO  → Page IC, start RCA (see root-cause-analysis)
+│  └─ After mitigation: mandatory post-mortem within 5 days
+│
+├─ HIGH (6x) — budget gone in ~5 days
+│  ├─ Is this a known issue with a fix in progress?
+│  │  ├─ YES → Accelerate the fix (promote to P1)
+│  │  └─ NO  → Assign on-call to investigate within 4h
+│  └─ Freeze non-critical deploys until burn rate drops below 3x
+│
+├─ ELEVATED (3x) — budget gone in ~10 days
+│  ├─ Create Jira ticket (P2)
+│  ├─ Review in next standup
+│  └─ No deploy freeze, but increase scrutiny on changes
+│
+└─ STEADY (1x) — budget will exhaust at window end
+   ├─ Monitor trend in weekly review
+   ├─ If improving: no action needed
+   └─ If stable at 1x: investigate chronic source of errors
+```
+
+## Decision tree: Budget policy enforcement
+
+```
+CHECK BUDGET REMAINING
+│
+├─ > 50% remaining → 🟢 HEALTHY
+│  └─ Deploy freely, experiment, run chaos tests
+│
+├─ 25-50% remaining → 🟡 CAUTION
+│  ├─ Review recent deploys (did they contribute?)
+│  ├─ Increase test coverage on risky changes
+│  └─ No risky experiments (chaos, migration)
+│
+├─ 5-25% remaining → 🟠 AT RISK
+│  ├─ Freeze non-critical deploys
+│  ├─ Prioritize reliability work (fix error sources)
+│  ├─ IC reviews ALL changes before merge
+│  └─ Notify team lead via Slack
+│
+├─ 0-5% remaining → 🔴 CRITICAL
+│  ├─ Feature freeze (only reliability fixes allowed)
+│  ├─ All engineering focused on recovery
+│  ├─ SRE approval required for ANY change
+│  └─ Escalate to management
+│
+└─ < 0% (exhausted) → ⛔ EXHAUSTED
+   ├─ Complete deploy freeze
+   ├─ ArgoCD sync DISABLED (manual override by IC only)
+   ├─ Mandatory post-mortem
+   └─ Budget recovers as old errors fall off 30d window
+```
 
 ## Concepts
 
@@ -354,3 +426,12 @@ SLO Error Budget dashboard (datasource UID: `victoriametrics`):
 - Related skills: `sla-slo-design`, `alerting-strategy`, `vmalert-configuration`
 - <org> stack: VictoriaMetrics (`vm-cluster-vmselect.monitoring:8481`) + VMAlert + Alertmanager (`https://alertmanager.<org-domain>`)
 - Grafana: `https://grafana.<org-domain>`
+
+## Related skills
+
+- `sla-slo-design` — define the SLO targets that drive these budgets
+- `alerting-strategy` — routing and severity for burn rate alerts
+- `slo-burn-rate-calculator` — automated calculation script
+- `vmalert-configuration` — VMRule CRD specifics
+- `runbook-authoring` — runbooks for burn rate alerts
+- `alertmanager-slack-config` — Slack template for SLO notifications

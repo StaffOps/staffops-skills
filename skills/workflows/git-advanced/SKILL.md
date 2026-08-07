@@ -417,3 +417,16 @@ Solution: regularly `git fetch --prune` and `git branch -d <merged>`.
 - BFG repo cleaner: https://rtyley.github.io/bfg-repo-cleaner/
 - git-filter-repo: https://github.com/newren/git-filter-repo
 - Related: `git-conventions` (steering — basic rules), `conventional-commits`, `jira-conventions`
+
+## When NOT to use
+
+- **Basic add/commit/push** — this skill is for complex operations (rebase, bisect, recovery).
+- **Commit message formatting** — see [conventional-commits](../workflows/conventional-commits/SKILL.md).
+- **CI/CD pipeline configuration** — see [pipeline-template-apps](../workflows/pipeline-template-apps/SKILL.md).
+
+## Related skills
+
+- [conventional-commits](../workflows/conventional-commits/SKILL.md) — commit message format.
+- [git-guardrails](../workflows/git-guardrails/SKILL.md) — safety hooks, destructive-op prevention.
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — automating git workflows in scripts.
+- [session-handoff](../workflows/session-handoff/SKILL.md) — preserving context across sessions via commits.

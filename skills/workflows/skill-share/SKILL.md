@@ -180,3 +180,15 @@ above for why.
   of just not committing it.** The exclude list covers build artifacts that
   `scripts/` directories reliably accumulate (`__pycache__`, `.pyc`,
   `.DS_Store`); it is not a general-purpose `.gitignore` replacement.
+
+## When NOT to use
+
+- **Private/org-specific knowledge** — don't share skills containing internal endpoints, secrets, or proprietary info.
+- **Incomplete/draft skills** — share after validation via the eval harness.
+- **Steering rules** — sharing steering requires different governance; skills are opt-in knowledge.
+
+## Related skills
+
+- [skill-authoring](../workflows/skill-authoring/SKILL.md) — writing skills ready for sharing.
+- [skill-eval-harness](../workflows/skill-eval-harness/SKILL.md) — validating quality before sharing.
+- [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding skill registry.

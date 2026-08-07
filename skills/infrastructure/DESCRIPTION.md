@@ -2,7 +2,7 @@
 
 GitOps, Helm, service mesh, and cluster infrastructure.
 
-13 skills.
+14 skills.
 
 - **argocd-patterns** — Configure ApplicationSets, sync waves and hooks.
 - **cosign-image-signing** — Sign and verify container images with cosign.

@@ -373,3 +373,16 @@ done
 - `cosign-image-signing` skill — final image signing after apko build
 - Multi-arch builds are mandatory for all custom packages — always build with `--arch amd64,arm64` to support Graviton scheduling
 - Path: `<workspace>/01-DEVOPS/AUTOMATIONS/CONTAINER/custom-packages/`
+
+## When NOT to use
+
+- For building the final container image from packages → use `container-image-apko`
+- For signing the built image with cosign → use `cosign-image-signing`
+- For vulnerability scanning of the image → use `sbom-vulnerability-management`
+
+## Related skills
+
+- `container-image-apko` — apko consumes the APK packages melange builds
+- `cosign-image-signing` — signing the golden image after build
+- `sbom-vulnerability-management` — scanning packages for CVEs
+- `golden-ami-creation` — AMI hardening (EC2 equivalent of container hardening)

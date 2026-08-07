@@ -284,3 +284,16 @@ ls /tmp/scriptname.* 2>/dev/null && echo "LEAK: temp files remain"
 - `scripts/retry.sh` — retry with exponential backoff and jitter
 - `scripts/strict-preamble.sh` — sourceable strict-mode + trap boilerplate
 - `examples/atomic-deploy.sh` — locking, staging, rollback on failure
+
+## When NOT to use
+
+- **Writing the script itself** (functions, loops, arrays) — see [bash-scripting](../shell/bash-scripting/SKILL.md).
+- **Argument parsing and CLI UX** — see [shell-cli-design](../shell/shell-cli-design/SKILL.md).
+- **Complex error recovery** that needs retry logic across services — consider Python or a proper orchestrator.
+
+## Related skills
+
+- [bash-scripting](../shell/bash-scripting/SKILL.md) — script structure, quoting, parameter expansion.
+- [shell-cli-design](../shell/shell-cli-design/SKILL.md) — argument parsing, help text, exit codes.
+- [shell-testing-linting](../shell/shell-testing-linting/SKILL.md) — shellcheck, bats, validating error paths.
+- [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md) — structured approach to finding root cause.

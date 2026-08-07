@@ -256,3 +256,16 @@ Without `service_name`, profiles are unattributable — useless for debugging.
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/pyroscope/docs`
 - <org> profiling branch (not merged): `feat/pyroscope` commit `824171a` in otel-telemetry-helper
 - Related skills: `grafana-cross-signal-correlation`, `monitoring-stack-overview`
+
+## When NOT to use
+
+- For trace-based debugging (latency, errors) → use `tempo-traceql-patterns`
+- For OTel eBPF instrumentation (tracing, not profiling) → use `otel-ebpf-instrumentation`
+- For metric-based resource analysis → use `victoriametrics-troubleshooting`
+
+## Related skills
+
+- `grafana-cross-signal-correlation` — linking profiles to traces (span → profile)
+- `tempo-traceql-patterns` — querying the traces that profiles correlate to
+- `otel-ebpf-instrumentation` — eBPF tracing (distinct from eBPF profiling)
+- `monitoring-stack-overview` — where Pyroscope fits in the signal pipeline
