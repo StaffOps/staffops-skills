@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "victoriametrics": {
+      "url": "${VM_MCP_ENDPOINT}",
+      "description": "VictoriaMetrics for metric verification"
+    }
+  }
+}
