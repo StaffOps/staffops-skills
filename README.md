@@ -13,8 +13,10 @@ that knows how a specific component actually fails, which metric to query, and
 what the anti-patterns are.
 
 The catalog is packaged in the [Hermes Agent](https://github.com/NousResearch/hermes-agent)
-skill format, which is also compatible with Claude Code and other agents that
-read `SKILL.md` frontmatter.
+skill format, which is also compatible with Claude Code, Kiro CLI, and other
+agents that read `SKILL.md` frontmatter — see **Installation** below for the
+one adjustment each platform needs (none, for Kiro; a flattening symlink
+step, for Claude Code).
 
 ## Why
 
@@ -111,14 +113,37 @@ cp -r staffops-skills/skills/observability ~/.hermes/skills/
 
 ### Claude Code
 
-Claude Code discovers skills under `~/.claude/skills/`. Because it reads the
-same `name` + `description` frontmatter, the catalog works unmodified:
+Claude Code discovers skills under `~/.claude/skills/` as direct children of
+that one flat directory — because it reads the same `name` + `description`
+frontmatter, the catalog works unmodified, it just needs one symlink per
+skill to flatten the category nesting:
 
 ```bash
-for dir in staffops-skills/skills/*/*/; do
-  ln -s "$(pwd)/$dir" ~/.claude/skills/"$(basename "$dir")"
-done
+./tools/install.sh install
 ```
+
+The script validates the catalog first (`tools/validate_skills.py`), never
+overwrites an entry it doesn't own (a same-named skill already installed by
+something else is skipped with a warning, not clobbered), and supports
+`uninstall`, `status`, and `clean` (remove only this repo's broken symlinks,
+e.g. after a skill is renamed) the same way — see `./tools/install.sh help`.
+Every command accepts `--dry-run`. Override the target directory with
+`CLAUDE_SKILLS_DIR=/path ./tools/install.sh install` if needed.
+
+### Kiro CLI
+
+Kiro needs no install step: it reads `SKILL.md` files directly off disk via
+a `skill://` glob resource declared in an agent's JSON `resources` array, and
+that glob already supports this catalog's `skills/<category>/<name>/`
+nesting natively — no flattening, no symlinks. Print the exact line to add
+to your own agent's `resources` array:
+
+```bash
+./tools/install.sh kiro-resource-line
+```
+
+This only prints; it never writes to a Kiro agent file the catalog doesn't
+own.
 
 ### Other agents
 
