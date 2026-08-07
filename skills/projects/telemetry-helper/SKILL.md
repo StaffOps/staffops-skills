@@ -1,345 +1,129 @@
 ---
 name: telemetry-helper
-description: "Work on the shared OTel helper monorepo."
-version: 1.0.0
-author: Carlos Felipe Gomes
-license: MIT
-platforms: [linux, macos, windows]
-metadata:
-  hermes:
-    tags: [telemetry, helper, projects]
-    category: projects
-    related_skills: [telemetry-standard]
+description: "Use when working on the StaffOps otel-libs monorepo — releasing new versions, understanding the .NET/Python helper API, or referring to sample apps for OTel instrumentation patterns."
 ---
-# <org> OTel Helper — Project Overview
+# OTel Helper Libraries — Project Overview
 
-Quick reference for the `otel-telemetry-helper` monorepo state.
+Quick reference for the `otel-libs` monorepo (shared OpenTelemetry libraries for .NET and Python).
 
-## When to Use
+## When to use
 
-<org> OTel Helper monorepo overview — current state, structure, versions, sample apps, CI/CD pipeline, Harbor images. Use when working on the otel-telemetry-helper repo, releasing new versions, or referring to sample apps. Cross-references to detailed skills for specific topics.
+- Working on the otel-libs repo (releasing, testing, adding instrumentation)
+- Understanding the helper library API (`AddOtelHelper()` / `setup_telemetry()`)
+- Looking for OTel instrumentation examples (sample apps cover 30+ patterns)
+- Debugging telemetry in apps that use these libraries
+
+## When NOT to use
+
+- **Manual OTel SDK configuration** — use the helper library; don't re-implement what it provides
+- **Collector/pipeline configuration** — see `otel-collector-multi-cluster` or `otel-pipeline-troubleshooting`
+- **Metric catalog questions** — see `dotnet-apm-metrics` or `python-apm-metrics`
 
 ## Repository
 
-**Path**: `<workspace>/01-DEVOPS/LABS/otel-telemetry-helper`
+**GitHub**: https://github.com/StaffOps/otel-libs
 
-GitLab: <org>'s internal GitLab.
-
-## Purpose
-
-Corporate OpenTelemetry libraries for <org> apps:
-- `.NET` library: `OtelHelper`
-- `Python` library: `otel_helper`
-
-Both implement the corporate observability standard. See related skill: `telemetry-standard`.
-
-## Monorepo structure
+## Structure
 
 ```
-otel-telemetry-helper/
-├── README.md                          # Overview, env vars, quick start
-├── .gitlab-ci.yml                     # CI: unit-test → build-dev → demo → build
-├── .gitignore                         # .NET + Python + IDE + OS
-├── dashboards/                        # Shared Grafana dashboards (used by all sample apps)
-│   ├── 01-api-business-metrics.json
-│   ├── 02-workers-background.json
-│   └── 03-traces-reliability.json
-├── dotnet/                            # .NET lib
-│   ├── OtelHelper/                 # Lib source
-│   ├── OtelHelper.Tests/           # 61 tests, 90% coverage
-│   ├── OtelHelper.sln
-│   ├── example/
-│   │   ├── dotnet-api/                # Minimal API (13 endpoints, gRPC client)
-│   │   ├── dotnet-backend/            # gRPC server (5 RPCs)
-│   │   ├── dotnet-process/            # Worker (4 background services)
-│   │   └── Protos/order.proto
-│   ├── .gitlab-cicd/
-│   │   ├── 00_unit_test.yml
-│   │   ├── 01_build_dev.yml
-│   │   ├── 02_demo.yml                # Dual-arch (arm64 + amd64)
-│   │   └── 03_build.yml
-│   ├── README.md
-│   ├── HOW-TO.md
-│   └── TESTS.md
-└── python/                            # Python lib
-    ├── otel_helper/                      # Lib source
-    ├── tests/                         # 63 tests, 94% coverage
-    ├── pyproject.toml
-    ├── example/
-    │   ├── python-api/                # FastAPI (notification service)
-    │   ├── python-backend/            # gRPC server (notification delivery)
-    │   ├── python-process/            # Workers (queue, retry, cleanup)
-    │   └── protos/notification.proto
-    ├── .gitlab-cicd/
-    │   ├── 00_unit_test.yml
-    │   ├── 01_build_dev.yml
-    │   ├── 02_demo.yml                # Dual-arch (arm64 + amd64)
-    │   └── 03_publish.yml
-    ├── README.md
-    ├── HOW-TO.md
-    └── TESTS.md
+otel-libs/
+├── dotnet/                        # .NET lib: OtelHelper
+│   ├── OtelHelper/                # Lib source
+│   ├── OtelHelper.Tests/          # 61 tests, 90% coverage
+│   └── example/
+│       ├── dotnet-api/            # Minimal API (13 endpoints, gRPC client)
+│       ├── dotnet-backend/        # gRPC server (5 RPCs)
+│       └── dotnet-process/        # Worker (4 background services)
+├── python/                        # Python lib: otel_helper
+│   ├── otel_helper/               # Lib source
+│   ├── tests/                     # 63 tests, 94% coverage
+│   └── example/
+│       ├── python-api/            # FastAPI (notification service)
+│       ├── python-backend/        # gRPC server
+│       └── python-process/        # Workers (queue, retry, cleanup)
+└── dashboards/                    # Shared Grafana dashboards
 ```
 
-## Current versions (May 2026)
+## API entry points
 
-### .NET library
+| Language | Setup call | Min version |
+|----------|-----------|-------------|
+| .NET | `services.AddOtelHelper()` | net8.0 / net10.0 |
+| Python | `setup_telemetry()` | Python 3.11+ (NOT 3.12) |
 
-| Item | Value |
-|------|-------|
-| Lib version | `0.1.0` (dev) |
-| Target frameworks | `net8.0;net10.0` |
-| OTel SDK | 1.15.3 |
-| Tests | 61 passing, 90% coverage |
-| API entry point | `services.AddOtelHelper()` |
+## Environment variables (both libs)
 
-### Python library
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SERVICE_NAME` | `my-service` | Service identity (priority 1) |
+| `OTEL_SERVICE_NAME` | `my-service` | Fallback service name |
+| `ENVIRONMENT` | `LOCAL` | Enum: LOCAL/DEV/HML/PRD/BTC |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://otel-agent-collector.monitoring` | Collector endpoint |
+| `OTEL_HELPER_DEBUG_LEVEL` | `false` | Force 100% sampling + debug spans |
+| `OTEL_HELPER_EXTRA_INSTRUMENTATION` | `SQL` | Conditional: SQL, AWS, REDIS |
+| `OTEL_HELPER_SAMPLE_RATIO` | `1.0` | Head sampling ratio (0.0-1.0) |
 
-| Item | Value |
-|------|-------|
-| Lib version | `0.1.0` (dev) |
-| Python | 3.11+ (NOT 3.12 — pkg_resources issues) |
-| OTel SDK | opentelemetry 1.42.1 |
-| Instrumentations | 0.63b1 |
-| Tests | 63 passing, 94% coverage |
-| API entry point | `setup_telemetry()` |
-
-## Environment enum
+## Behavior by environment
 
 ```
 LOCAL → log DEBUG, 100% sampling
 DEV   → log INFO,  100% sampling
 HML   → log INFO,  100% sampling
 PRD   → log WARN,  100% sampling (tail-sampled at Collector)
-BTC   → log WARN,  100% sampling (renamed from PRD_BATCH/PRD-BATCH)
+BTC   → log WARN,  100% sampling (batch workloads)
 ```
 
-Aliases: `PRD-BATCH`, `PRD_BATCH` → maps to `BTC`.
+## Sample apps — key patterns demonstrated
 
-## Environment variables (both libs)
+### .NET (13 API endpoints)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `SERVICE_NAME` | `my-service` | Service name (priority 1) |
-| `OTEL_SERVICE_NAME` | `my-service` | Fallback for service name |
-| `ENVIRONMENT` | `LOCAL` | Environment enum |
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | `http://otel-agent-collector.monitoring` | Collector host |
-| `OTEL_HELPER_DEBUG_LEVEL` | `false` | Debug mode (force 100% sampling) |
-| `OTEL_HELPER_EXTRA_INSTRUMENTATION` | `SQL` | Conditional: SQL, AWS, REDIS |
-| `OTEL_HELPER_SAMPLE_RATIO` | `1.0` | Head sampling (0.0-1.0) |
+| Pattern | Endpoint |
+|---------|----------|
+| Distributed trace (API→gRPC→Backend) | `GET /order/{id}` |
+| High latency simulation | `GET /slow` |
+| Parallel fan-out (Task.WhenAll) | `GET /parallel/{count}` |
+| Retry with span per attempt | `GET /retry/{id}` |
+| Cache hit/miss with metrics | `GET /cache/{id}` |
+| Baggage propagation + scoped logging | `GET /order/{id}/trace` |
+| Span events (lifecycle) | `GET /order/{id}/events` |
+| Exception → ERROR span | `GET /error` |
+| StartRootActivity (workers) | Background services |
 
-## Sample apps — .NET
+### Python (notification service)
 
-**Architecture:**
-```
-dotnet-process (Worker)
-  HTTP :8080
-  ↓
-dotnet-api (Minimal API)
-  gRPC :5100
-  ↓
-dotnet-backend (gRPC server)
-```
+| Pattern | Location |
+|---------|----------|
+| FastAPI + gRPC cross-service | `POST /notify` → gRPC backend |
+| Queue consumer (independent traces) | `python-process/QueueConsumer` |
+| Retry worker | `python-process/RetryWorker` |
+| Health checker (StartRootActivity) | `python-process/HealthChecker` |
 
-**dotnet-api (13 endpoints):**
+## Build commands
 
-| Endpoint | Pattern Demonstrated |
-|----------|---------------------|
-| GET / | Health check |
-| GET /order/{id} | Distributed trace (API→gRPC→Backend) |
-| POST /order | POST with JSON body |
-| GET /order/{id}/cancel | Write operation |
-| GET /slow | High latency (4-7s) |
-| GET /batch | Sequential fan-out (5 items) |
-| GET /error | Exception → ERROR span |
-| GET /health/ready | Dependency probe |
-| GET /order/{id}/trace | Baggage propagation + scoped logging |
-| GET /order/{id}/events | Span events (4 lifecycle events) |
-| GET /parallel/{count} | Parallel fan-out (Task.WhenAll) |
-| GET /retry/{id} | Retry with span per attempt |
-| GET /cache/{id} | Cache hit/miss with metrics |
+```bash
+# .NET — test
+docker run --rm -v $(pwd)/dotnet:/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet test
 
-**dotnet-backend (5 RPCs):**
-
-| RPC | What it simulates |
-|-----|-------------------|
-| ProcessOrder | DB query 10-80ms + httpbin ~1s |
-| CancelOrder | DB update 5-30ms |
-| SlowOperation | DB heavy 3-5s + external 1-2s |
-| UnstableOperation | Transient failures (retry target) |
-| ReadBaggage | Reads Baggage.Current, returns items |
-
-**dotnet-process (4 workers):**
-
-| Worker | Interval | Pattern |
-|--------|----------|---------|
-| ApiHealthWorker | 1 min | StartRootActivity per check |
-| HeavyProcessWorker | 2 min | CPU/memory stress, parallel |
-| QueueConsumerWorker | 30s | Consumer pattern, 1 trace/message |
-| ScheduledJobWorker | 3 min | Timeout + circuit breaker |
-
-## Sample apps — Python (notification service)
-
-**Architecture:**
-```
-python-process (Worker)
-  HTTP :8000 (with traceparent header)
-  ↓
-python-api (FastAPI :8000)
-  gRPC :50051
-  ↓
-python-backend (gRPC server)
+# Python — test
+docker run --rm -v $(pwd)/python:/app -w /app python:3.11-slim sh -c \
+  "pip install -e '.[dev]' -q && pytest tests/ -v"
 ```
 
-**python-api endpoints:**
-- POST /notify → calls backend via gRPC
-- GET /notify/{id} → status check
-- GET /templates → list templates
-- GET /health
-
-**python-backend RPCs:**
-- SendNotification → render + deliver (email/sms/push)
-- GetStatus
-- RenderTemplate
-
-**python-process workers:**
-- QueueConsumer (30s) → POST /notify
-- RetryWorker (60s) → retries failed
-- CleanupWorker (3min) → cleans expired
-- HealthChecker (1min) → GET /health
-
-## Harbor images
-
-```
-harbor.<org-domain>/labs/dotnet-api
-harbor.<org-domain>/labs/dotnet-backend
-harbor.<org-domain>/labs/dotnet-process
-harbor.<org-domain>/labs/python-api
-harbor.<org-domain>/labs/python-backend
-harbor.<org-domain>/labs/python-process
-```
-
-Tags:
-- `latest` — latest main build
-- `<short_sha>` — CI immutable
-- `<short_sha>-arm64-graviton` — Arm64 variant
-
-## CI/CD pipeline (4 stages)
+## CI pipeline (4 stages)
 
 ```
 unit-test → build-dev → demo → build (manual)
 ```
 
-| Stage | Trigger | Purpose |
-|-------|---------|---------|
-| `unit-test` | Every push | Run unit tests via Docker (61 .NET + 63 Python = 124 tests) |
-| `build-dev` | Every push | Publish dev package (NuGet/PyPI/Docker dev tag) |
-| `demo` | Every push | Ephemeral end-to-end (Docker run + curl + Tempo query) |
-| `build` | Manual, main only | Publish stable package |
-
-### demo stage details
-- Dual-arch: arm64 + amd64 in parallel
-- Build images → push Harbor → run via `docker run` → curl all endpoints → wait → query Tempo for traces → cleanup
-
-### Versioning per language
-
-| Lib | Format | Dev example | Release example |
-|-----|--------|-------------|-----------------|
-| .NET | SemVer 2.0 | `0.1.0-dev-a1b2c3d` | `1.0.0` |
-| Python | PEP 440 (numeric only dev) | `0.1.0.dev42` | `1.0.0` |
+Demo stage: builds dual-arch images → runs → curls endpoints → queries Tempo for traces → cleanup.
 
 ## Profiling status
 
-**Stand-by**. Pyroscope SDK packages removed (compatibility issues with OTel 1.15.3).
-
-The `IProfilingProvider` interface and stub `PyroscopeProfilingProvider` remain in the codebase for future migration.
-
-Will be re-enabled when:
-1. Pyroscope packages updated, OR
-2. OTel native Profiles signal stabilizes (currently Alpha, March 2026)
-
-The `feat/pyroscope` branch (commit `824171a`) has the previous Pyroscope integration but is **not merged** to main (blocked by CPU limit issue — profiler requires ≥1 CPU in cgroup).
-
-## Recent major changes
-
-### May 2026 — gRPC migration + StartRootActivity (commit `b4d38bf`, `4665511`, `04cc63a`)
-- Sample apps migrated from HTTP to gRPC for API→Backend
-- Added `StartRootActivity` extension for independent traces in workers
-- `AppEnvironment.PRD_BATCH` renamed to `BTC` (alias accepted)
-- Added `DebugTraceStateProcessor`
-- `OTEL_HELPER_SAMPLE_RATIO` env var
-- Renamed API: `AddTelemetry` → `AddOtelHelper`
-
-### May 2026 — Python lib introduced
-- Created `python/` directory with `otel_helper` library
-- Full parity with .NET (entry point, env vars, behavior per environment)
-- Notification service sample apps
-- 63 tests, 94% coverage
-
-### April 2026 — Pyroscope removed, profiling on stand-by
-- `IProfilingProvider` kept as abstraction
-- `PyroscopeProfilingProvider` stub (no-op)
-
-## Build commands
-
-### .NET (always via Docker)
-```bash
-cd <workspace>/01-DEVOPS/LABS/otel-telemetry-helper/dotnet
-
-# Build
-docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet build
-
-# Test
-docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet test
-
-# Pack (NuGet)
-docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet pack
-```
-
-### Python (always via Docker)
-```bash
-cd <workspace>/01-DEVOPS/LABS/otel-telemetry-helper/python
-
-# Test
-docker run --rm -v $(pwd):/app -w /app python:3.11-slim sh -c \
-  "pip install -e '.[dev]' -q && pytest tests/ -v"
-```
-
-## Pending items
-
-### .NET library
-- [ ] Re-add Remote Debug Mode with safety controls
-- [ ] Migrate profiling to OTel SDK native when Profiles signal reaches Beta/GA
-- [ ] Add messaging instrumentation (Kafka, RabbitMQ)
-- [ ] Evaluate declarative configuration (OTel SDK feature, stabilized early 2026)
-
-### Python library
-- [ ] Publish to internal PyPI registry (currently dev builds only)
-- [ ] Verify metric naming consistency with .NET (Prometheus conversion)
-
-### Sample apps
-- [ ] Add Kafka/RabbitMQ message consumer/producer to sample apps
-- [ ] Add Pyroscope dashboard (when profiling re-enabled)
-
-### Infrastructure
-- [ ] Replace Fluent Bit with OTel Collector filelog receiver (unified log pipeline)
+**Stand-by.** Pyroscope SDK packages removed (compatibility issues). Will re-enable when OTel native Profiles signal reaches Beta/GA.
 
 ## Related skills
 
-- `telemetry-standard` — Lib API, env vars, behavior per environment, anti-patterns
-- `dotnet-otel-patterns` — StartRootActivity, debug processor, advanced .NET patterns
-- `python-otel-patterns` — gRPC aio, FastAPI, Python 3.11 vs 3.12
-- `grpc-distributed-tracing` — Cross-language gRPC tracing
-
-## Reference links
-
-- Repo: `<workspace>/01-DEVOPS/LABS/otel-telemetry-helper`
-- Sample apps: `otel-telemetry-helper/{dotnet,python}/example/`
-- Dashboards: `otel-telemetry-helper/dashboards/`
-- Tests docs: `otel-telemetry-helper/{dotnet,python}/TESTS.md`
-- HOW-TO guides: `otel-telemetry-helper/{dotnet,python}/HOW-TO.md`
-
-## When NOT to use
-
-- **Manual OTel SDK configuration** — use the helper library; don't re-implement what it provides.
-- **Non-BDC projects** — the library embeds org-specific conventions (env vars, sampling, endpoint resolution).
-- **Collector/pipeline configuration** — see observability skills for OTel Collector config.
+- `telemetry-standard` — the observability standard these libs implement
+- `dotnet-otel-patterns` — advanced .NET patterns (StartRootActivity, debug processor)
+- `python-otel-patterns` — Python-specific patterns (gRPC aio, FastAPI)
+- `grpc-distributed-tracing` — cross-language gRPC context propagation
