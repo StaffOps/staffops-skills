@@ -10,3 +10,8 @@ tools/descriptions.tsv
 __pycache__/
 *.pyc
 .DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example

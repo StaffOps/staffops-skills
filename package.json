@@ -1,0 +1,10 @@
+{
+  "name": "staffops-skills",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "python3 tools/validate_skills.py",
+    "lint": "python3 tools/validate_skills.py --strict",
+    "format": "python3 tools/generate_catalog.py"
+  }
+}
