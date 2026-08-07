@@ -1,0 +1,68 @@
+{
+  "$schema": "https://example.com/agent-permissions-schema.json",
+  "_comment": "Agent permissions config — Claude Code / Kiro format. Controls what the agent can do without asking.",
+
+  "permissions": {
+    "allow": {
+      "file_read": [
+        "**/*.{ts,tsx,js,jsx,py,go,rs,java,cs,md,yaml,yml,json,toml}",
+        "**/Dockerfile",
+        "**/.env.example"
+      ],
+      "file_write": [
+        "src/**",
+        "tests/**",
+        "docs/**",
+        "*.md"
+      ],
+      "shell_commands": [
+        "git status",
+        "git diff*",
+        "git log*",
+        "git branch*",
+        "npm test*",
+        "npm run lint*",
+        "pytest*",
+        "go test*",
+        "docker build*",
+        "docker run --rm*"
+      ],
+      "git_operations": [
+        "git add",
+        "git stash*"
+      ]
+    },
+
+    "deny": {
+      "file_read": [
+        "**/.env",
+        "**/*.pem",
+        "**/*.key",
+        "**/credentials*",
+        "**/secrets*"
+      ],
+      "file_write": [
+        ".github/workflows/**",
+        ".gitlab-ci.yml",
+        "**/Makefile",
+        "infrastructure/**"
+      ],
+      "shell_commands": [
+        "rm -rf*",
+        "curl*|bash",
+        "wget*|bash",
+        "sudo*",
+        "chmod 777*",
+        "aws * --no-dry-run*"
+      ],
+      "git_operations": [
+        "git push*",
+        "git commit*",
+        "git reset --hard*",
+        "git push --force*",
+        "git branch -D*",
+        "git rebase*"
+      ]
+    }
+  }
+}

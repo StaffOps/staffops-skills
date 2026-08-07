@@ -1,0 +1,84 @@
+# Helmfile — Multi-Environment with Values Layering, Hooks, and Secrets
+# Pattern: base values + environment-specific overrides + encrypted secrets.
+# Usage: helmfile -e dev diff | helmfile -e prd apply
+---
+# Environment definitions — each maps to a K8s context and values layer
+environments:
+  dev:
+    values:
+      - environments/dev/values.yaml
+    kubeContext: dev-cluster
+  hml:
+    values:
+      - environments/hml/values.yaml
+    kubeContext: hml-cluster
+  prd:
+    values:
+      - environments/prd/values.yaml
+    kubeContext: prd-cluster
+
+---
+# Helm defaults applied to all releases
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 300
+  force: false
+  atomic: true
+  cleanupOnFail: true
+  createNamespace: true
+
+---
+# Repository declarations
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  - name: argo
+    url: https://argoproj.github.io/argo-helm
+
+---
+releases:
+  # Release 1 — Application service
+  - name: my-service
+    namespace: my-namespace
+    chart: ./charts/my-service
+    version: 0.5.0
+    # Values layering: base → environment → secrets
+    values:
+      - charts/my-service/values.yaml              # Base (shared)
+      - environments/{{ .Environment.Name }}/my-service.yaml  # Env-specific
+      # Secrets via vals (sops-encrypted or AWS SM references)
+      - secrets://environments/{{ .Environment.Name }}/secrets.yaml
+    set:
+      - name: image.tag
+        value: {{ requiredEnv "IMAGE_TAG" | quote }}
+    # Conditional install — only in prd
+    installed: true
+
+  # Release 2 — Dependency (e.g. Redis)
+  - name: redis
+    namespace: my-namespace
+    chart: bitnami/redis
+    version: 19.6.4
+    values:
+      - charts/redis/values.yaml
+      - environments/{{ .Environment.Name }}/redis.yaml
+
+---
+# Hooks — run before/after apply
+hooks:
+  - events: ["presync"]
+    showlogs: true
+    command: "kubectl"
+    args:
+      - "annotate"
+      - "namespace/my-namespace"
+      - "last-deploy={{ now | date \"2006-01-02T15:04:05Z\" }}"
+      - "--overwrite"
+
+  - events: ["postsync"]
+    showlogs: true
+    command: "sh"
+    args:
+      - "-c"
+      - "echo 'Deploy to {{ .Environment.Name }} completed successfully'"

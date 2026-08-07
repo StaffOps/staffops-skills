@@ -1,0 +1,86 @@
+# ApplicationSet — Directory Generator, Multi-Environment
+# Pattern: one ApplicationSet generates N apps from a directory structure.
+# Expected repo layout:
+#   apps/<app-name>/dev/values.yaml
+#   apps/<app-name>/hml/values.yaml
+#   apps/<app-name>/prd/values.yaml
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: my-service-appset
+  namespace: argocd
+spec:
+  # Generators — directory generator discovers apps from folder structure
+  generators:
+    - git:
+        repoURL: https://git.example.com/team/applicationsets.git
+        revision: HEAD
+        directories:
+          - path: "apps/*/dev"
+          - path: "apps/*/hml"
+          - path: "apps/*/prd"
+
+  template:
+    metadata:
+      name: "{{path[1]}}-{{path[2]}}"  # e.g. my-service-dev
+      labels:
+        app.kubernetes.io/managed-by: argocd-applicationset
+        environment: "{{path[2]}}"
+    spec:
+      project: default
+
+      source:
+        repoURL: https://git.example.com/team/applicationsets.git
+        targetRevision: HEAD
+        path: "{{path}}"
+        helm:
+          valueFiles:
+            - values.yaml
+
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{path[1]}}"  # namespace = app name
+
+      # Sync policy — auto-sync with self-heal and prune
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+          - PruneLast=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
+
+      # Ignore differences for fields mutated by controllers/operators
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jsonPointers:
+            - /spec/replicas  # ScaleOps / HPA manages replicas
+        - group: autoscaling
+          kind: HorizontalPodAutoscaler
+          jsonPointers:
+            - /spec/minReplicas
+            - /spec/maxReplicas
+        - group: ""
+          kind: Service
+          jsonPointers:
+            - /spec/clusterIP
+            - /spec/clusterIPs
+        - group: admissionregistration.k8s.io
+          kind: MutatingWebhookConfiguration
+          jqPathExpressions:
+            - ".webhooks[]?.clientConfig.caBundle"
+
+      # Revision history limit to save etcd space
+      revisionHistoryLimit: 3

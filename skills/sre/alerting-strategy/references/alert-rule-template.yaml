@@ -1,0 +1,101 @@
+# VMRule / PrometheusRule template — SLI recording + multi-window burn rate alerts
+# Pattern: Google SRE Workbook ch.5 multi-window, multi-burn-rate
+# Replace: <SERVICE>, <SLO_TARGET>, <NAMESPACE>, <RUNBOOK_URL>
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule  # Change to PrometheusRule + apiVersion: monitoring.coreos.com/v1 for Prometheus
+metadata:
+  name: slo-service-name
+  namespace: monitoring
+  labels:
+    role: alert-rules
+    team: platform  # Used for routing in Alertmanager
+spec:
+  groups:
+    # --- Recording Rules: compute SLI from raw metrics ---
+    - name: sli.service-name.rules
+      interval: 30s
+      rules:
+        # Availability SLI: ratio of successful requests
+        - record: sli:availability:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>",
+              service_name="<SERVICE>",
+              http_status_code!~"5.."
+            }[5m]))
+            /
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>",
+              service_name="<SERVICE>"
+            }[5m]))
+          labels:
+            service: "<SERVICE>"
+            slo: "availability"
+
+        # Latency SLI: ratio of requests faster than threshold
+        - record: sli:latency:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_bucket{
+              namespace="<NAMESPACE>",
+              service_name="<SERVICE>",
+              le="0.5"
+            }[5m]))
+            /
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>",
+              service_name="<SERVICE>"
+            }[5m]))
+          labels:
+            service: "<SERVICE>"
+            slo: "latency_p50_500ms"
+
+    # --- Burn Rate Alerts: multi-window (fast + slow) ---
+    - name: slo.service-name.alerts
+      rules:
+        # Critical: 14.4x burn rate over 5m AND 1h (pages immediately)
+        - alert: SLOBurnRateCritical
+          expr: |
+            (1 - sli:availability:ratio_rate5m{service="<SERVICE>"}) > (14.4 * (1 - <SLO_TARGET>))
+            and
+            (1 - sli:availability:ratio_rate1h{service="<SERVICE>"}) > (14.4 * (1 - <SLO_TARGET>))
+          for: 2m
+          labels:
+            severity: critical
+            team: platform
+            slo: "availability"
+          annotations:
+            summary: "SLO burn rate critical for {{ $labels.service }}"
+            description: "Burning 14.4x error budget. Budget exhausted in ~1h at this rate."
+            runbook_url: "<RUNBOOK_URL>"
+            dashboard: "https://grafana.example.com/d/slo-overview"
+
+        # Warning: 6x burn rate over 30m AND 6h (tickets, not pages)
+        - alert: SLOBurnRateWarning
+          expr: |
+            (1 - sli:availability:ratio_rate30m{service="<SERVICE>"}) > (6 * (1 - <SLO_TARGET>))
+            and
+            (1 - sli:availability:ratio_rate6h{service="<SERVICE>"}) > (6 * (1 - <SLO_TARGET>))
+          for: 5m
+          labels:
+            severity: warning
+            team: platform
+            slo: "availability"
+          annotations:
+            summary: "SLO burn rate elevated for {{ $labels.service }}"
+            description: "Burning 6x error budget. Budget exhausted in ~5h at this rate."
+            runbook_url: "<RUNBOOK_URL>"
+
+        # Info: 1x sustained burn over 6h (slow bleed, review in standup)
+        - alert: SLOBurnRateSlow
+          expr: |
+            (1 - sli:availability:ratio_rate6h{service="<SERVICE>"}) > (1 * (1 - <SLO_TARGET>))
+          for: 30m
+          labels:
+            severity: info
+            team: platform
+            slo: "availability"
+          annotations:
+            summary: "SLO slow burn for {{ $labels.service }}"
+            description: "Sustained error rate consuming budget. Review in next standup."
+            runbook_url: "<RUNBOOK_URL>"

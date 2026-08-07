@@ -1,0 +1,124 @@
+# Kyverno Common Policies — 4 Essential ClusterPolicies
+# 1. Require mandatory labels
+# 2. Disallow :latest tag
+# 3. Require resource limits
+# 4. Restrict image registries
+---
+# Policy 1: Require mandatory labels on all pods
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-labels
+  annotations:
+    policies.kyverno.io/title: Require Mandatory Labels
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: check-labels
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        message: >-
+          Labels 'app.kubernetes.io/name', 'CostCenter', and 'Environment'
+          are required on all pods.
+        pattern:
+          metadata:
+            labels:
+              app.kubernetes.io/name: "?*"
+              CostCenter: "?*"
+              Environment: "PRD | HML | DEV | BTC"
+---
+# Policy 2: Disallow :latest tag
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-latest-tag
+  annotations:
+    policies.kyverno.io/title: Disallow Latest Tag
+    policies.kyverno.io/severity: high
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: validate-image-tag
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        message: "Using ':latest' or no tag is forbidden. Use immutable tags (SHA or semver)."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest & *:*"
+            =(initContainers):
+              - image: "!*:latest & *:*"
+---
+# Policy 3: Require resource requests and memory limit
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-resource-limits
+  annotations:
+    policies.kyverno.io/title: Require Resource Requests and Memory Limit
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: check-resources
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      exclude:
+        any:
+          - resources:
+              namespaces: ["kube-system", "kyverno"]
+      validate:
+        message: "All containers must define resources.requests (cpu + memory) and limits.memory."
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
+                  limits:
+                    memory: "?*"
+---
+# Policy 4: Restrict image registries to approved sources
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-registries
+  annotations:
+    policies.kyverno.io/title: Restrict Image Registries
+    policies.kyverno.io/severity: high
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: allowed-registries
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      validate:
+        message: >-
+          Images must come from approved registries:
+          ECR (*.dkr.ecr.*.amazonaws.com), Harbor (harbor.example.com),
+          or public.ecr.aws.
+        deny:
+          conditions:
+            all:
+              - key: "{{request.object.spec.containers[].image}}"
+                operator: AnyNotIn
+                value:
+                  - "*.dkr.ecr.*.amazonaws.com/*"
+                  - "harbor.example.com/*"
+                  - "public.ecr.aws/*"

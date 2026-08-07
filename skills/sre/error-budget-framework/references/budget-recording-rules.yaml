@@ -1,0 +1,102 @@
+# Error Budget Recording Rules — VMRule
+# Produces: SLI ratios, budget remaining, burn rates at multiple windows.
+# Replace: <SERVICE>, <NAMESPACE>, <SLO_TARGET> (e.g., 0.999 for 99.9%)
+# Apply: kubectl apply -f budget-recording-rules.yaml
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: error-budget-service-name
+  namespace: monitoring
+  labels:
+    role: recording-rules
+spec:
+  groups:
+    - name: error_budget.service_name
+      interval: 30s
+      rules:
+        # --- SLI: Availability (success ratio) at multiple windows ---
+        - record: sli:availability:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>",
+              http_status_code!~"5.."
+            }[5m]))
+            / sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>"
+            }[5m]))
+          labels: {service: "<SERVICE>", slo: "availability"}
+
+        - record: sli:availability:ratio_rate1h
+          expr: |
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>",
+              http_status_code!~"5.."
+            }[1h]))
+            / sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>"
+            }[1h]))
+          labels: {service: "<SERVICE>", slo: "availability"}
+
+        - record: sli:availability:ratio_rate6h
+          expr: |
+            sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>",
+              http_status_code!~"5.."
+            }[6h]))
+            / sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>"
+            }[6h]))
+          labels: {service: "<SERVICE>", slo: "availability"}
+
+        # --- SLI: Latency (% requests under threshold) ---
+        - record: sli:latency:ratio_rate5m
+          expr: |
+            sum(rate(http_server_request_duration_seconds_bucket{
+              namespace="<NAMESPACE>", service_name="<SERVICE>", le="0.5"
+            }[5m]))
+            / sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>"
+            }[5m]))
+          labels: {service: "<SERVICE>", slo: "latency_500ms"}
+
+        - record: sli:latency:ratio_rate1h
+          expr: |
+            sum(rate(http_server_request_duration_seconds_bucket{
+              namespace="<NAMESPACE>", service_name="<SERVICE>", le="0.5"
+            }[1h]))
+            / sum(rate(http_server_request_duration_seconds_count{
+              namespace="<NAMESPACE>", service_name="<SERVICE>"
+            }[1h]))
+          labels: {service: "<SERVICE>", slo: "latency_500ms"}
+
+        # --- Error Budget Remaining (30-day window) ---
+        - record: error_budget:remaining:ratio
+          expr: |
+            1 - (
+              (1 - avg_over_time(sli:availability:ratio_rate5m{service="<SERVICE>"}[30d]))
+              / (1 - <SLO_TARGET>)
+            )
+          labels: {service: "<SERVICE>"}
+
+        # --- Burn Rates (how fast budget is being consumed) ---
+        # burn_rate = error_rate / allowed_error_rate
+        - record: burn_rate:1h
+          expr: |
+            (1 - sli:availability:ratio_rate1h{service="<SERVICE>"})
+            / (1 - <SLO_TARGET>)
+          labels: {service: "<SERVICE>"}
+
+        - record: burn_rate:6h
+          expr: |
+            (1 - sli:availability:ratio_rate6h{service="<SERVICE>"})
+            / (1 - <SLO_TARGET>)
+          labels: {service: "<SERVICE>"}
+
+        # --- Hours until budget exhaustion (at current 1h burn rate) ---
+        - record: error_budget:exhaustion_hours
+          expr: |
+            error_budget:remaining:ratio{service="<SERVICE>"}
+            / (burn_rate:1h{service="<SERVICE>"} > 0)
+            * 720  # 30 days in hours
+          labels: {service: "<SERVICE>"}

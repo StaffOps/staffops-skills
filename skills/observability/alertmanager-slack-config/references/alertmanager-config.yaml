@@ -1,0 +1,114 @@
+# Alertmanager Configuration — Slack Integration
+# Complete config with routing tree, Slack templates, and inhibition rules.
+# Designed for VMAlert → Alertmanager → Slack pipeline.
+
+global:
+  resolve_timeout: 5m
+  slack_api_url_file: /etc/alertmanager/secrets/slack-webhook-url
+
+# --- Templates ---------------------------------------------------------------
+templates:
+  - /etc/alertmanager/templates/*.tmpl
+
+# --- Routing Tree ------------------------------------------------------------
+route:
+  receiver: slack-default
+  group_by: [alertname, namespace, service]
+  group_wait: 30s       # Wait before first notification (batch related alerts)
+  group_interval: 5m    # Wait before sending updates to an existing group
+  repeat_interval: 4h   # Re-notify if alert still firing
+
+  routes:
+    # Critical: immediate, dedicated channel
+    - receiver: slack-critical
+      match:
+        severity: critical
+      group_wait: 10s
+      repeat_interval: 1h
+      continue: false
+
+    # Warning: standard SRE channel
+    - receiver: slack-warning
+      match:
+        severity: warning
+      repeat_interval: 4h
+      continue: false
+
+    # Info/watchdog: low-noise channel
+    - receiver: slack-info
+      match_re:
+        severity: info|none
+      repeat_interval: 12h
+      group_wait: 1m
+
+# --- Receivers ---------------------------------------------------------------
+receivers:
+  - name: slack-default
+    slack_configs:
+      - channel: "#alerts-default"
+        send_resolved: true
+        title: '{{ .Status | toUpper }}{{ if eq .Status "firing" }} :fire:{{ else }} :white_check_mark:{{ end }} [{{ .CommonLabels.severity | toUpper }}] {{ .CommonLabels.alertname }}'
+        text: >-
+          *Namespace:* {{ .CommonLabels.namespace }}
+          *Service:* {{ .CommonLabels.service | default "n/a" }}
+          *Description:* {{ .CommonAnnotations.description }}
+          {{ if .CommonAnnotations.runbook_url }}*Runbook:* <{{ .CommonAnnotations.runbook_url }}|:book: View>{{ end }}
+          {{ if .CommonAnnotations.grafana_url }}*Dashboard:* <{{ .CommonAnnotations.grafana_url }}|:chart_with_upwards_trend: Grafana>{{ end }}
+        color: '{{ if eq .CommonLabels.severity "critical" }}danger{{ else if eq .CommonLabels.severity "warning" }}warning{{ else }}#36a64f{{ end }}'
+
+  - name: slack-critical
+    slack_configs:
+      - channel: "#alerts-critical"
+        send_resolved: true
+        title: ':rotating_light: CRITICAL — {{ .CommonLabels.alertname }}'
+        text: >-
+          *Cluster:* {{ .CommonLabels.cluster }}
+          *Namespace:* {{ .CommonLabels.namespace }}
+          *Service:* {{ .CommonLabels.service | default "n/a" }}
+          *Description:* {{ .CommonAnnotations.description }}
+          *Impact:* {{ .CommonAnnotations.impact | default "Unknown" }}
+          {{ if .CommonAnnotations.runbook_url }}*Runbook:* <{{ .CommonAnnotations.runbook_url }}|:book: Respond>{{ end }}
+          {{ if .CommonAnnotations.grafana_url }}*Dashboard:* <{{ .CommonAnnotations.grafana_url }}|:chart_with_upwards_trend: Investigate>{{ end }}
+        color: "danger"
+
+  - name: slack-warning
+    slack_configs:
+      - channel: "#alerts-warning"
+        send_resolved: true
+        title: ':warning: {{ .CommonLabels.alertname }} — {{ .CommonLabels.namespace }}'
+        text: >-
+          *Service:* {{ .CommonLabels.service | default "n/a" }}
+          *Description:* {{ .CommonAnnotations.description }}
+          {{ if .CommonAnnotations.runbook_url }}*Runbook:* <{{ .CommonAnnotations.runbook_url }}|:book: View>{{ end }}
+        color: "warning"
+
+  - name: slack-info
+    slack_configs:
+      - channel: "#alerts-info"
+        send_resolved: false
+        title: ':information_source: {{ .CommonLabels.alertname }}'
+        text: "{{ .CommonAnnotations.description }}"
+        color: "#36a64f"
+
+# --- Inhibition Rules --------------------------------------------------------
+inhibit_rules:
+  # If critical is firing, suppress warning for the same alert
+  - source_matchers:
+      - severity = critical
+    target_matchers:
+      - severity = warning
+    equal: [alertname, namespace, service]
+
+  # If a cluster-wide alert fires, suppress namespace-level alerts
+  - source_matchers:
+      - scope = cluster
+    target_matchers:
+      - scope = namespace
+    equal: [cluster, alertname]
+
+  # Suppress all alerts for a namespace if it's being drained/decommissioned
+  - source_matchers:
+      - alertname = NamespaceDecommissioning
+    target_matchers:
+      - severity =~ warning|info
+    equal: [namespace]

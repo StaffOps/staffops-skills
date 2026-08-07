@@ -1,0 +1,103 @@
+# Chaos Mesh Experiments — 5 ready-to-apply CRDs
+# Docs: https://chaos-mesh.org/docs/
+# Prerequisites: Chaos Mesh installed (helm install chaos-mesh chaos-mesh/chaos-mesh)
+# CAUTION: Apply to non-production first. Use duration + selector carefully.
+
+---
+# 1. Pod Kill — Randomly kill pods to test restart resilience
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: pod-kill-experiment
+  namespace: chaos-testing
+spec:
+  action: pod-kill          # Kills the pod (simulates OOMKill / node failure)
+  mode: one                 # one | all | fixed (N) | fixed-percent (N%)
+  selector:
+    namespaces: [target-namespace]
+    labelSelectors:
+      app.kubernetes.io/name: target-service
+  duration: "60s"           # Not used for pod-kill (instant), but required field
+  scheduler:
+    cron: "@every 5m"       # Optional: repeat every 5 min. Remove for one-shot.
+
+---
+# 2. Network Delay — Inject latency to test timeout handling
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-delay-experiment
+  namespace: chaos-testing
+spec:
+  action: delay
+  mode: all                 # Apply to all matched pods
+  selector:
+    namespaces: [target-namespace]
+    labelSelectors:
+      app.kubernetes.io/name: target-service
+  delay:
+    latency: "200ms"        # Added latency per packet
+    correlation: "80"       # 80% of packets affected (simulates jitter)
+    jitter: "50ms"          # ±50ms variance
+  duration: "120s"          # Experiment lasts 2 minutes then auto-reverts
+  direction: to             # to | from | both
+
+---
+# 3. CPU Stress — Saturate CPU to test autoscaling and degradation
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: cpu-stress-experiment
+  namespace: chaos-testing
+spec:
+  mode: one
+  selector:
+    namespaces: [target-namespace]
+    labelSelectors:
+      app.kubernetes.io/name: target-service
+  stressors:
+    cpu:
+      workers: 2            # Number of CPU-stress workers (match container CPU limit)
+      load: 80              # Target 80% CPU utilization per worker
+  duration: "180s"          # 3 minutes — enough to trigger HPA/KEDA if configured
+  containerNames: [app]     # Target specific container (skip sidecars)
+
+---
+# 4. Disk Fill — Fill ephemeral storage to test graceful degradation
+apiVersion: chaos-mesh.org/v1alpha1
+kind: IOChaos
+metadata:
+  name: disk-fill-experiment
+  namespace: chaos-testing
+spec:
+  action: fault
+  mode: one
+  selector:
+    namespaces: [target-namespace]
+    labelSelectors:
+      app.kubernetes.io/name: target-service
+  volumePath: /tmp          # Path to fill (use emptyDir or ephemeral path)
+  path: "/tmp/chaos-*"     # Pattern of affected files
+  errno: 28                 # ENOSPC — "No space left on device"
+  percent: 100             # 100% of matching I/O calls return error
+  duration: "60s"
+  containerNames: [app]
+
+---
+# 5. DNS Error — Simulate DNS resolution failures
+apiVersion: chaos-mesh.org/v1alpha1
+kind: DNSChaos
+metadata:
+  name: dns-error-experiment
+  namespace: chaos-testing
+spec:
+  action: error             # error | random (return random IP)
+  mode: all
+  selector:
+    namespaces: [target-namespace]
+    labelSelectors:
+      app.kubernetes.io/name: target-service
+  patterns:
+    - "downstream-service.other-namespace.svc.cluster.local"  # Target specific DNS
+    - "*.external-api.com"                                     # Or external domains
+  duration: "90s"           # DNS fails for 90 seconds then recovers

@@ -1,0 +1,41 @@
+# Kyverno ClusterPolicy — Verify cosign signatures on container images
+# Enforces that golden/base images are signed before admission.
+# Application images inherit trust from their signed base.
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signatures
+  annotations:
+    policies.kyverno.io/title: Verify Cosign Image Signatures
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/description: >-
+      Verifies that golden/base images from the internal registry are
+      signed with cosign. Unsigned images are rejected in PRD/HML/BTC.
+spec:
+  validationFailureAction: Enforce
+  background: false  # Cannot verify signatures in background scans
+  webhookTimeoutSeconds: 30
+  rules:
+    - name: verify-cosign-signature
+      match:
+        any:
+          - resources:
+              kinds: ["Pod"]
+      verifyImages:
+        - imageReferences:
+            # Only verify images from the golden-image registry path
+            - "harbor.example.com/golden-images/*"
+          attestors:
+            - entries:
+                - keys:
+                    publicKeys: |-
+                      -----BEGIN PUBLIC KEY-----
+                      <INSERT-COSIGN-PUBLIC-KEY-HERE>
+                      -----END PUBLIC KEY-----
+          # Mutate the image reference to use digest (immutable)
+          mutateDigest: true
+          # Require the digest to match the signed artifact
+          verifyDigest: true
+          # Required = block if verification fails
+          required: true

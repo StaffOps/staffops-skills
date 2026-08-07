@@ -1,0 +1,42 @@
+# OpenTelemetry eBPF Instrumentation (OBI) — Instrumentation CRD
+# Auto-instruments all workloads in a namespace without SDK changes.
+# Deploys as DaemonSet; discovers pods via namespace label selector.
+---
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: otel-ebpf
+  namespace: my-namespace
+spec:
+  # Exporter endpoint — send to the OTel Collector
+  exporter:
+    endpoint: http://otel-collector.monitoring:4317
+
+  # Resource attributes added to all telemetry
+  resource:
+    addK8sUIDAttributes: true
+
+  # Propagator for context propagation (W3C standard)
+  propagators:
+    - tracecontext
+    - baggage
+
+  # Sampler — always sample (Collector does tail sampling)
+  sampler:
+    type: AlwaysOn
+
+  # Language-specific instrumentation settings
+  # eBPF mode instruments at kernel level — no per-language config needed
+  env:
+    - name: OTEL_TRACES_EXPORTER
+      value: otlp
+    - name: OTEL_METRICS_EXPORTER
+      value: otlp
+    - name: OTEL_LOGS_EXPORTER
+      value: otlp
+    - name: OTEL_EXPORTER_OTLP_PROTOCOL
+      value: grpc
+---
+# Namespace label to enable auto-instrumentation
+# Apply this label to namespaces that should be instrumented:
+#   kubectl label namespace my-namespace instrumentation.opentelemetry.io/inject-ebpf=otel-ebpf

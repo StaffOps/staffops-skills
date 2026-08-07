@@ -1,0 +1,138 @@
+# OTel Collector Gateway Configuration — Multi-Cluster Mode
+#
+# Receives OTLP from per-cluster agents, routes signals to appropriate backends.
+# Topology: [App SDK] → [Cluster Agent] → [THIS GATEWAY] → [Backends]
+#
+# Features:
+# - OTLP gRPC + HTTP receivers
+# - Memory limiter (backpressure before OOM)
+# - Batch processor (efficient exports)
+# - Routing by resource attribute (cluster, signal type)
+# - Multiple exporters: VictoriaMetrics (metrics), Tempo (traces), Loki (logs)
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+        max_recv_msg_size_mib: 16
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  # Memory limiter — MUST be first processor in every pipeline
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 1800        # Hard limit (container has 2Gi)
+    spike_limit_mib: 400   # Burst allowance
+
+  # Batch — improves export efficiency
+  batch/default:
+    send_batch_size: 8192
+    send_batch_max_size: 16384
+    timeout: 5s
+
+  # Smaller batches for traces (latency-sensitive)
+  batch/traces:
+    send_batch_size: 4096
+    timeout: 2s
+
+  # Resource detection — enrich with gateway identity
+  resource:
+    attributes:
+      - key: collector.tier
+        value: gateway
+        action: upsert
+
+  # Transform — normalize cluster label for downstream
+  transform/normalize:
+    metric_statements:
+      - context: datapoint
+        statements:
+          - set(attributes["environment"], resource.attributes["deployment.environment"])
+    trace_statements:
+      - context: span
+        statements:
+          - set(attributes["collector.gateway"], "central")
+
+exporters:
+  # --- Metrics → VictoriaMetrics (Prometheus remote write) ---
+  prometheusremotewrite/victoriametrics:
+    endpoint: http://vminsert.monitoring:8480/insert/0/prometheus/api/v1/write
+    tls:
+      insecure: false
+      ca_file: /etc/ssl/certs/internal-ca.pem
+    resource_to_telemetry_conversion:
+      enabled: true
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+
+  # --- Traces → Tempo (OTLP gRPC) ---
+  otlp/tempo:
+    endpoint: tempo-gateway.monitoring:4317
+    tls:
+      insecure: false
+      ca_file: /etc/ssl/certs/internal-ca.pem
+    retry_on_failure:
+      enabled: true
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 5000
+
+  # --- Logs → Loki (OTLP HTTP) ---
+  otlphttp/loki:
+    endpoint: http://loki-gateway.monitoring:3100/otlp
+    tls:
+      insecure: false
+      ca_file: /etc/ssl/certs/internal-ca.pem
+    retry_on_failure:
+      enabled: true
+    sending_queue:
+      enabled: true
+      num_consumers: 10
+      queue_size: 5000
+
+  # --- Debug (development only — disable in production) ---
+  debug:
+    verbosity: basic
+    sampling_initial: 2
+    sampling_thereafter: 100
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  zpages:
+    endpoint: 0.0.0.0:55679
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+service:
+  extensions: [health_check, zpages, pprof]
+
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      address: 0.0.0.0:8888  # Collector self-metrics (Prometheus scrape)
+
+  pipelines:
+    # Metrics pipeline
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, transform/normalize, batch/default]
+      exporters: [prometheusremotewrite/victoriametrics]
+
+    # Traces pipeline
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch/traces]
+      exporters: [otlp/tempo]
+
+    # Logs pipeline
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch/default]
+      exporters: [otlphttp/loki]
