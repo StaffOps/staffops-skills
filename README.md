@@ -160,23 +160,23 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `agent-evals` | Build golden-dataset regression evals for agent quality. | — |
-| `agent-observability` | Emit spans, tokens, and cost signals for LLM agent turns. | — |
-| `ai-agent-security` | Bound agent tool abuse, exfiltration, and overreach. | — |
-| `ai-coding-agent-guardrails` | Scope file, shell, and review permissions for coding agents. | — |
-| `ai-pipeline-orchestration` | Run RAG index refresh and batch inference on Argo Workflows. | — |
-| `ai-red-teaming` | Adversarially test an agent's tool, data, and scope limits. | — |
-| `ai-security-hardening` | Harden the inference host: weight theft, DoS, CIS baseline. | — |
-| `ai-sre-incident-response` | Detect and mitigate LLM quality, cost, safety incidents. | — |
-| `llm-app-security` | Isolate tenants, moderate output, and rate-limit LLM apps. | — |
-| `llm-caching` | Choose exact, semantic, or provider-side LLM caching. | — |
-| `llm-cost-optimization` | Cut LLM API spend via model choice, tokens, and batching. | — |
-| `llmops-platform-engineering` | Gate LLM prompt/model promotion with evals and rollback. | — |
-| `mcp-server-security` | Secure MCP transport, tool authz, and audit logging. | — |
-| `model-registry-governance` | Track model provenance, eval results, and approval status. | — |
-| `model-supply-chain-security` | Vet upstream model checkpoints and training data provenance. | — |
-| `prompt-injection-defense` | Defend against prompt injection carried in untrusted input. | — |
-| `rag-observability-evals` | Measure RAG retrieval quality and answer groundedness. | — |
+| `agent-evals` | Use when building golden-dataset regression suites to measure agent/skill correctness over time, designing rubrics for graded evaluation, setting r... | — |
+| `agent-observability` | Use when instrumenting LLM agent calls with OTel spans for token counts, cost tracking, tool-call structure, and sensitive-content redaction — the ... | — |
+| `ai-agent-security` | Use when designing or auditing the security posture of an AI agent — tool permission scoping, blast-radius tiering, exfiltration prevention, creden... | — |
+| `ai-coding-agent-guardrails` | Use when scoping file, shell, and git permissions for coding agents (Claude Code, Cursor, Copilot, Codex) — deciding which actions auto-apply vs re... | — |
+| `ai-pipeline-orchestration` | Use when designing multi-step LLM pipelines — chaining prompts, routing between models, implementing fallback/retry, managing context windows acros... | — |
+| `ai-red-teaming` | Use when adversarially testing an AI agent's security controls — probing for prompt injection bypasses, tool abuse, privilege escalation, data exfi... | — |
+| `ai-security-hardening` | Use when hardening AI/ML infrastructure — securing model serving endpoints, API key rotation, rate limiting LLM APIs, network isolation for inferen... | — |
+| `ai-sre-incident-response` | Use when an AI/LLM system is involved in a production incident — agent runaway loops, cost spikes, model degradation, hallucination-caused bad acti... | — |
+| `llm-app-security` | Use when building application-layer security for LLM-powered features — output validation, PII filtering, content moderation, output format enforce... | — |
+| `llm-caching` | Use when reducing LLM API costs and latency through semantic caching, prompt caching (provider-native), response memoization, and embedding-based c... | — |
+| `llm-cost-optimization` | Use when reducing LLM API spend — model tier selection per task, token budget management, prompt compression, batch API usage for async workloads, ... | — |
+| `llmops-platform-engineering` | Use when building the platform layer for LLM operations — API gateway for model routing, shared inference infrastructure, A/B model deployment, fea... | — |
+| `mcp-server-security` | Use when securing MCP (Model Context Protocol) servers — transport encryption, tool-level authorization, input validation on tool arguments, output... | — |
+| `model-registry-governance` | Use when managing model lifecycle governance — tracking which models are deployed where, version control for model artifacts, approval workflows fo... | — |
+| `model-supply-chain-security` | Use when securing the model artifact supply chain — verifying model provenance, detecting tampered weights, signing model artifacts, scanning for e... | — |
+| `prompt-injection-defense` | Use when defending against prompt injection carried in untrusted input — detecting injected instructions in fetched content, tool results, RAG chun... | — |
+| `rag-observability-evals` | Use when measuring RAG pipeline quality — retrieval precision/recall, answer groundedness (faithfulness to retrieved context), chunk relevance scor... | — |
 
 </details>
 
@@ -239,26 +239,26 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>aws</strong> (21) — AWS service patterns, EKS, and AI DevOps Agent operations.</summary>
+<summary><strong>aws</strong> (21) — AWS service design and troubleshooting patterns.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `agent-instruction-authoring` | Write SKILL.md instructions that land in the AWS DevOps Agent. | — |
+| `agent-instruction-authoring` | Use when writing or editing an agents_md or a SKILL.md for the AWS DevOps Agent. Carries the rule that an instruction must prescribe substance rath... | — |
 | `agent-skills-adversarial-review` | Refute a document with independent reviewers before commit. | — |
 | `agent-skills-cost-modelling` | Estimate agent cost from observed duration, not guesses. | — |
-| `agent-skills-debugging` | Debug skills that don't load, return empty, or get ignored. | — |
-| `agent-skills-harness-guide` | Run the behaviour harness and interpret eval results. | — |
-| `agent-skills-import-and-harness` | Import skills to agentspace respecting API constraints. | — |
-| `agent-skills-metric-verification` | Verify metric names exist before writing skill queries. | — |
-| `agent-skills-new-skill-checklist` | Scaffold, validate and import a new agent skill. | — |
-| `agent-skills-readonly-invariant` | Enforce the agent read-only safety invariant. | — |
-| `agent-skills-sandbox-development` | Build executable skills for the agent sandbox. | — |
+| `agent-skills-debugging` | Troubleshooting guide for when a skill doesn't load, loads but produces empty results, or loads but the agent ignores its procedure. | — |
+| `agent-skills-harness-guide` | How to run the behaviour harness, interpret results, add new cases, understand costs, and recover from common failures. | — |
+| `agent-skills-import-and-harness` | Use when importing assets to the agentspace or running the behaviour harness. Carries every API constraint that cost a failed attempt — sourceUrl b... | — |
+| `agent-skills-metric-verification` | Use before writing, editing or reviewing any metric name or PromQL query in this repo. Carries the verified environment traps — the inconsistent `_... | — |
+| `agent-skills-new-skill-checklist` | Step-by-step procedure for adding a new skill to the AWS DevOps Agent catalog — from scaffolding through import and validation. | — |
+| `agent-skills-readonly-invariant` | Use when touching the read-only prohibition, the agents_md, the tool associations, or anything about what the agent may execute. Carries the invari... | — |
+| `agent-skills-sandbox-development` | How to build skills with executable code for the AWS DevOps Agent sandbox — bundling Python/bash scripts, filesystem layout, pre-installed packages... | — |
 | `agent-skills-specs-authoring` | Where planning artefacts go, and what makes one valid. | — |
-| `aws-devops-agent-skills` | Operate the AWS DevOps Agent skill catalog end-to-end. | — |
+| `aws-devops-agent-skills` | Use when authoring, importing, validating, or troubleshooting skills for the AWS DevOps Agent (aidevops) — writing SKILL.md, choosing agent_types, ... | — |
 | `cloudfront-patterns` | Configure CloudFront origins, caching and WAF. | — |
 | `cost-explorer` | Analyze AWS spend via Cost Explorer and CUR Athena. | — |
 | `eks-management` | Manage EKS nodes, Karpenter, IRSA and upgrades. | — |
-| `eks-node-troubleshooting` | Diagnose NotReady nodes, spot interruptions and kubelet. | — |
+| `eks-node-troubleshooting` | > | — |
 | `iam-patterns` | Design least-privilege IAM roles and policies. | — |
 | `lambda-patterns` | Design Lambda cold start, VPC and observability. | — |
 | `rds-patterns` | Design RDS sizing, failover and backup strategy. | — |
@@ -272,11 +272,11 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `container-image-optimization` | Shrink image size and speed up builds and pulls. | — |
-| `container-runtime-debugging` | Debug crashing, hanging or misbehaving containers. | — |
-| `docker-cli-operations` | Run, inspect and debug containers with the Docker CLI. | — |
-| `docker-compose-patterns` | Compose multi-container apps with healthchecks and profiles. | — |
-| `dockerfile-authoring` | Write small, cacheable, secure Dockerfiles. | — |
+| `container-image-optimization` | Shrink image size and speed up builds and pulls. | `references/` |
+| `container-runtime-debugging` | Debug crashing, hanging or misbehaving containers. | `references/` |
+| `docker-cli-operations` | Run, inspect and debug containers with the Docker CLI. | `references/` |
+| `docker-compose-patterns` | Compose multi-container apps with healthchecks and profiles. | `references/` |
+| `dockerfile-authoring` | Write small, cacheable, secure Dockerfiles. | `references/` |
 
 </details>
 
@@ -289,23 +289,23 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `anomaly-detection-deep` | Choose detection algorithms and tune false positives. | — |
 | `dotnet-async-patterns` | Write async .NET workers, channels and pipelines. | — |
 | `dotnet-otel-patterns` | Instrument .NET workers, spans and debug tracing. | — |
-| `frontend-design` | Design distinctive UI and avoid common AI-generated cliches. | `references/`, `scripts/` |
+| `frontend-design` | Use when building or restyling a UI that needs a distinct identity — choosing color palettes, typeface pairings, layout concepts, and avoiding gene... | `references/`, `scripts/` |
 | `go-patterns` | Write idiomatic Go services, context and gRPC. | — |
 | `grpc-distributed-tracing` | Propagate trace context across gRPC languages. | — |
-| `interactive-debugging` | Drive a real debugger from the shell via DAP. | `references/` |
-| `linkedin-connection-pipeline` | Vendor-agnostic LinkedIn connection pipeline state machine. | `scripts/` |
+| `interactive-debugging` | Use when you need live process state (locals, call stack, breakpoints) that logs/traces can't answer — via DAP CLI. Covers Python debugpy, Go dlv, ... | `references/` |
+| `linkedin-connection-pipeline` | Use when building or extending a vendor-agnostic LinkedIn outreach pipeline — SQLite state machine, retry policies, account rotation, liveness sche... | `scripts/` |
 | `mcp-server-development` | Build MCP servers with tools, resources and prompts. | — |
 | `prophet-isolation-forest-patterns` | Forecast and detect outliers with Prophet. | — |
-| `python-cli-tools` | Build distributable CLIs with Click or Typer. | — |
+| `python-cli-tools` | Use when building a pip-installable CLI with subcommands using Click or Typer, configuring entry points, or migrating from argparse to a proper CLI... | `references/` |
 | `python-fastapi-patterns` | Build FastAPI services, deps and validation. | — |
 | `python-grpc-aio` | Build async Python gRPC servers and clients. | — |
 | `python-otel-patterns` | Instrument Python traces, metrics and logs. | — |
-| `python-packaging` | Package Python projects with pyproject.toml and venvs. | — |
-| `python-performance` | Profile and speed up Python: cProfile, GIL, async. | — |
-| `python-scripting` | Write robust Python scripts: argparse, pathlib, subprocess. | — |
-| `python-testing` | Write pytest fixtures, mocks and parametrized tests. | — |
+| `python-packaging` | Use when creating a new Python project with pyproject.toml, managing dependencies, configuring virtual environments, or publishing packages. Covers... | `references/` |
+| `python-performance` | Use when profiling slow Python code, choosing between threading/multiprocessing/asyncio, diagnosing GIL contention, or optimizing hot paths. Covers... | `references/` |
+| `python-scripting` | Use when writing standalone Python scripts that need argument parsing, safe file/path handling, subprocess calls, or structured logging. Covers the... | `references/` |
+| `python-testing` | Use when writing pytest test suites, designing fixtures, mocking external dependencies, parametrizing test cases, or measuring coverage. Covers con... | `references/` |
 | `secrets-management-dotnet` | Load secrets into .NET configuration safely. | — |
-| `telemetry-standard` | Adopt the shared OTel helper for .NET and Python. | — |
+| `telemetry-standard` | Use when integrating telemetry into apps via the shared OTel helper for .NET and Python, choosing between manual OTel SDK config vs the corporate l... | — |
 
 </details>
 
@@ -314,14 +314,14 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `adr-template` | Write MADR architecture decision records. | — |
-| `api-docs-patterns` | Generate API docs from OpenAPI and protobuf. | — |
-| `diagram-patterns` | Choose Mermaid, drawio or ASCII for diagrams. | — |
+| `adr-template` | Write MADR architecture decision records. | `references/` |
+| `api-docs-patterns` | Generate API docs from OpenAPI and protobuf. | `references/` |
+| `diagram-patterns` | Choose Mermaid, drawio or ASCII for diagrams. | `references/` |
 | `file-organizer` | Scan, dedupe, plan, apply, and undo file reorganizations. | `scripts/` |
 | `image-enhancer` | Upscale, sharpen, denoise, and resize images via Pillow. | `scripts/` |
 | `invoice-organizer` | Extract, rename, organize, and CSV-export invoices/receipts. | `scripts/` |
 | `markdown-docs` | Write structured, reviewable Markdown docs. | — |
-| `mkdocs-conventions` | Configure MkDocs Material sites and navigation. | — |
+| `mkdocs-conventions` | Configure MkDocs Material sites and navigation. | `references/` |
 | `pdf-operations` | Extract, merge, split, watermark, OCR, and fill PDF forms. | `references/`, `scripts/` |
 
 </details>
@@ -345,7 +345,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `argocd-patterns` | Configure ApplicationSets, sync waves and hooks. | — |
 | `cosign-image-signing` | Sign and verify container images with cosign. | — |
 | `external-secrets-aws-sm` | Sync AWS Secrets Manager into Kubernetes secrets. | — |
-| `gitops-environments` | Map GitOps repos, branches and clusters per environment. | — |
+| `gitops-environments` | > | `references/` |
 | `helm-chart-app` | Deploy apps with the shared application Helm chart. | `references/` |
 | `helm-chart-cronworkflow` | Schedule Argo CronWorkflows via the shared chart. | — |
 | `helmfile-applicationset` | Register services in GitOps ApplicationSets. | — |
@@ -366,7 +366,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | --- | --- | --- |
 | `linux-command-line` | Navigate the shell with pipes, globs and job control. | `references/`, `scripts/`, `examples/` |
 | `linux-filesystem` | Manage permissions, mounts, links and disk usage. | `references/`, `scripts/` |
-| `linux-performance-analysis` | Diagnose CPU, memory, disk and network bottlenecks. | — |
+| `linux-performance-analysis` | Diagnose CPU, memory, disk and network bottlenecks. | `references/` |
 | `linux-process-management` | Inspect processes, signals, limits and cgroups. | `references/`, `scripts/`, `examples/` |
 | `systemd-services` | Write, debug and manage systemd units and timers. | `references/`, `scripts/`, `examples/` |
 | `ubuntu-administration` | Manage packages, users, network and updates on Ubuntu. | `references/`, `scripts/` |
@@ -378,11 +378,11 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `dns-troubleshooting` | Diagnose DNS resolution failures with dig and resolvectl. | — |
-| `linux-firewall` | Write and debug nftables/iptables firewall rules. | — |
-| `network-troubleshooting-tools` | Use ss, tcpdump, curl and traceroute to diagnose issues. | — |
-| `tcp-ip-fundamentals` | Understand TCP handshakes, states and packet flow. | — |
-| `tls-troubleshooting` | Diagnose certificate chains, expiry and handshake failures. | — |
+| `dns-troubleshooting` | Diagnose DNS resolution failures with dig and resolvectl. | `references/` |
+| `linux-firewall` | Write and debug nftables/iptables firewall rules. | `references/` |
+| `network-troubleshooting-tools` | Use ss, tcpdump, curl and traceroute to diagnose issues. | `references/` |
+| `tcp-ip-fundamentals` | Understand TCP handshakes, states and packet flow. | `references/` |
+| `tls-troubleshooting` | Diagnose certificate chains, expiry and handshake failures. | `references/` |
 
 </details>
 
@@ -392,31 +392,31 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `alertmanager-slack-config` | Route Alertmanager alerts to Slack with context. | — |
-| `cardinality-explosion-finder` | Detect and attribute TSDB cardinality explosions. | `references/` |
+| `cardinality-explosion-finder` | > | `references/` |
 | `fluent-bit-loki-pipeline` | Ship logs to Loki with labels and multiline parsing. | — |
 | `fluent-bit-vs-otel-logs` | Compare Fluent Bit and OTel log collection paths. | — |
 | `grafana-cross-signal-correlation` | Link metrics, traces, logs and profiles in Grafana. | — |
-| `kafka-pipeline-health` | Diagnose Kafka consumer lag and partition health. | `references/` |
+| `kafka-pipeline-health` | > | `references/` |
 | `kubelet-scrape-architecture` | Understand kubelet and cAdvisor scrape paths. | — |
-| `kuma-synthetic-status` | Monitor endpoint availability via Uptime Kuma. | — |
-| `log-pattern-analyzer` | Detect anomalous log patterns with LogQL. | `references/` |
+| `kuma-synthetic-status` | > | — |
+| `log-pattern-analyzer` | > | `references/` |
 | `loki-logql-patterns` | Query logs with LogQL filters and aggregations. | — |
 | `monitoring-stack-overview` | Navigate the monitoring stack topology. | — |
 | `multicluster-label-strategy` | Align cluster labels for multi-cluster queries. | — |
-| `observability-tooling` | Map signals to backends and choose the right tool. | `references/` |
+| `observability-tooling` | > | `references/` |
 | `otel-collector-multi-cluster` | Design multi-cluster OTel Collector pipelines. | — |
 | `otel-ebpf-instrumentation` | Instrument services with eBPF, no code changes. | — |
-| `otel-pipeline-review` | Audit OTel pipeline config for loss and inefficiency. | `references/` |
-| `otel-pipeline-troubleshooting` | Debug missing spans, logs or metrics in the pipeline. | `references/` |
+| `otel-pipeline-review` | > | `references/` |
+| `otel-pipeline-troubleshooting` | > | `references/` |
 | `pyroscope-profiling-patterns` | Profile CPU and memory continuously with Pyroscope. | — |
 | `streaming-aggregation` | Cut cardinality with streaming aggregation rules. | — |
-| `tempo-trace-investigation` | Investigate distributed traces in Tempo with TraceQL. | `references/` |
+| `tempo-trace-investigation` | > | `references/` |
 | `tempo-traceql-patterns` | Query traces with TraceQL selectors and aggregates. | — |
-| `tempo-v3-kafka-operations` | Operate Tempo v3 Kafka ingest and block-builder. | — |
-| `victoriametrics-investigation` | Run diagnostic procedures on VictoriaMetrics clusters. | `references/` |
+| `tempo-v3-kafka-operations` | Use when migrating Grafana Tempo v2→v3, operating the v3 Kafka-based ingest path, or debugging partition-ring errors, orphan partitions, OOM on rep... | — |
+| `victoriametrics-investigation` | > | `references/` |
 | `victoriametrics-troubleshooting` | Debug VictoriaMetrics ingest and query failures. | — |
 | `victoriametrics-tuning` | Tune VictoriaMetrics retention, memory and dedup. | — |
-| `vm-capacity-review` | Project VictoriaMetrics storage and resource needs. | `references/` |
+| `vm-capacity-review` | > | `references/` |
 | `vm-cardinality-management` | Find and cut high-cardinality metric series. | — |
 | `vmalert-configuration` | Configure VMAlert rules, groups and notifiers. | — |
 
@@ -441,12 +441,12 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `container-package-melange` | Build custom APK packages with melange. | — |
 | `dependency-track-integration` | Upload SBOMs and manage projects via API. | — |
 | `golden-ami-creation` | Build hardened AMIs with Packer and Ansible. | — |
-| `linux-hardening` | Apply baseline OS hardening: sysctl, PAM, mounts, kernel. | — |
+| `linux-hardening` | Apply baseline OS hardening: sysctl, PAM, mounts, kernel. | `references/` |
 | `linux-security-auditing` | Audit a Linux host for common misconfigurations. | — |
 | `sbom-vulnerability-management` | Generate SBOMs and triage vulnerabilities. | — |
 | `secrets-handling-shell` | Avoid leaking secrets through shell history, env and logs. | — |
 | `security-hub-findings-mgmt` | Triage and remediate Security Hub findings. | — |
-| `ssh-hardening` | Configure SSH for key-only, restricted, auditable access. | — |
+| `ssh-hardening` | Configure SSH for key-only, restricted, auditable access. | `references/` |
 
 </details>
 
@@ -464,25 +464,25 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>sre</strong> (15) — Reliability engineering: SLOs, incidents, triage, and error budgets.</summary>
+<summary><strong>sre</strong> (15) — Reliability engineering: SLOs, incidents, and error budgets.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `alerting-strategy` | Design symptom-based alerts and cut fatigue. | — |
-| `capacity-projection` | Project resource exhaustion dates with trend analysis. | `references/` |
-| `deploy-correlation-checker` | Correlate deploys with metric anomalies. | `references/` |
-| `error-budget-framework` | Track error budgets and burn rate alerts. | — |
+| `alerting-strategy` | Use when designing new alert rules, reducing alert fatigue, routing alerts to correct channels, evaluating alert quality (MTTA/MTTR/false-positive ... | — |
+| `capacity-projection` | > | `references/` |
+| `deploy-correlation-checker` | > | `references/` |
+| `error-budget-framework` | Use when implementing error budget tracking, burn rate alerting, or defining budget exhaustion policies. Provides complete VMRule recording rules a... | — |
 | `incident-response-runbook` | Run incident command, severity and comms. | — |
-| `incident-skip-criteria` | Decide when NOT to investigate an alert. | `references/` |
-| `incident-triage` | Classify severity and route incidents. | — |
-| `investigation-cost-guardrail` | Cap investigation cost vs problem impact. | `references/` |
-| `metric-correlation-analysis` | Find correlated signals for root cause analysis. | `references/` |
-| `post-mortem-templates` | Write blameless post-mortems with actions. | — |
-| `root-cause-analysis` | Correlate signals to prove root cause. | — |
-| `runbook-authoring` | Write actionable operational runbooks. | — |
-| `sla-slo-design` | Define SLIs, SLOs and reliability targets. | — |
-| `slo-burn-rate-calculator` | Calculate multi-window burn rate alerts. | `references/` |
-| `symptom-router` | Route symptoms to the correct investigation skill. | `references/` |
+| `incident-skip-criteria` | > | `references/` |
+| `incident-triage` | > | — |
+| `investigation-cost-guardrail` | > | `references/` |
+| `metric-correlation-analysis` | > | `references/` |
+| `post-mortem-templates` | Use when writing a blameless post-mortem after a production incident (SEV1-2 mandatory, SEV3 encouraged). Provides copy-paste templates by severity... | — |
+| `root-cause-analysis` | Use when investigating production incidents where the root cause is unknown. Provides structured techniques (5 Whys, fault tree, elimination), cros... | — |
+| `runbook-authoring` | Use when writing an operational runbook for a new or existing alert. Every production alert MUST have a linked runbook. Provides copy-paste templat... | — |
+| `sla-slo-design` | Use when defining reliability targets (SLI/SLO/SLA) for a new or existing service, choosing service tier, writing recording rules for VictoriaMetri... | — |
+| `slo-burn-rate-calculator` | > | `references/` |
+| `symptom-router` | > | `references/` |
 
 </details>
 
@@ -491,10 +491,10 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 
 | Skill | Description | Includes |
 | --- | --- | --- |
-| `disk-and-memory-issues` | Diagnose OOM kills, leaks, disk pressure and swap. | — |
-| `incident-triage-linux` | Triage a live Linux incident quickly and safely. | — |
-| `linux-troubleshooting-methodology` | Apply a systematic approach to diagnosing Linux issues. | — |
-| `log-analysis` | Extract signal from logs with grep, awk and journalctl. | — |
+| `disk-and-memory-issues` | Diagnose OOM kills, leaks, disk pressure and swap. | `references/` |
+| `incident-triage-linux` | Triage a live Linux incident quickly and safely. | `references/` |
+| `linux-troubleshooting-methodology` | Apply a systematic approach to diagnosing Linux issues. | `references/` |
+| `log-analysis` | Extract signal from logs with grep, awk and journalctl. | `references/` |
 | `systematic-debugging` | Investigate root cause before proposing any fix. | `references/`, `scripts/`, `examples/` |
 
 </details>
@@ -513,9 +513,9 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `local-reference-docs` | Find vendored reference docs offline. | — |
 | `pipeline-template-apps` | Wire apps into the shared CI/CD templates. | — |
 | `session-handoff` | Hand off an incident or migration to the next on-call shift. | `references/` |
-| `skill-authoring` | Structure and validate a new catalog skill before it ships. | — |
+| `skill-authoring` | Use when creating a new SKILL.md, rewriting a description that doesn't trigger correctly, splitting an overgrown skill into references/, or decidin... | `references/` |
 | `skill-eval-harness` | Run paired, budget-capped evals to validate a skill change. | `references/`, `scripts/` |
-| `skill-share` | Scaffold, validate, package, and announce a catalog skill. | `scripts/` |
+| `skill-share` | Use when scaffolding a new skill directory, running per-skill validation, packaging a skill as a zip for distribution, or formatting an announcemen... | `scripts/` |
 | `spec-writing` | Write requirements, design and task specs. | — |
 
 </details>

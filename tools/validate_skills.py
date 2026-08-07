@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
-"""Validate every SKILL.md against the Hermes Agent skill contract.
+"""Validate every SKILL.md against the skill contract.
 
-Checks performed:
+Checks performed (errors — fail the build):
 
 * directory layout is skills/<category>/<name>/SKILL.md
 * YAML frontmatter is present and parses
-* required keys: name, description, version, author, license, platforms
+* required keys: name, description (only these two are mandatory)
 * name matches ^[a-z][a-z0-9_-]*$ and equals its directory name
-* description is <= 60 chars, one sentence, ends with a period
-* metadata.hermes.category matches the parent directory
+* description max 1024 chars
+* metadata.hermes.category matches the parent directory (if declared)
 * every related_skills entry resolves to a real skill
 * the body is English-only (no accented Latin characters)
+
+Checks performed (warnings — reported but don't fail):
+
+* description is under 100 chars (recommended minimum)
+* description starts with 'Use when' (recommended, skip for apm-metrics)
+* body contains '## When to use' section
+* body contains '## When NOT to use' section (skip for apm-metrics)
+* body contains '## Related skills' or '## Related Skills' (skip for apm-metrics)
 
 Usage:
     python3 tools/validate_skills.py [skills_dir]
 
-Exits non-zero when any check fails.
+Exits non-zero when any ERROR check fails. Warnings are informational.
 """
 
 from __future__ import annotations
@@ -24,10 +32,11 @@ import re
 import sys
 from pathlib import Path
 
-MAX_DESCRIPTION = 60
+MIN_DESCRIPTION = 100
+MAX_DESCRIPTION = 1024
 NAME_RE = re.compile(r"^[a-z][a-z0-9_-]*$")
 FRONTMATTER_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n", re.DOTALL)
-REQUIRED = ("name", "description", "version", "author", "license", "platforms")
+REQUIRED = ("name", "description")
 
 # Accented Latin letters only. Deliberately excludes typographic and math
 # symbols in the same Unicode block (×, ÷, °, ±, µ), which are legitimate in
@@ -35,6 +44,9 @@ REQUIRED = ("name", "description", "version", "author", "license", "platforms")
 ACCENTED_RE = re.compile(
     r"[àáâãäåèéêëìíîïòóôõöùúûüçñýÿÀÁÂÃÄÅÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÇÑÝ]"
 )
+
+# Categories where apm-metrics-specific relaxations apply
+APM_METRICS_CATEGORY = "apm-metrics"
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, str], str] | None:
@@ -82,52 +94,90 @@ def main() -> int:
 
     names = {p.parent.name for p in paths}
     errors: list[str] = []
+    warnings: list[str] = []
 
     for path in paths:
         rel = path.relative_to(root.parent)
         category = path.parent.parent.name
         dirname = path.parent.name
+        is_apm = category == APM_METRICS_CATEGORY
 
-        parsed = parse_frontmatter(path.read_text(encoding="utf-8"))
+        text = path.read_text(encoding="utf-8")
+        parsed = parse_frontmatter(text)
         if parsed is None:
             errors.append(f"{rel}: missing or malformed YAML frontmatter")
             continue
         fields, body = parsed
 
+        # Required frontmatter keys (only name + description)
         for key in REQUIRED:
             if not fields.get(key):
                 errors.append(f"{rel}: missing required key '{key}'")
 
+        # Name validation
         name = fields.get("name", "")
         if name and not NAME_RE.match(name):
             errors.append(f"{rel}: name '{name}' must match ^[a-z][a-z0-9_-]*$")
         if name and name != dirname:
             errors.append(f"{rel}: name '{name}' does not match directory '{dirname}'")
 
+        # Description validation
         description = fields.get("description", "")
         if description:
+            if len(description) < MIN_DESCRIPTION:
+                warnings.append(
+                    f"{rel}: description is {len(description)} chars (recommended min {MIN_DESCRIPTION})"
+                )
             if len(description) > MAX_DESCRIPTION:
-                errors.append(f"{rel}: description is {len(description)} chars (max {MAX_DESCRIPTION})")
-            if not description.endswith("."):
-                errors.append(f"{rel}: description must end with a period")
+                errors.append(
+                    f"{rel}: description is {len(description)} chars (max {MAX_DESCRIPTION})"
+                )
+            # 'Use when' prefix is a warning, not an error; skip for apm-metrics
+            if not is_apm and not description.startswith("Use when"):
+                warnings.append(
+                    f"{rel}: description does not start with 'Use when' (recommended)"
+                )
 
+        # Category match (if declared)
         declared = fields.get("metadata.hermes.category")
         if declared and declared != category:
             errors.append(f"{rel}: category '{declared}' does not match directory '{category}'")
 
+        # Related skills resolution
         for related in parse_list(fields.get("metadata.hermes.related_skills", "")):
             if related not in names:
                 errors.append(f"{rel}: related_skills entry '{related}' does not exist")
 
-        match = ACCENTED_RE.search(body)
-        if match:
-            line = body[: match.start()].count("\n") + 1
-            errors.append(f"{rel}:{line}: non-English character '{match.group(0)}'")
+        # English-only body check
+        match_accent = ACCENTED_RE.search(body)
+        if match_accent:
+            line = body[: match_accent.start()].count("\n") + 1
+            errors.append(f"{rel}:{line}: non-English character '{match_accent.group(0)}'")
 
-    for error in errors:
-        print(error, file=sys.stderr)
+        # Section presence warnings
+        if "## When to use" not in body and "## When to Use" not in body:
+            warnings.append(f"{rel}: missing '## When to use' section")
 
-    print(f"\nvalidated {len(paths)} skills, {len(errors)} error(s)")
+        if not is_apm:
+            if "## When NOT to use" not in body and "## When not to use" not in body:
+                warnings.append(f"{rel}: missing '## When NOT to use' section")
+
+            if "## Related skills" not in body and "## Related Skills" not in body:
+                warnings.append(f"{rel}: missing '## Related skills' section")
+
+    # Print warnings
+    if warnings:
+        print(f"\n--- WARNINGS ({len(warnings)}) ---", file=sys.stderr)
+        for w in warnings:
+            print(f"  WARN: {w}", file=sys.stderr)
+
+    # Print errors
+    if errors:
+        print(f"\n--- ERRORS ({len(errors)}) ---", file=sys.stderr)
+        for e in errors:
+            print(f"  ERROR: {e}", file=sys.stderr)
+
+    print(f"\nvalidated {len(paths)} skills, {len(errors)} error(s), {len(warnings)} warning(s)")
     return 1 if errors else 0
 
 

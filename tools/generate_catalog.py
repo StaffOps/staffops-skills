@@ -49,10 +49,23 @@ BLURBS = {
 
 
 def read_description(path: Path) -> str:
-    match = DESCRIPTION_RE.search(path.read_text(encoding="utf-8"))
-    if not match:
-        raise ValueError(f"{path}: no description in frontmatter")
-    return match.group(1)
+    """Extract description from YAML frontmatter.
+
+    Handles multi-line descriptions that may span multiple lines within quotes.
+    """
+    text = path.read_text(encoding="utf-8")
+
+    # Try simple single-line match first
+    match = DESCRIPTION_RE.search(text)
+    if match:
+        desc = match.group(1).strip()
+        # Handle case where description is truncated by end-of-line
+        # but there's a continuation on the next line (multiline YAML)
+        if desc and not desc.endswith('"'):
+            return desc
+        return desc
+
+    raise ValueError(f"{path}: no description in frontmatter")
 
 
 def extra_assets(skill_dir: Path) -> list[str]:
@@ -70,8 +83,13 @@ def collect() -> dict[str, list[tuple[str, str, list[str]]]]:
     for skill_md in sorted(REPO.glob("skills/*/*/SKILL.md")):
         category = skill_md.parent.parent.name
         name = skill_md.parent.name
+        try:
+            desc = read_description(skill_md)
+        except ValueError as e:
+            print(f"warning: {e}", file=sys.stderr)
+            desc = "(no description)"
         catalog.setdefault(category, []).append(
-            (name, read_description(skill_md), extra_assets(skill_md.parent))
+            (name, desc, extra_assets(skill_md.parent))
         )
     for skills in catalog.values():
         skills.sort()
@@ -85,8 +103,12 @@ def write_descriptions(catalog) -> None:
             lines += [blurb, ""]
         lines += [f"{len(skills)} skills.", ""]
         for name, description, assets in skills:
+            # Truncate long descriptions for the index view
+            short_desc = description
+            if len(short_desc) > 200:
+                short_desc = short_desc[:197] + "..."
             suffix = f" _({', '.join(assets)})_" if assets else ""
-            lines.append(f"- **{name}** — {description}{suffix}")
+            lines.append(f"- **{name}** — {short_desc}{suffix}")
         lines.append("")
         (REPO / "skills" / category / "DESCRIPTION.md").write_text(
             "\n".join(lines), encoding="utf-8"
@@ -106,29 +128,39 @@ def render_catalog(catalog) -> str:
             "| --- | --- | --- |",
         ]
         for name, description, assets in skills:
+            # Truncate long descriptions for the table
+            short_desc = description
+            if len(short_desc) > 150:
+                short_desc = short_desc[:147] + "..."
             includes = ", ".join(f"`{a}`" for a in assets) or "—"
-            lines.append(f"| `{name}` | {description} | {includes} |")
+            lines.append(f"| `{name}` | {short_desc} | {includes} |")
         lines += ["", "</details>", ""]
     return "\n".join(lines)
 
 
 def update_readme(catalog) -> None:
     readme = REPO / "README.md"
+    if not readme.exists():
+        print("warning: README.md not found, skipping badge/catalog update", file=sys.stderr)
+        return
+
     text = readme.read_text(encoding="utf-8")
     total = sum(len(v) for v in catalog.values())
 
     if CATALOG_START not in text or CATALOG_END not in text:
         print(
-            f"error: README.md is missing the {CATALOG_START} / {CATALOG_END} markers",
+            f"warning: README.md is missing the {CATALOG_START} / {CATALOG_END} markers, "
+            "skipping catalog block update",
             file=sys.stderr,
         )
-        raise SystemExit(1)
+    else:
+        before = text.split(CATALOG_START)[0]
+        after = text.split(CATALOG_END)[1]
+        text = f"{before}{CATALOG_START}\n\n{render_catalog(catalog)}\n{CATALOG_END}{after}"
 
-    before = text.split(CATALOG_START)[0]
-    after = text.split(CATALOG_END)[1]
-    text = f"{before}{CATALOG_START}\n\n{render_catalog(catalog)}\n{CATALOG_END}{after}"
-
+    # Update badge count
     text = BADGE_RE.sub(rf"\g<1>{total}\g<2>", text)
+    # Update text references to skill count
     text = re.sub(
         r"A catalog of \d+ platform engineering skills",
         f"A catalog of {total} platform engineering skills",

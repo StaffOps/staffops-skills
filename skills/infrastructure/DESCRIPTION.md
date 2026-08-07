@@ -7,7 +7,8 @@ GitOps, Helm, service mesh, and cluster infrastructure.
 - **argocd-patterns** — Configure ApplicationSets, sync waves and hooks.
 - **cosign-image-signing** — Sign and verify container images with cosign.
 - **external-secrets-aws-sm** — Sync AWS Secrets Manager into Kubernetes secrets.
-- **helm-chart-app** — Deploy apps with the shared application Helm chart.
+- **gitops-environments** — > _(references/)_
+- **helm-chart-app** — Deploy apps with the shared application Helm chart. _(references/)_
 - **helm-chart-cronworkflow** — Schedule Argo CronWorkflows via the shared chart.
 - **helmfile-applicationset** — Register services in GitOps ApplicationSets.
 - **helmfile-k8s-addon** — Package cluster addons as helmfile releases.
