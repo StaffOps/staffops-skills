@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [alertmanager, slack, config, observability]
     category: observability
-    related_skills: []
+    related_skills: [vmalert-configuration]
 ---
 # Alertmanager Slack Configuration
 

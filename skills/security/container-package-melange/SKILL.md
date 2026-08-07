@@ -371,6 +371,5 @@ done
 
 - `container-image-apko` skill — apko consumes melange packages
 - `cosign-image-signing` skill — final image signing after apko build
-- `ci-cd-conventions` steering — multi-arch build requirements
-- `multi-arch-builds` steering — architecture support mandate
+- Multi-arch builds are mandatory for all custom packages — always build with `--arch amd64,arm64` to support Graviton scheduling
 - Path: `<workspace>/01-DEVOPS/AUTOMATIONS/CONTAINER/custom-packages/`

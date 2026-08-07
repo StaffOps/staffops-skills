@@ -325,4 +325,7 @@ LIMIT 30;
 - Karpenter consolidation: https://karpenter.sh/docs/concepts/disruption/
 - ScaleOps: https://www.scaleops.com/
 - Related skills: `cost-explorer`, `savings-plans-strategy`, `eks-management`, `karpenter-consolidation`, `scaleops-metrics`
-- Related steering: `k8s-best-practices` (resource requests mandatory)
+
+Right-sizing depends on pods carrying accurate CPU/memory requests — a
+NodePool cannot bin-pack correctly against requests that don't reflect real
+usage. Set resource requests on every workload before tuning Karpenter.

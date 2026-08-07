@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [rds, patterns, aws]
     category: aws
-    related_skills: []
+    related_skills: [iam-patterns, cost-explorer, external-secrets-aws-sm]
 ---
 # AWS RDS Patterns
 

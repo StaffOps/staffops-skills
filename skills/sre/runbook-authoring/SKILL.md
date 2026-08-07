@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [runbook, authoring, sre]
     category: sre
-    related_skills: [incident-response-runbook]
+    related_skills: [incident-response-runbook, alerting-strategy, vmalert-configuration]
 ---
 # Runbook Authoring
 

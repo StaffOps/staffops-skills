@@ -225,4 +225,5 @@ helmfile -e prd apply
 
 - `helm-chart-app` skill — the <org> app chart consumed by ApplicationSets
 - `helmfile-templating` skill — escaping gotchas in gotmpl files
-- `gitlab-branch-flow` steering — branch-to-environment mapping
+
+Branch-to-environment mapping follows the same `dev`/`prd`/`btc` split used throughout this catalog: each branch in the `*-environments/` repo corresponds to the matching directory scanned by the Git directory generator (see "Repository structure" above).

@@ -379,3 +379,9 @@ Live infrastructure definitions (not modules):
 - Hardcoded regions (use variables for multi-region readiness)
 - Skipping `validation` blocks on critical variables
 - Creating resources outside modules (one-off `.tf` files without reuse)
+
+## Reference
+
+- Terraform S3 backend: https://developer.hashicorp.com/terraform/language/backend/s3
+- AWS provider docs: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+- Related skills: `eks-management` (ECS-to-EKS target state), `iam-patterns` (IRSA/execution roles), `cloudfront-patterns` (aws-cloudfront module deep dive)

@@ -238,7 +238,7 @@ Connect and MM2 expose the standard Kafka Connect JMX metrics via the JMX export
 
 ## Complements
 
-- `observability/application-metrics-first` — check application/broker metrics (lag, under-replication) before CPU/memory
+- Diagnostic order: check application/broker metrics (consumer lag, under-replicated partitions) before CPU/memory — resource metrics explain the cause, not whether there's a problem.
 - `apm-metrics/collector-internal-metrics` — the OTel Collector that receives Connect/MM2/Bridge traces
 - `observability/vmalert-configuration` + `sre/alerting-strategy` — turning these into alerts
 - Example Grafana dashboards shipped by Strimzi: `strimzi-kafka.json`, `strimzi-kraft.json`, `strimzi-kafka-exporter.json`, `strimzi-cruise-control.json`, `strimzi-operators.json`

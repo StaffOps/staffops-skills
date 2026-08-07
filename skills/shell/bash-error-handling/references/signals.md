@@ -84,7 +84,7 @@ Without `exit "$rc"`, a successful `rm` turns a failed script into exit 0.
 
 ## Signals while waiting
 
-Bash does not run a trap in the middle of a foreign foreign command; it waits
+Bash does not run a trap in the middle of a foreign command; it waits
 for the current command to finish first. A long `sleep` therefore delays
 handling:
 

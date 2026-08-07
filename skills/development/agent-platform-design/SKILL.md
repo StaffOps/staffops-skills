@@ -293,7 +293,7 @@ For specific implementation patterns:
 - `python-fastapi-patterns` — webhook endpoint design (Pattern 2)
 - `python-grpc-aio` — multi-agent gRPC orchestration (Pattern 4)
 - `dotnet-otel-patterns` — `StartRootActivity` for worker traces
-- `<org>-telemetry-standard` — observability integration (`AddOtelHelper`/`setup_telemetry`)
+- `telemetry-standard` — observability integration (`AddOtelHelper`/`setup_telemetry`)
 - `helm-chart-cronworkflow` — corporate cron chart for Pattern 1
 - `helm-chart-app` — corporate app chart for Patterns 2/3
 - `cosign-image-signing` — golden/base image signing (app images inherit trust)

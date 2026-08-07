@@ -389,5 +389,3 @@ releases:
 
 - `helmfile-templating` skill — escaping gotchas in `.gotmpl` files
 - `helmfile-applicationset` skill — application-level helmfile (different pattern)
-- `k8s-best-practices` steering — resource requirements, labels
-- `k8s-safety` steering — read-only by default, approval gates

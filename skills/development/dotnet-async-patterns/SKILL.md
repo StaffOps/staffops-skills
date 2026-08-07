@@ -416,4 +416,4 @@ for (int i = 0; i < 10; i++)
 
 - <org> sample: `otel-telemetry-helper/dotnet/example/dotnet-process/`
 - Related skill: `dotnet-otel-patterns` (StartRootActivity for workers)
-- Steering: `dev-environment.md` (all builds via Docker)
+- All builds run via Docker (no local .NET SDK dependency)

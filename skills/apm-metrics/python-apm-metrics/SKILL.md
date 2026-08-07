@@ -271,7 +271,7 @@ This is a **custom metric** — not semconv-standardized.
 
 | Concern | Impact |
 |---------|--------|
-| `pkg_resources` removal in 3.12 | OTel instrumentation packages that depend on `pkg_resources` (setuptools) break. **Pin Python 3.11** per repo steering. |
+| `pkg_resources` removal in 3.12 | OTel instrumentation packages that depend on `pkg_resources` (setuptools) break. **Pin Python 3.11** as a known constraint until instrumentation packages drop the dependency. |
 | GC internals changed in 3.12 | CPython 3.12 uses an incremental GC. The 3-generation model (`gc.stats()`) still works but semantics shift. Semconv metrics remain valid but generation-2 collection frequency changes. |
 
 ### Metric name transition (legacy → current)
@@ -304,5 +304,5 @@ OTel → VictoriaMetrics/Prometheus translation:
 - RPC metrics semconv: https://opentelemetry.io/docs/specs/semconv/rpc/rpc-metrics/
 - DB metrics semconv: https://opentelemetry.io/docs/specs/semconv/db/database-metrics/
 - system-metrics package: https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-system-metrics
-- Steering `dev-environment.md`: Python 3.11 pinned (NOT 3.12)
-- Steering `observability-principles.md`: AlwaysOnSampler in SDK, tail sampling at gateway
+- Known environment constraint: Python is pinned to 3.11 (NOT 3.12) across services
+- SDK sampling policy: AlwaysOnSampler in-process, with tail sampling applied at the gateway Collector

@@ -7,7 +7,7 @@ license: MIT
 platforms: [linux]
 metadata:
   hermes:
-    tags: [ubuntu, apt, dpkg, netplan, ufw, cloud-init, users, debian]
+    tags: [ubuntu, apt, dpkg, netplan, ufw, cloud-init, users, debian, apparmor]
     category: linux
     related_skills: [linux-filesystem, linux-process-management, systemd-services]
 ---
@@ -22,7 +22,8 @@ skill. Debian-derived, so most of this applies to Debian directly too.
 
 Use when installing or holding back a package, debugging a broken `apt`
 state, adding a service account, configuring a static IP with Netplan,
-opening a port with `ufw`, or working through `cloud-init` on first boot.
+opening a port with `ufw`, chasing a permission denial that looks correct at
+the Unix level, or working through `cloud-init` on first boot.
 
 ## Package management
 
@@ -262,6 +263,58 @@ host; `ufw allow 22/tcp` has no such dependency and works everywhere.
 For anything beyond simple allow/deny rules, work with `nftables` directly —
 see the `linux-firewall` skill.
 
+## AppArmor
+
+Ubuntu's default mandatory access control (Ubuntu ships AppArmor, not
+SELinux — the reverse of RHEL/Fedora). It confines individual binaries to a
+profile of allowed file paths, capabilities, and network access, independent
+of the Unix permission model.
+
+```bash
+aa-status                           # loaded profiles, and enforce vs complain mode
+aa-status --enabled; echo $?        # exit 0 if AppArmor is enabled at all
+systemctl status apparmor           # the service that loads profiles at boot
+```
+
+A denial produces a normal-looking permission error from the *application*
+(`Permission denied` with correct Unix modes and no ACL) while the real
+cause is in the kernel audit log, not in anything `ls -l` shows:
+
+```bash
+dmesg -T | grep -i apparmor
+journalctl -k | grep -i apparmor
+grep -i denied /var/log/syslog /var/log/kern.log 2>/dev/null
+```
+
+```
+audit: type=1400 audit(...): apparmor="DENIED" operation="open"
+profile="/usr/sbin/mysqld" name="/data/mysql/custom.cnf" pid=1234 comm="mysqld"
+```
+
+The `profile=` and `name=` fields identify the confined binary and the exact
+path it was denied. Diagnose Unix permissions first (`namei -l`, see
+`linux-filesystem`) — only check AppArmor once those look correct and the
+denial persists.
+
+```bash
+aa-complain /etc/apparmor.d/usr.sbin.mysqld   # log denials instead of enforcing -- for diagnosis
+aa-enforce /etc/apparmor.d/usr.sbin.mysqld    # back to enforcing
+aa-logprof                                     # interactively add rules from recent denials
+```
+
+Profiles live in `/etc/apparmor.d/`, one file per confined binary (path
+separators become dots: `/usr/sbin/mysqld` → `usr.sbin.mysqld`). Editing a
+profile requires reloading it:
+
+```bash
+apparmor_parser -r /etc/apparmor.d/usr.sbin.mysqld
+```
+
+Snap packages carry their own bundled AppArmor profiles, generated per
+snap and largely opaque to manual editing — a permission problem inside a
+snap is usually a packaging issue, not something to fix by hand-editing its
+profile.
+
 ## cloud-init
 
 Handles first-boot configuration on cloud images (EC2, GCE, Azure,
@@ -336,6 +389,9 @@ timedatectl                         # time, timezone, NTP sync status
   `full-upgrade` when a dependency change requires removal.
 - **Forgetting `DEBIAN_FRONTEND=noninteractive`** — a postinst prompt hangs
   automation indefinitely.
+- **Debugging a "permission denied" purely at the Unix level** — with correct
+  owner/group/mode and no ACL, check `dmesg` for an AppArmor `DENIED` line
+  before assuming the application itself is wrong.
 
 ## Verification
 
@@ -345,6 +401,7 @@ dpkg --configure -a && apt --fix-broken install
 netplan generate                    # syntax check without applying
 netplan try                         # apply with automatic rollback
 ufw status verbose
+aa-status --enabled && echo "AppArmor enforcing profiles"
 systemctl is-active unattended-upgrades.service
 cloud-init status --long
 test -f /var/run/reboot-required && echo "reboot pending"

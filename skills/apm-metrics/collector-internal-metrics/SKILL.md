@@ -151,7 +151,7 @@ Answers: "Is data leaving the Collector successfully?"
 
 > 🚨 **CRITICAL**: `enqueue_failed > 0` means **irrecoverable data loss**. Unlike `send_failed` (which may retry), enqueue failures mean the queue is full and data is DROPPED ON THE FLOOR. This is the #1 silent killer in Collector pipelines.
 >
-> **Real case** (from steering `application-metrics-first.md`): Gateway Collector with CPU 0.6/1.0 and memory 1.6/2Gi (resources "OK"), but `enqueue_failed_log_records` = 2840/sec = **12% of logs permanently lost**. Invisible if you only check CPU/memory.
+> **Real case**: Gateway Collector with CPU 0.6/1.0 and memory 1.6/2Gi (resources "OK"), but `enqueue_failed_log_records` = 2840/sec = **12% of logs permanently lost**. Invisible if you only check CPU/memory.
 
 ### Queue State
 
@@ -285,15 +285,15 @@ rate(otelcol_exporter_send_failed_spans_total[5m])
 
 ---
 
-## Connection to Steering: Resources Lie
+## Resources Lie: Check the Pipeline First
 
-Per `steering/application-metrics-first.md`:
+**CPU and memory "ok" can hide 12% data loss.** The FIRST query when investigating Collector health is NEVER `kubectl top`. It is:
 
-> **CPU and memory "ok" can hide 12% data loss.** The FIRST query when investigating Collector health is NEVER `kubectl top`. It is:
->
-> `rate(otelcol_exporter_enqueue_failed_*_total[5m])`
->
-> Only after confirming zero enqueue failures do resource metrics become relevant (to explain WHY there's a problem, not IF there is one).
+```promql
+rate(otelcol_exporter_enqueue_failed_*_total[5m])
+```
+
+Only after confirming zero enqueue failures do resource metrics become relevant (to explain WHY there's a problem, not IF there is one).
 
 Process metrics (`otelcol_process_memory_rss`, `otelcol_process_cpu_seconds`) explain the CAUSE of a problem already detected in pipeline metrics — they do not declare health.
 

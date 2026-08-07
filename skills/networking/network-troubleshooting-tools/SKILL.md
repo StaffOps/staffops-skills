@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [tcpdump, ss, curl, traceroute, mtr, netcat, wireshark, packet-capture]
     category: networking
-    related_skills: [tcp-ip-fundamentals, dns-troubleshooting]
+    related_skills: [tcp-ip-fundamentals, dns-troubleshooting, tls-troubleshooting, linux-firewall]
 ---
 # Network Troubleshooting Tools
 
@@ -213,3 +213,4 @@ provably in between, not on either host.
 - `tcp-ip-fundamentals` — the handshake/state model these tools observe
 - `dns-troubleshooting` — `dig` and the DNS-specific diagnostic path
 - `tls-troubleshooting` — `openssl s_client` and certificate-layer diagnosis
+- `linux-firewall` — the rules behind a DROP/REJECT a capture confirms

@@ -278,4 +278,8 @@ Before buying any SP:
 - AWS Savings Plans docs: https://docs.aws.amazon.com/savingsplans/
 - Cost Explorer SP recommendations: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-savings-plans.html
 - Related skills: `cost-explorer`, `eks-management`, `ec2-rightsizing-patterns`, `rds-patterns`
-- Related steering: `aws-tag-policies` (cost allocation)
+
+SP coverage and utilization reporting are only meaningful when cost is
+attributed correctly — tag every resource (`CostCenter`, `Environment`,
+`Team`) so per-team chargeback reflects reality rather than an
+undifferentiated shared pool.

@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [post, mortem, templates, sre]
     category: sre
-    related_skills: []
+    related_skills: [incident-response-runbook, alerting-strategy, sla-slo-design]
 ---
 # Post-Mortem Templates
 

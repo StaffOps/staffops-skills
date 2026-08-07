@@ -281,4 +281,4 @@ docker run --rm -v $(pwd):/app -w /app python:3.11-slim sh -c \
 - Lib source: `<workspace>/01-DEVOPS/LABS/otel-telemetry-helper/python/otel_helper/`
 - Examples: `otel-telemetry-helper/python/example/`
 - OTel Python docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/python/`
-- Related skills: `<org>-telemetry-standard`, `grpc-distributed-tracing`, `dotnet-otel-patterns`
+- Related skills: `telemetry-standard`, `grpc-distributed-tracing`, `dotnet-otel-patterns`

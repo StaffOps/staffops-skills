@@ -99,7 +99,6 @@ Use backticks for file paths and identifiers:
 Use relative paths:
 ```markdown
 See [TODO.md](TODO.md) for status.
-See [steering rules](steering/dev-environment.md).
 ```
 
 ### External links
@@ -255,10 +254,10 @@ Related docs, external links.
 - ❌ Tables when a list would be clearer
 - ❌ Long paragraphs without breaks
 - ❌ "click here" link text
-- ❌ Outdated README (see `documentation-sync` steering)
+- ❌ Outdated README (docs not updated alongside the code they describe)
 
 ## Reference
 
 - CommonMark spec: https://commonmark.org/
 - GitHub Flavored Markdown: https://github.github.com/gfm/
-- Related: `documentation-sync` (steering), `mkdocs-conventions`, `diagram-patterns`, `api-docs-patterns`
+- Related: `mkdocs-conventions`, `diagram-patterns`, `api-docs-patterns`

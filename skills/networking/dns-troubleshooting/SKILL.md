@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [dns, dig, resolv-conf, nslookup, caching, ttl, resolvectl]
     category: networking
-    related_skills: [tcp-ip-fundamentals, network-troubleshooting-tools]
+    related_skills: [tcp-ip-fundamentals, network-troubleshooting-tools, linux-firewall]
 ---
 # DNS Troubleshooting
 
@@ -218,3 +218,4 @@ or not at all.
 
 - `tcp-ip-fundamentals` — the connectivity layer DNS problems are often confused with
 - `network-troubleshooting-tools` — `dig`, `nc`, packet capture in more depth
+- `linux-firewall` — where a UDP/53 rule gap actually blocks resolution

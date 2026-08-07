@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [untagged, resources, bulk, fix, finops]
     category: finops
-    related_skills: []
+    related_skills: [cost-explorer, terraform-modules, eks-management, ec2-rightsizing-patterns, savings-plans-strategy]
 ---
 # Untagged Resources — Bulk Detection & Fix
 
@@ -28,7 +28,7 @@ Use when detecting and remediating untagged AWS resources at scale. Covers Resou
 
 ## <org> mandatory tags
 
-Per `aws-tag-policies` steering:
+These are the mandatory tags enforced across <org> AWS accounts:
 
 | Tag | Required | Format | Example |
 |-----|----------|--------|---------|
@@ -364,4 +364,3 @@ aws ce get-cost-and-usage \
 - AWS Config required-tags rule: https://docs.aws.amazon.com/config/latest/developerguide/required-tags.html
 - AWS Tag Policies: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html
 - Related skills: `cost-explorer`, `terraform-modules`
-- Related steering: `aws-tag-policies` (mandatory tags list + enforcement)

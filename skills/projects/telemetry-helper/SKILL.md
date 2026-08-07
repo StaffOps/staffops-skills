@@ -329,8 +329,6 @@ docker run --rm -v $(pwd):/app -w /app python:3.11-slim sh -c \
 - `dotnet-otel-patterns` — StartRootActivity, debug processor, advanced .NET patterns
 - `python-otel-patterns` — gRPC aio, FastAPI, Python 3.11 vs 3.12
 - `grpc-distributed-tracing` — Cross-language gRPC tracing
-- `observability-principles` (steering) — Cross-cutting principles
-- `dev-environment` (steering) — Docker build patterns
 
 ## Reference links
 

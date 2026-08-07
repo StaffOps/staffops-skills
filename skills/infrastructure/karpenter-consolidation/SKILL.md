@@ -120,8 +120,19 @@ kubectl get ec2nodeclass <name> -o json | jq '{securityGroupSelector: .spec.secu
 | `karpenter_voluntary_disruption_consolidation_timeouts_total` | Algorithm timeouts |
 | `karpenter_nodes_current_lifetime_seconds` | Node age distribution |
 
+## Anti-patterns
+
+- ❌ Setting `consolidateAfter` very low (e.g., `1m`) in busy clusters — causes node churn, repeated pod reschedules, and disruption budget exhaustion
+- ❌ `consolidationPolicy: WhenEmpty` when the goal is bin-packing (only consolidates fully empty nodes, ignores underutilized ones)
+- ❌ Zero or overly strict PodDisruptionBudgets on every workload (blocks all voluntary disruption, nodes never consolidate)
+- ❌ Narrow `instance-family`/`instance-size` requirements combined with Spot (starves `SpotToSpotConsolidation`'s 15-option minimum)
+- ❌ Assuming consolidation failures are bugs — check `DisruptionBlocked`/`Unconsolidatable` events before filing anything
+- ❌ Tuning `budgets.nodes` without considering PDB interaction (both must allow disruption simultaneously)
+- ❌ Ignoring `karpenter_nodeclaims_disrupted_total` trends — sudden mass replacement usually means SecurityGroupDrift, not normal consolidation
+
 ## Reference
 
 - Karpenter docs: https://karpenter.sh/docs/concepts/disruption/
 - Metrics: https://karpenter.sh/docs/reference/metrics/
 - Instance types: https://karpenter.sh/docs/reference/instance-types/
+- Related skills: `karpenter-metrics`, `eks-management`, `ec2-rightsizing-patterns`

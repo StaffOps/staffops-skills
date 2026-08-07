@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [nftables, iptables, firewall, netfilter, conntrack, drop, reject]
     category: networking
-    related_skills: [tcp-ip-fundamentals, network-troubleshooting-tools]
+    related_skills: [tcp-ip-fundamentals, network-troubleshooting-tools, ubuntu-administration]
 ---
 # Linux Firewall (nftables/iptables)
 
@@ -169,7 +169,7 @@ but it's not blocking anything."
 
 ```bash
 nft add rule inet filter input tcp dport 8080 counter accept   # counters show whether a rule is even being hit
-nft list ruleset -a                                              # with packet/byte counters visible
+nft list ruleset -a                                              # -a adds rule handles; counters print automatically once a rule has `counter`
 watch -n1 'nft list chain inet filter input'                     # watch counters increment live
 ```
 

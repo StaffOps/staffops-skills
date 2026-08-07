@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [dependency, track, integration, security]
     category: security
-    related_skills: [dependency-track-metrics]
+    related_skills: [dependency-track-metrics, sbom-vulnerability-management, container-image-apko]
 ---
 # DependencyTrack Integration
 
@@ -330,5 +330,4 @@ curl -s "${DTRACK_URL}/api/v1/metrics/portfolio/current" \
 
 - `sbom-vulnerability-management` skill — full pipeline overview
 - `container-image-apko` skill — apko auto-generates SBOM
-- `ci-cd-conventions` steering — pipeline stage structure
-- `cloud-security` steering — vulnerability SLA requirements
+- Vulnerability SLAs are enforced via policy severity thresholds (see Vulnerability policies above)

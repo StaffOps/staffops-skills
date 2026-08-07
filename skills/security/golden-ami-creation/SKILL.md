@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [golden, ami, creation, security]
     category: security
-    related_skills: []
+    related_skills: [container-image-apko, aws-ftr-compliance]
 ---
 # Golden AMI Creation (Packer + Ansible)
 
@@ -429,6 +429,5 @@ source "amazon-ebs" "ubuntu" {
 
 - `container-image-apko` skill — container golden images (complementary to AMI)
 - `aws-ftr-compliance` skill — CIS benchmark alignment
-- `cloud-security` steering — encryption and access requirements
 - `terraform-modules` skill — EC2 instance module consumes AMI via SSM
 - Path: `<workspace>/01-DEVOPS/AUTOMATIONS/AMIS/`

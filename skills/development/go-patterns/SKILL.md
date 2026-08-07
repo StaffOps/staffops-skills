@@ -309,7 +309,7 @@ case result := <-resultCh:
 
 - Effective Go: https://go.dev/doc/effective_go
 - Local docs: (none cached yet for Go — search go.dev directly)
-- Related skills: `grpc-distributed-tracing`, `<org>-telemetry-standard` (covers Go OTel via standard SDK, no <org> wrapper for Go yet)
+- Related skills: `grpc-distributed-tracing`, `telemetry-standard` (covers Go OTel via standard SDK, no <org> wrapper for Go yet)
 
 ## Roadmap for this skill
 

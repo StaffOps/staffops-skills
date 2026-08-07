@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [security, hub, patterns, aws]
     category: aws
-    related_skills: [security-hub-findings-mgmt]
+    related_skills: [security-hub-findings-mgmt, aws-ftr-compliance, iam-patterns, sbom-vulnerability-management, untagged-resources-bulk-fix]
 ---
 # AWS Security Hub — Platform Operations
 
@@ -394,7 +394,7 @@ aws securityhub batch-update-findings \
 ## <org> context
 
 - **3 EKS clusters** generate findings on EC2 nodes, EBS, SGs, IAM roles, S3
-- Resources missing `CostCenter`/`Environment` tags → tagging compliance gap (cross-ref `aws-tag-policies` steering)
+- Resources missing `CostCenter`/`Environment` tags → tagging compliance gap; enforce via SCP (see `iam-patterns`) and remediate in bulk (see `untagged-resources-bulk-fix`)
 - **Future pipeline**: Kyverno admission failures → K8s Event → EventBridge → Lambda → `BatchImportFindings` (unifies cloud + K8s posture)
 - **Slack**: `#eks-notifications` could receive HIGH/CRITICAL via EventBridge → Lambda → webhook (same `alertmanager-slack-webhook` secret)
 
@@ -418,4 +418,4 @@ aws securityhub batch-update-findings \
 - `security/security-hub-findings-mgmt` — triage, SLAs, lifecycle
 - `aws/iam-patterns` — IAM role design, IRSA, least privilege
 - `security/sbom-vulnerability-management` — Trivy scans, SBOM ingestion
-- `cloud-security` steering — baseline security rules
+- `finops/untagged-resources-bulk-fix` — remediating tagging compliance gaps in bulk

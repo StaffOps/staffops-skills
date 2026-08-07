@@ -403,5 +403,5 @@ curl http://my-new-service.dpm.svc.cluster.local:8080/healthz
 - `helm-chart-app` skill — all values.yaml options for the app chart
 - `helm-chart-cronworkflow` skill — batch job onboarding
 - `argocd-patterns` skill — sync policies, hooks, generators
-- `ci-cd-conventions` steering — pipeline stages, image tagging
-- `aws-tag-policies` steering — mandatory tag values
+- `pipeline-template-apps` skill — pipeline stages, image tagging
+- See your organization's tagging policy for mandatory CostCenter/tag values

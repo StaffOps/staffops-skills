@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [iam, patterns, aws]
     category: aws
-    related_skills: []
+    related_skills: [eks-management, cost-explorer]
 ---
 # AWS IAM Patterns
 
@@ -438,4 +438,4 @@ aws --profile <org>-dev s3 ls
 - IRSA setup: https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
 - SCP examples: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html
 - Cloudsplaining: https://github.com/salesforce/cloudsplaining
-- Related: `eks-management`, `cost-explorer`, `k8s-safety` (steering)
+- Related: `eks-management`, `cost-explorer`

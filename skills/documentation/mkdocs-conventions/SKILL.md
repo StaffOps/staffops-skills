@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [mkdocs, conventions, documentation]
     category: documentation
-    related_skills: [jira-conventions]
+    related_skills: [markdown-docs, diagram-patterns, api-docs-patterns]
 ---
 # MkDocs Conventions (<org> Corporate Docs)
 
@@ -394,5 +394,5 @@ pages:
 - MkDocs: https://www.mkdocs.org/
 - Material theme: https://squidfunk.github.io/mkdocs-material/
 - PyMdown extensions: https://facelessuser.github.io/pymdown-extensions/
-- <org> docs (to be inventoried in Fase 10): `<workspace>/<central-docs-portal>`
+- <org> docs (to be inventoried later): `<workspace>/<central-docs-portal>`
 - Related: `markdown-docs`, `diagram-patterns`, `api-docs-patterns`

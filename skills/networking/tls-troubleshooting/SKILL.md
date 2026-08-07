@@ -208,3 +208,5 @@ just the client-side error.
 
 - `network-troubleshooting-tools` — `curl -v`, `tcpdump`, and where TLS
   failure fits into a broader connection diagnosis
+- `tcp-ip-fundamentals` — confirming the TCP handshake completes before
+  blaming a hang on TLS

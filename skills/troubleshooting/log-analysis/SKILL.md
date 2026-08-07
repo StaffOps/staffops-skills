@@ -158,19 +158,29 @@ lives.
 ## Extracting structured data from unstructured logs
 
 ```bash
-# Response times from a common log format.
-awk -F'"' '{print $3}' access.log | awk '{print $NF}' | sort -n | tail -20
+# Request time, when a custom nginx/Apache log_format appends it as the
+# last whitespace-separated field (a common convention, not universal).
+awk '{print $NF}' access.log | sort -n | tail -20
 
-# Status code distribution.
+# Status code distribution -- field 9 in the standard combined log format.
 awk '{print $9}' access.log | sort | uniq -c | sort -rn
 
 # A specific field from a semi-structured line via a targeted regex.
 grep -oP 'latency=\K[0-9.]+' app.log | sort -n | tail -20
 ```
 
+Splitting on the literal `"` character (`awk -F'"'`) isolates the quoted
+request line itself — `awk -F'"' '{print $2}' access.log` gives
+`GET /path HTTP/1.1` — not the trailing numeric fields around it; don't
+assume a fixed field number without checking one real line of the log
+format first, since these positions shift with the log format in use.
+
 `grep -oP` with a `\K` (keep — resets the match start) is an efficient way
 to extract just the value of a specific labeled field from otherwise
-free-form log lines, without needing a full parser for the format.
+free-form log lines, without needing a full parser for the format. `-P` is
+GNU grep only (see `shell-text-processing`) — it fails on macOS's built-in
+BSD grep; use `ggrep` (from Homebrew's `grep` package) or fall back to
+`sed -E` there.
 
 ## Aggregating for a summary, not a wall of text
 

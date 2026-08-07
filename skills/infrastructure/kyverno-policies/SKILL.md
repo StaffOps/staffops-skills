@@ -233,7 +233,4 @@ kubectl get events -n <namespace> --field-selector reason=PolicyViolation
 ## Related
 
 - `cosign-image-signing` skill — signing details, key rotation, Harbor `--new-bundle-format=false` gotcha (Kyverno verifies signatures created by this)
-- `cosign-signing-mandatory` steering — image signing requirements
-- `k8s-best-practices` steering — mandatory labels and security context
-- `aws-tag-policies` steering — CostCenter values reference
 - `helm-chart-app` skill — how labels are set in Helm values

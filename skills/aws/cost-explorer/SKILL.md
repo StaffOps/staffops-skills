@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [cost, explorer, aws]
     category: aws
-    related_skills: []
+    related_skills: [eks-management, iam-patterns]
 ---
 # AWS Cost Explorer & FinOps
 

@@ -220,7 +220,7 @@ Links metrics to traces. Click on metric spike in Grafana → jump to exact trac
 | .NET | SemVer | `0.1.0-dev-<short_sha>` | `1.0.0` |
 | Python | PEP 440 | `0.1.0.dev<pipeline_id>` | `1.0.0` |
 
-See `ci-cd-conventions.md` for details.
+Dev builds are published on every merge to main; release builds are tagged manually.
 
 ## CI/CD pipeline (4 stages)
 
@@ -256,4 +256,3 @@ Will be re-enabled when:
 - `dotnet-otel-patterns` — Advanced .NET patterns (StartRootActivity, debug processor)
 - `python-otel-patterns` — Python-specific patterns (gRPC aio, propagation)
 - `grpc-distributed-tracing` — Cross-language gRPC tracing patterns
-- `observability-principles` (steering) — Cross-cutting principles

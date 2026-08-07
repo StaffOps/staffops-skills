@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [error, budget, framework, sre]
     category: sre
-    related_skills: []
+    related_skills: [sla-slo-design, alerting-strategy, vmalert-configuration]
 ---
 # Error Budget Framework
 

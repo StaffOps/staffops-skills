@@ -426,7 +426,6 @@ builder.Services.AddOptions<DatabaseOptions>()
 ## Reference
 
 - <org> sample: `otel-telemetry-helper/dotnet/example/dotnet-api/`
-- Related steering: `cloud-security.md` (secrets management section)
 - Related skill: `external-secrets-aws-sm` (ESO configuration)
 - Related skill: `helm-chart-app` (env/secret injection in Helm)
-- Steering: `dev-environment.md` (all builds via Docker)
+- All builds run via Docker (no local .NET SDK dependency)

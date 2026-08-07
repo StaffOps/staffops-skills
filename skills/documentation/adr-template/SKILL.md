@@ -245,4 +245,4 @@ What forces are at play? What constraints exist?
 - ADR GitHub org: https://adr.github.io/
 - Nygard original post: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
 - Corporate docs: `<workspace>/<central-docs-portal>`
-- Related: `markdown-docs`, `mkdocs-conventions`, `documentation-sync` (steering)
+- Related: `markdown-docs`, `mkdocs-conventions`

@@ -493,4 +493,4 @@ FastAPIInstrumentor.instrument_app(app)
 - <org> sample: `otel-telemetry-helper/python/example/python-api/`
 - Related skill: `python-otel-patterns` (OTel integration details)
 - Related skill: `python-grpc-aio` (gRPC backend)
-- Steering: `dev-environment.md` (all builds via Docker, Python 3.11)
+- All builds run via Docker (Python 3.11, no local interpreter dependency)

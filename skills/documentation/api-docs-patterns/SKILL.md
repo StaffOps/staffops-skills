@@ -389,7 +389,7 @@ Solution: validate spec in CI; generate either client OR server from spec to kee
 Always include `example:` in OpenAPI schemas — makes docs much more useful.
 
 ### Pitfall: outdated docs after API changes
-Per `documentation-sync` rule: API change = OpenAPI/proto update + regenerate docs.
+Treat it as one change: API change = OpenAPI/proto update + regenerate docs, in the same commit.
 
 ### Pitfall: too granular operationId
 Bad: `getOrderById`, `getOrderByStatus`, `getOrderByCustomer`

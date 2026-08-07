@@ -239,7 +239,7 @@ From `TUNING-CHANGES.md` and `values.yaml.gotmpl`:
 
 - **`skills/infrastructure/argocd-patterns`** — ApplicationSets, sync-waves, multi-cluster config (operational, NOT metrics).
 - **`skills/apm-metrics/go-apm-metrics`** — Full `go_*` runtime metrics catalog (applies to all Argo CD Go components).
-- **`steering/k8s-best-practices.md`** — GitOps-only deployment rules, ArgoCD as sole PRD deployment mechanism.
+- GitOps-only deployment rule: Argo CD is the sole mechanism for production deployments — manual `kubectl apply`/`edit` against production bypasses drift detection and is treated as an incident.
 
 ---
 

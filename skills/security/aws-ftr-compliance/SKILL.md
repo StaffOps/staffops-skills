@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [aws, ftr, compliance, security]
     category: security
-    related_skills: [aws-csi-driver-metrics, external-secrets-aws-sm, aws-load-balancer-controller-metrics]
+    related_skills: [security-hub-findings-mgmt, iam-patterns, golden-ami-creation]
 ---
 # AWS Foundational Technical Review (FTR) Compliance
 
@@ -327,7 +327,6 @@ resource "aws_config_config_rule" "encrypted_volumes" {
 ## Related
 
 - `iam-patterns` skill — IAM role design and least privilege
-- `cloud-security` steering — baseline security rules
-- `aws-tag-policies` steering — mandatory tagging (compliance requirement)
 - `terraform-modules` skill — module patterns with built-in compliance
+- Mandatory tagging (`CostCenter`, `CostScope`, `CostProject`, `Environment`) is itself a compliance requirement — untagged resources block ownership tracing during an audit
 - Path: `<workspace>/03-TESTS/FTR/` — <org> FTR findings

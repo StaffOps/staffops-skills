@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [diagram, patterns, documentation]
     category: documentation
-    related_skills: []
+    related_skills: [markdown-docs, mkdocs-conventions]
 ---
 # Diagram Patterns
 
@@ -259,7 +259,7 @@ Long ASCII art wraps poorly on mobile. Use Mermaid for diagrams >80 chars wide.
 Always commit `.drawio` source alongside the exported image.
 
 ### Pitfall: outdated diagrams in docs
-Per `documentation-sync` rule: when architecture changes, update the diagram.
+When architecture changes, update the diagram in the same change — don't let diagrams drift from the system they describe.
 
 ## C4 model recommendation
 
@@ -274,12 +274,12 @@ Most <org> docs need only Context + Container levels.
 
 ## Examples in <org> docs
 
-### Existing diagrams
+### Common patterns seen in practice
 
-- `otel-telemetry-helper/README.md` — telemetry architecture (ASCII)
-- `otel-telemetry-helper/dotnet/README.md` — sample apps flow (ASCII)
-- `06-STAFFOPS/anomaly-detection-controller/README.md` — system architecture (ASCII)
-- (To be inventoried in Fase 10) — drawio sources for external docs
+- Telemetry/data-flow architecture in a service `README.md` — ASCII (renders everywhere, no tooling needed)
+- Sample-app or client-library data flow in a `README.md` — ASCII
+- Controller/system architecture in a platform repo `README.md` — ASCII
+- drawio sources for external-facing docs — inventory and link them here as they're produced (see "drawio patterns" above)
 
 ## Tools
 

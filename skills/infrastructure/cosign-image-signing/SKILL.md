@@ -277,4 +277,3 @@ cosign verify --key cosign.pub $IMAGE || exit 1
 - Cosign docs: https://docs.sigstore.dev/cosign/overview/
 - Sigstore: https://www.sigstore.dev/
 - Harbor signature integration: https://goharbor.io/docs/latest/working-with-projects/working-with-images/signing-images/
-- Related: `ci-cd-conventions` (steering — golden/base image signing is mandatory)

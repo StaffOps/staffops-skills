@@ -284,4 +284,4 @@ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet t
 - <org> OTel Helper monorepo: `<workspace>/01-DEVOPS/LABS/otel-telemetry-helper/`
 - Sample apps with all patterns: `otel-telemetry-helper/dotnet/example/`
 - OTel .NET docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/dotnet/`
-- Related skills: `<org>-telemetry-standard`, `grpc-distributed-tracing`, `python-otel-patterns`
+- Related skills: `telemetry-standard`, `grpc-distributed-tracing`, `python-otel-patterns`

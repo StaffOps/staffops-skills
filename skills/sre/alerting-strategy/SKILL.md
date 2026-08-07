@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [alerting, strategy, sre]
     category: sre
-    related_skills: [savings-plans-strategy, multicluster-label-strategy]
+    related_skills: [error-budget-framework, alertmanager-slack-config, vmalert-configuration, runbook-authoring]
 ---
 # Alerting Strategy
 

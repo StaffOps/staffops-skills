@@ -76,7 +76,7 @@ Knowing these avoids misreading CI failures:
 | `make` | 2 | Build failure |
 | `test` / `[` | 0 / 1 / 2 | True / false / usage error |
 | `timeout` | 124 / 125 / 126 / 127 | Timed out / timeout itself failed / not executable / not found |
-| `xargs` | 123 / 124 / 125 | Some invocation failed / command exited non-zero / killed |
+| `xargs` | 123 / 124 / 125 | Some invocation exited 1-125 / a command exited 255 / a command was killed by a signal |
 
 `grep` returning 1 is **not an error** — it means no match. Under `set -e`
 this exits the script, which is why it needs a guard:

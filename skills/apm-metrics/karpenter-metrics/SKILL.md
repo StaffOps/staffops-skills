@@ -261,7 +261,7 @@ workqueue_depth{name=~"karpenter.*"} > 0
 - `skills/infrastructure/karpenter-consolidation` — operational patterns: why consolidation blocks, PDB issues, spotToSpot thresholds, instance type broadening. This skill provides the **metrics** to diagnose those issues.
 - `skills/apm-metrics/go-apm-metrics` — Go runtime metrics (`go_goroutines`, `go_memstats_*`, `go_gc_*`) also emitted by the Karpenter controller binary.
 - `skills/apm-metrics/k8s-workload-metrics` — container-level resource metrics for the Karpenter pods themselves.
-- `steering/k8s-best-practices.md` — scheduling constraints and anti-affinity that can cause `maxReplicas` to be ineffective (same principle applies to Karpenter-provisioned nodes with topology constraints).
+- Scheduling constraint: restrictive pod anti-affinity or topology-spread rules can make `maxReplicas`/consolidation targets unreachable even when Karpenter metrics look healthy — check pod scheduling constraints before assuming a controller bug.
 
 ---
 

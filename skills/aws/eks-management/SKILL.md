@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [eks, management, aws]
     category: aws
-    related_skills: []
+    related_skills: [cost-explorer, iam-patterns]
 ---
 # AWS EKS Management
 
@@ -108,8 +108,11 @@ kubectl get nodepool
 # Show NodeClaim (pending node provision)
 kubectl get nodeclaim
 
-# Force node consolidation
-kubectl annotate node <node> karpenter.sh/disruption=delete
+# Force node deletion (Karpenter drains and replaces it if still needed)
+kubectl delete node <node>
+
+# Opt a node out of consolidation/drift disruption
+kubectl annotate node <node> karpenter.sh/do-not-disrupt=true
 
 # Karpenter logs
 kubectl logs -n karpenter -l app.kubernetes.io/name=karpenter --tail=100
@@ -273,7 +276,7 @@ Mix on-demand and spot in NodePool. Karpenter falls back to on-demand if spot un
 
 ### Graviton (arm64)
 
-ARM-based instances are 20-40% cheaper. Requires multi-arch container images (see `ci-cd-conventions` steering).
+ARM-based instances are 20-40% cheaper. Requires multi-arch container images (build both `amd64` and `arm64` and publish a manifest list).
 
 ## Backup and DR
 
@@ -311,4 +314,4 @@ aws eks list-clusters --region us-east-1
 - EKS docs: https://docs.aws.amazon.com/eks/
 - Karpenter: https://karpenter.sh/
 - AWS Best Practices: https://aws.github.io/aws-eks-best-practices/
-- Related: `cost-explorer`, `iam-patterns`, `k8s-safety` (steering)
+- Related: `cost-explorer`, `iam-patterns`

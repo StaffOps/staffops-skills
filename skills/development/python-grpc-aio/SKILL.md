@@ -469,4 +469,4 @@ async def call_service():
 - Related skill: `python-otel-patterns` (GrpcAioInstrumentor details)
 - Related skill: `grpc-distributed-tracing` (cross-language propagation)
 - Related skill: `python-fastapi-patterns` (API layer calling gRPC backend)
-- Steering: `dev-environment.md` (all builds via Docker, Python 3.11)
+- All builds run via Docker (Python 3.11, no local interpreter dependency)

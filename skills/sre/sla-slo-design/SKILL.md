@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [sla, slo, design, sre]
     category: sre
-    related_skills: [agent-platform-design]
+    related_skills: [error-budget-framework, incident-response-runbook, alerting-strategy, runbook-authoring, post-mortem-templates]
 ---
 # SLI/SLO/SLA Design Framework
 
@@ -213,7 +213,7 @@ spec:
           annotations:
             summary: "SLO burn rate critical for {{ $labels.service_name }}"
             description: "Error budget being consumed at 14.4x rate. Budget exhausted in ~2h."
-            runbook_url: "https://docs.<old-internal-domain>/runbooks/slo-burn-rate"
+            runbook_url: "https://gitlab.<org-domain>/devops/runbooks/-/blob/main/slo/slo-burn-rate-critical.md"
 
         - alert: SLOBurnRateHigh
           expr: |
@@ -274,10 +274,12 @@ SLO overview dashboard (datasource UID: `victoriametrics`):
 
 ---
 
-## Related skills
+## Reference
 
-- `error-budget-framework` — burn rate alerting, error budget policies, multi-window alerting (companion to SLO design)
-- `incident-response-runbook` — what to do when SLO is at risk
-- `alerting-strategy` — symptom-based alerting (SLOs are the canonical symptom)
-- `runbook-authoring` — runbooks for SLO violations and burn rate alerts
-- `post-mortem-templates` — when SLO is missed, post-mortem framework
+- Google SRE Book Ch. 4: Service Level Objectives; SRE Workbook Ch. 2-5
+- Related skills:
+  - `error-budget-framework` — burn rate alerting, error budget policies, multi-window alerting (companion to SLO design)
+  - `incident-response-runbook` — what to do when SLO is at risk
+  - `alerting-strategy` — symptom-based alerting (SLOs are the canonical symptom)
+  - `runbook-authoring` — runbooks for SLO violations and burn rate alerts
+  - `post-mortem-templates` — when SLO is missed, post-mortem framework

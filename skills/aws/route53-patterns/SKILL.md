@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [route53, patterns, aws]
     category: aws
-    related_skills: []
+    related_skills: [eks-management, iam-patterns, istio-ambient-otel]
 ---
 # AWS Route 53 Patterns
 

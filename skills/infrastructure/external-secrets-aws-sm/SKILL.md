@@ -258,6 +258,5 @@ Examples: `dpm/people-api/prd`, `dcp/receita-process/dev`, `devops/harbor/prd`
 
 ## Related
 
-- `cloud-security` steering — secrets management flow
 - `helm-chart-app` skill — externalSecret section in chart values
 - `iam-patterns` skill — IRSA role design for ESO

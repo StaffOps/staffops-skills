@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [kubelet, scrape, architecture, observability]
     category: observability
-    related_skills: []
+    related_skills: [multicluster-label-strategy, streaming-aggregation]
 ---
 # Kubelet Scrape Architecture
 

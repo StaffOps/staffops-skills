@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [lambda, patterns, aws]
     category: aws
-    related_skills: []
+    related_skills: [iam-patterns, cost-explorer, telemetry-standard]
 ---
 # AWS Lambda Patterns
 
@@ -56,7 +56,7 @@ resource "aws_lambda_provisioned_concurrency_config" "api" {
 
 Use for: latency-critical APIs, customer-facing endpoints.
 
-### SnapStart (Java/.NET only)
+### SnapStart (Java, Python 3.12+, .NET 8+)
 
 Snapshots the initialized function. Restores from snapshot instead of cold-starting.
 
@@ -77,7 +77,7 @@ resource "aws_lambda_function" "java_api" {
 Caveats:
 - Only works with published versions (not `$LATEST`)
 - Uniqueness: don't cache random seeds or connection IDs in init
-- Not available for all runtimes
+- Not available for container image packaging or OS-only runtimes (e.g. Node.js, Ruby, Go)
 
 ## Lambda Layers
 
@@ -390,4 +390,4 @@ aws lambda update-function-configuration \
 - Lambda Power Tuning: https://github.com/alexcasalboni/aws-lambda-power-tuning
 - Lambda Powertools: https://docs.powertools.aws.dev/lambda/python/latest/
 - OTel Lambda layer: https://aws-otel.github.io/docs/getting-started/lambda
-- Related: `iam-patterns`, `cost-explorer`, `<org>-telemetry-standard`
+- Related: `iam-patterns`, `cost-explorer`, `telemetry-standard`

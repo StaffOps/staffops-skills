@@ -349,4 +349,3 @@ steps:
 - `helmfile-applicationset` skill — how CronWorkflows are managed via ApplicationSets
 - `helm-chart-app` skill — long-running service chart (complementary)
 - `external-secrets-aws-sm` skill — ESO integration details
-- `aws-tag-policies` steering — mandatory tag values

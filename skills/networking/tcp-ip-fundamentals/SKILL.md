@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [tcp, ip, networking, handshake, mtu, subnetting, sockets]
     category: networking
-    related_skills: [network-troubleshooting-tools, dns-troubleshooting]
+    related_skills: [network-troubleshooting-tools, dns-troubleshooting, linux-firewall]
 ---
 # TCP/IP Fundamentals
 

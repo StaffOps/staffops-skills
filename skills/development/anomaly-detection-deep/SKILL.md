@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [anomaly, detection, deep, development]
     category: development
-    related_skills: []
+    related_skills: [prophet-isolation-forest-patterns, go-patterns]
 ---
 # Anomaly Detection Deep Dive
 

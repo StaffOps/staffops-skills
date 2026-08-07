@@ -9,7 +9,7 @@ metadata:
   hermes:
     tags: [incident, response, runbook, sre]
     category: sre
-    related_skills: [runbook-authoring]
+    related_skills: [runbook-authoring, post-mortem-templates, alerting-strategy, incident-triage-linux]
 ---
 # Incident Response Runbook
 
@@ -237,7 +237,7 @@ kubectl get applications -n argo -l app.kubernetes.io/name=<service>
 # Check deployment history
 kubectl -n argo get applications <app-name> -o jsonpath='{.status.history}'
 
-# Rollback via ArgoCD (requires approval per k8s-safety steering)
+# Rollback via ArgoCD (requires approval)
 argocd app rollback <app-name> <revision>
 ```
 
@@ -274,6 +274,7 @@ Rules:
 
 - Google SRE Book Ch. 14: Managing Incidents
 - Related skills: `post-mortem-templates`, `alerting-strategy`, `runbook-authoring`
+- For the hands-on, Linux-technical side of the Triage/Mitigate phases (what to check first on a box, mitigate-vs-diagnose decision, safe restart/rollback mechanics) see `incident-triage-linux` — this skill covers the process/roles/comms layer, that one covers the machine-level investigation
 - <org> clusters: `<org>-workloads-dev-nv`, `<org>-workloads-prd-nv`, `<org>-eks-prd` (core)
 - Alertmanager: `https://alertmanager.<org-domain>`
 - Grafana: `https://grafana.<org-domain>`
