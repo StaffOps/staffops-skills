@@ -1,0 +1,32 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * 0'  # Sunday 03:00 UTC
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate skill structure
+        run: python3 tools/validate_skills.py
+
+      - name: Verify metrics (dry-run)
+        if: github.event_name != 'schedule'
+        run: |
+          chmod +x tools/verify_metrics.sh
+          tools/verify_metrics.sh --all
+
+      - name: Verify metrics (live)
+        if: github.event_name == 'schedule'
+        env:
+          VM_READ_ENDPOINT: ${{ secrets.VM_READ_ENDPOINT }}
+        run: |
+          chmod +x tools/verify_metrics.sh
+          tools/verify_metrics.sh --all
