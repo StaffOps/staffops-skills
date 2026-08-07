@@ -1,10 +1,10 @@
 # StaffOps Skills
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-226-blue.svg)](#catalog)
+[![Skills](https://img.shields.io/badge/skills-229-blue.svg)](#catalog)
 [![Format](https://img.shields.io/badge/format-Hermes%20Agent-8A2BE2.svg)](https://github.com/NousResearch/hermes-agent)
 
-A catalog of 226 platform engineering skills for AI coding agents, covering
+A catalog of 229 platform engineering skills for AI coding agents, covering
 observability, SRE, Kubernetes, AWS, security, AI/LLM-ops, and delivery workflows.
 
 Each skill is a self-contained Markdown document that an agent loads on demand
@@ -92,7 +92,7 @@ inline examples over exhaustively tested tooling. Contributions that add
 
 The 60-character description limit is deliberate: an agent loads every skill's
 frontmatter into context at all times and only expands the body on demand. Long
-descriptions dilute attention across 226 entries.
+descriptions dilute attention across 229 entries.
 
 ## Installation
 
@@ -239,11 +239,13 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 </details>
 
 <details>
-<summary><strong>aws</strong> (18) — AWS service patterns, EKS, and AI DevOps Agent operations.</summary>
+<summary><strong>aws</strong> (21) — AWS service patterns, EKS, and AI DevOps Agent operations.</summary>
 
 | Skill | Description | Includes |
 | --- | --- | --- |
 | `agent-instruction-authoring` | Write SKILL.md instructions that land in the AWS DevOps Agent. | — |
+| `agent-skills-adversarial-review` | Refute a document with independent reviewers before commit. | — |
+| `agent-skills-cost-modelling` | Estimate agent cost from observed duration, not guesses. | — |
 | `agent-skills-debugging` | Debug skills that don't load, return empty, or get ignored. | — |
 | `agent-skills-harness-guide` | Run the behaviour harness and interpret eval results. | — |
 | `agent-skills-import-and-harness` | Import skills to agentspace respecting API constraints. | — |
@@ -251,6 +253,7 @@ frontmatter can consume this catalog. The extra Hermes-specific keys live under
 | `agent-skills-new-skill-checklist` | Scaffold, validate and import a new agent skill. | — |
 | `agent-skills-readonly-invariant` | Enforce the agent read-only safety invariant. | — |
 | `agent-skills-sandbox-development` | Build executable skills for the agent sandbox. | — |
+| `agent-skills-specs-authoring` | Where planning artefacts go, and what makes one valid. | — |
 | `aws-devops-agent-skills` | Operate the AWS DevOps Agent skill catalog end-to-end. | — |
 | `cloudfront-patterns` | Configure CloudFront origins, caching and WAF. | — |
 | `cost-explorer` | Analyze AWS spend via Cost Explorer and CUR Athena. | — |
@@ -527,7 +530,8 @@ frontmatter keys, the description limit, category consistency, resolvable
 
 ```bash
 python3 tools/validate_skills.py
-# validated 226 skills, 0 error(s)
+# validated 229 skills, 270 error(s)   <- 270 pre-existing: bulk-imported
+#                                          skills lack version/author/license/platforms
 ```
 
 It requires only the Python standard library and exits non-zero on any failure,

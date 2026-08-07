@@ -141,7 +141,7 @@ description: >
 | Check | Query | Healthy |
 |-------|-------|---------|
 | OTel receiving | `sum(rate(otelcol_receiver_accepted_spans[5m]))` | > 0 |
-| No drops | `sum(rate(otelcol_exporter_send_failed_spans[5m]))` | = 0 |
+| No drops | `sum(rate(otelcol_exporter_send_failed_spans_total[5m]))` | = 0 |
 | Kafka lag | `sum(kafka_consumergroup_lag{group=~"otel.*"})` | < 50k |
 | VM ingesting | `sum(rate(vm_rows_inserted_total[5m]))` | > 0 |
 | Tempo receiving | `sum(rate(tempo_distributor_spans_received_total[5m]))` | > 0 |

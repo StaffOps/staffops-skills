@@ -113,6 +113,11 @@ high in multi-tenant deployments. Never `group by (tenant)` without `topk()`.
 | `tempo_ingester_failed_flushes_total` | Counter | events | Failed block flushes to object storage | Non-zero = trace data at risk in WAL only | — |
 | `tempo_ingester_flush_duration_seconds` | Histogram | seconds | Time to flush a block to storage | Growing p99 = storage backend slowdown | `le` |
 
+> ⚠️ **Tempo v3 (2025+)**: The ingester component was replaced by `block-builder` and `live-store`.
+> These `tempo_ingester_*` metrics **do not exist** in Tempo v3. If you run Tempo v3 with Kafka ingest,
+> see the `tempo-v3-kafka-operations` skill instead. Query `tempo_live_store_*` and `tempo_block_builder_*`
+> for the equivalent signals.
+
 ### Receiver (OTLP/gRPC intake)
 
 | Metric | Type | Unit | What it measures | Troubleshooting use | Key labels |
@@ -276,7 +281,7 @@ sum(rate(tempo_distributor_spans_received_total[5m]))
 rate(otelcol_exporter_send_failed_log_records{exporter=~".*loki.*"}[5m])
 
 # Tempo side: what Collector failed to deliver
-rate(otelcol_exporter_send_failed_spans{exporter=~".*otlp.*"}[5m])
+rate(otelcol_exporter_send_failed_spans_total{exporter=~".*otlp.*"}[5m])
 ```
 
 ---

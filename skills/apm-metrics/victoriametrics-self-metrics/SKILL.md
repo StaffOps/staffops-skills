@@ -140,7 +140,7 @@ vmagent scrapes targets and remote-writes to vminsert. Deployed as `VMAgent` CRD
 | `vmagent_remotewrite_send_duration_seconds_total` | Counter | Cumulative time spent sending | Rate = avg send latency; growing = network/vminsert saturation | `url` |
 | `vmagent_remotewrite_conn_bytes_written_total` | Counter | Total bytes written over wire | Throughput per remote write target | `url` |
 | `vmagent_remotewrite_queue_size` | Gauge | Number of pending blocks in remote write queue | Growing = queue saturation; compare with `remoteWrite.queues` (32) | `url` |
-| `vm_promscrape_targets_total` | Gauge | Total discovered scrape targets | Target discovery health; drop = service discovery issue | `job`, `status` (up/down) |
+| `vm_promscrape_targets` | Gauge | Total discovered scrape targets | Target discovery health; drop = service discovery issue. **Note**: some versions emit `vm_promscrape_targets_total` — use `{__name__=~"vm_promscrape_targets(_total)?"}` if unsure | `job`, `status` (up/down) |
 | `vm_promscrape_scrapes_total` | Counter | Total scrape attempts | Scrape frequency baseline | `type` (regular, limit) |
 | `vm_promscrape_scrape_duration_seconds` | Summary | Scrape request latency | Slow targets starving the scrape loop | `job` |
 | `vm_promscrape_scrapes_failed_total` | Counter | Failed scrape attempts | Target unreachable / timeout | `job` |
@@ -183,7 +183,7 @@ Deployed: 1 replica, `evaluationInterval: 30s`, `selectAllByDefault: true`.
 | Write latency spike | `vm_rpc_send_duration_seconds_total` rate; `vm_rpc_buf_pending_bytes`; `vm_concurrent_insert_current` vs `_limit` |
 | Cardinality explosion / high churn | `vm_slow_row_inserts_total` rate (vmstorage); `vm_cache_misses_total{type="storage/tsid"}` |
 | vmagent queue growing | `vmagent_remotewrite_pending_data_bytes`; `vmagent_remotewrite_errors_total` |
-| Scrape targets disappearing | `vm_promscrape_targets_total{status="down"}`; `vm_promscrape_scrapes_failed_total` |
+| Scrape targets disappearing | `vm_promscrape_targets{status="down"}`; `vm_promscrape_scrapes_failed_total` |
 | Query timeouts / slow dashboards | `vm_slow_queries_total`; `vm_concurrent_select_current` vs `_limit`; `vm_http_request_duration_seconds` |
 | vmstorage disk filling | `vm_free_disk_space_bytes` (below 10GB = readonly); `vm_data_size_bytes` |
 | Alert rules not evaluating | `vmalert_alerting_rules_error`; `vmalert_iteration_missed_total`; `vmalert_iteration_duration_seconds` |

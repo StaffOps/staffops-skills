@@ -2,8 +2,11 @@
 
 AWS service patterns, EKS troubleshooting, and AI DevOps Agent operations.
 
-18 skills.
+21 skills.
 
+- **agent-skills-adversarial-review** — Refute a document with independent reviewers before commit.
+- **agent-skills-cost-modelling** — Estimate agent cost from observed duration, not guesses.
+- **agent-skills-specs-authoring** — Where planning artefacts go, and what makes one valid.
 - **cloudfront-patterns** — Configure CloudFront origins, caching and WAF.
 - **cost-explorer** — Analyze AWS spend via Cost Explorer and CUR Athena.
 - **eks-management** — Manage EKS nodes, Karpenter, IRSA and upgrades.
