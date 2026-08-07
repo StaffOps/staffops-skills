@@ -179,6 +179,17 @@ workflow-controller:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Workflow error rate | `sum(rate(argo_workflows_error_count[5m])) by (cause)` | Any cause sustained > 0 |
+| 2 | Queue depth (backlog) | `argo_workflows_queue_depth_gauge` | Growing unbounded |
+| 3 | Pending pods | `argo_workflows_pods_gauge{phase="Pending"}` | > 10 for > 5m |
+| 4 | K8s API errors | `sum(rate(argo_workflows_k8s_request_total{status_code=~"4..\|5.."}[5m]))` | > 1 rps |
+| 5 | Leader election active | `argo_workflows_is_leader` | 0 on ALL replicas |
+
 ## Complements
 
 - **`go-apm-metrics`** — Full Go runtime metrics catalog (goroutines, GC, memory classes, scheduler)

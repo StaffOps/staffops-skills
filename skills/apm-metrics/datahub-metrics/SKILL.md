@@ -249,6 +249,17 @@ DataHub's backing services have their own metrics covered by existing skills:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | JVM heap pressure | `jvm_memory_pool_bytes_used{pool="G1 Old Gen"} / jvm_memory_pool_bytes_max{pool="G1 Old Gen"}` | > 0.85 |
+| 2 | GC overhead | `rate(jvm_gc_collection_seconds_sum[5m])` | > 0.2 (20% time in GC) |
+| 3 | Kafka consumer lag | `kafka_consumer_fetch_manager_metrics_records_lag` | Growing unbounded |
+| 4 | Thread deadlocks | `jvm_threads_deadlocked` | > 0 |
+| 5 | File descriptor exhaustion | `process_open_fds / process_max_fds` | > 0.8 |
+
 ## Complements
 
 - **k8s-workload-metrics** — pod/container resource metrics (CPU, memory, restarts) for all DataHub pods

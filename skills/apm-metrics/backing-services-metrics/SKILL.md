@@ -330,3 +330,13 @@ Any sustained rate = all upstream resolvers failing. DNS resolution is degraded 
 ---
 
 *All metrics confirmed present in live VictoriaMetrics inventory (2026-07-06).*
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Redis evictions | `rate(redis_evicted_keys_total[5m]) > 0` | Any eviction = memory forcing data loss |
+| 2 | Redis hit ratio | `rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m]))` | < 90% = cache thrashing |
+| 3 | PG connection saturation | `pg_stat_activity_count / pg_settings_max_connections` | > 80% = pool exhaustion risk |
+| 4 | PG replication lag | `pg_replication_lag_seconds` | > 10s = replica diverging |
+| 5 | CoreDNS errors | `rate(coredns_dns_responses_total{rcode="SERVFAIL"}[5m])` | > 0 = DNS resolution failures |

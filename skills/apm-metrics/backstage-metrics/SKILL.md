@@ -169,6 +169,16 @@ For observability of the Backstage deployment **right now**, use:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Pod restarts | `kube_pod_container_status_restarts_total{namespace="backstage"}` | Increasing |
+| 2 | Memory pressure | `container_memory_working_set_bytes{namespace="backstage",container="backstage"}` | Near limit |
+| 3 | CPU saturation | `rate(container_cpu_usage_seconds_total{namespace="backstage",container="backstage"}[5m])` | > 0.8 of request |
+| 4 | Pod not ready | `kube_pod_status_ready{namespace="backstage",condition="true"} == 0` | Any pod not ready |
+
 ## Complements
 
 - **`k8s-workload-metrics`** — pod/container resource metrics (the ONLY metrics available today for Backstage)

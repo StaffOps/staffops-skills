@@ -306,3 +306,13 @@ OTel → VictoriaMetrics/Prometheus translation:
 - system-metrics package: https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation/opentelemetry-instrumentation-system-metrics
 - Known environment constraint: Python is pinned to 3.11 (NOT 3.12) across services
 - SDK sampling policy: AlwaysOnSampler in-process, with tail sampling applied at the gateway Collector
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | GC uncollectable (leak) | `rate(cpython_gc_uncollectable_objects_total{cpython_gc_generation="2"}[5m]) > 0` | Non-zero gen-2 = definite memory leak |
+| 2 | Memory growth | `process_runtime_cpython_memory_bytes{type="rss"}` | Monotonic rise = leak or unbounded cache |
+| 3 | CPU saturation | `system_cpu_utilization > 0.85` | Sustained > 85% = compute-bound |
+| 4 | Thread count | `process_runtime_cpython_thread_count` | Monotonic rise = thread leak in asyncio |
+| 5 | HTTP error rate | `rate(http_server_request_duration_seconds_count{http_response_status_code=~"5.."}[5m])` | Rising 5xx = application errors |

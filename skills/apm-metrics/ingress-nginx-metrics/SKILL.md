@@ -240,6 +240,17 @@ sum by (controller_class) (
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | 5xx error rate | `sum(rate(nginx_ingress_controller_requests{status=~"5.."}[5m])) by (ingress)` | > 1% of total |
+| 2 | Request latency p99 | `histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[5m])) by (le, ingress))` | > SLO |
+| 3 | Config reload failures | `nginx_ingress_controller_config_last_reload_successful` | 0 = broken config |
+| 4 | TLS cert expiring | `nginx_ingress_controller_ssl_expire_time_seconds - time()` | < 604800 (7 days) |
+| 5 | Connection saturation | `nginx_ingress_controller_nginx_process_connections` | Near worker_connections |
+
 ## Complements
 
 - **`go-apm-metrics`** — Go runtime metrics (`go_*`) exposed by the controller process

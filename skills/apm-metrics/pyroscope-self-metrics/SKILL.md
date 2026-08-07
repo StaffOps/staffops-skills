@@ -211,3 +211,13 @@ See skill `go-apm-metrics` for the full catalog. Key ones for Pyroscope ops:
 - Helm chart: `grafana/pyroscope` v2.1.0 (appVersion 2.1.0) from `https://grafana.github.io/helm-charts`
 - Deployed config: `02-KUBE/00-CONFIG/k8s-setup/monitoring/pyroscope/values.yaml.gotmpl`
 - dskit server metrics: `github.com/grafana/dskit/server` (provides `pyroscope_request_duration_seconds` etc.)
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Ingest errors | `sum(rate(pyroscope_request_duration_seconds_count{route="/push.v1.PusherService/Push",status_code=~"5.."}[5m]))` | > 0 = profiles being rejected |
+| 2 | Parse latency p99 | `histogram_quantile(0.99, rate(pyroscope_distributor_parse_duration_seconds_bucket[5m]))` | > 1s = CPU bottleneck in parsing |
+| 3 | In-flight saturation | `pyroscope_inflight_requests{route=~".*/Push.*"}` | Sustained high = concurrency exhaustion |
+| 4 | Head series growth | `pyroscope_tsdb_head_series` | Monotonic rise = cardinality explosion |
+| 5 | Query latency p99 | `histogram_quantile(0.99, rate(pyroscope_request_duration_seconds_bucket{route=~".*SelectMerge.*"}[5m]))` | > 10s = query degraded |

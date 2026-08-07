@@ -178,3 +178,13 @@ The `scaleops-raw` bedag/raw release creates:
 - CloudBolt/StormForge comparison (May 2026): "ScaleOps requires in-cluster Prometheus for metrics collection and storage"
 - ScaleOps website: https://scaleops.com/ — no public metrics documentation found
 - ScaleOps docs portal (https://docs.scaleops.com/) — **gated, not accessible** for metrics verification
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Pod restarts | `kube_pod_container_status_restarts_total{namespace="scaleops-system"}` | Rising = crash-loop |
+| 2 | Pods running | `kube_pod_status_phase{namespace="scaleops-system",phase="Running"}` | Missing pods = operator down |
+| 3 | Memory pressure | `container_memory_working_set_bytes{namespace="scaleops-system"} / container_spec_memory_limit_bytes{namespace="scaleops-system"}` | > 80% = OOMKill risk |
+
+> **Note**: No confirmed custom Prometheus metrics. Use k8s-workload-metrics for pod-level health.

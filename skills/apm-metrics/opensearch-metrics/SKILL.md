@@ -295,3 +295,13 @@ When enabled, per-index metrics are exposed with an additional `index` label:
 - Deployed alert rules: `k8s-setup/opensearch/opensearch-raw/prometheus.rules.yaml`
 - Scrape config: `k8s-setup/monitoring/vm-operator-raw/vmagent-scrape-external/scrape-configs/ec2-instances.yaml` (job `ec2-opensearch-metrics`, path `/_prometheus/metrics`, port 9200)
 - Default metric prefix: `opensearch_` (plugin config `prometheus.metric_name.prefix`)
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Cluster status | `opensearch_cluster_status` | != 1 (GREEN=1, YELLOW=2, RED=3) |
+| 2 | JVM heap pressure | `opensearch_jvm_mem_heap_used_in_bytes / opensearch_jvm_mem_heap_max_in_bytes` | > 75% = GC pressure, circuit breakers trip |
+| 3 | Bulk rejections | `rate(opensearch_threadpool_rejected_count{name="write"}[5m])` | > 0 = indexing backpressure, data loss risk |
+| 4 | Disk watermark | `1 - (opensearch_fs_total_available_in_bytes / opensearch_fs_total_total_in_bytes)` | > 85% = approaching flood-stage read-only |
+| 5 | Search latency | `rate(opensearch_indices_search_query_time_in_millis[5m]) / rate(opensearch_indices_search_query_total[5m])` | > 500ms avg = slow queries |

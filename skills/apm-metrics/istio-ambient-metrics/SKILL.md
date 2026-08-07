@@ -520,3 +520,13 @@ sum by (source_workload, destination_service_name) (
 - [Envoy Response Flags](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage)
 - [Istio Ambient Architecture](https://istio.io/latest/docs/ambient/architecture/)
 - Related skills: `istio-ambient-otel`, `istio-ambient-debugging`, `trace-derived-metrics`
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Mesh error rate | `sum(rate(istio_requests_total{response_code=~"5.."}[5m])) / sum(rate(istio_requests_total[5m]))` | > 1% mesh-wide |
+| 2 | Upstream resets | `sum(rate(istio_requests_total{response_flags=~".*UC.*"}[5m])) by (destination_service_name)` | > 0 = upstream connection reset |
+| 3 | Latency p99 | `histogram_quantile(0.99, sum(rate(istio_request_duration_milliseconds_bucket[5m])) by (le, destination_service_name))` | > 1000ms per service |
+| 4 | TCP failures | `sum(rate(istio_tcp_connections_closed_total{response_flags!=""}[5m])) by (destination_service_name)` | Non-zero = L4 issues |
+| 5 | mTLS gaps | `sum(istio_requests_total{connection_security_policy="unknown"}) by (destination_service_name)` | Non-zero = traffic bypassing mTLS |

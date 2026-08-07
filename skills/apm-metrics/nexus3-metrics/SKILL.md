@@ -226,3 +226,12 @@ count({job="nexus3"}) by (__name__)
 - Dropwizard Metrics: https://metrics.dropwizard.io/ (metric naming conventions)
 - Grafana community dashboard: https://grafana.com/grafana/dashboards/16459-infra-nexus/ (empirical metric usage)
 - stevehipwell/helm-charts release: https://github.com/stevehipwell/helm-charts/releases/tag/nexus3-5.5.1
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Heap saturation | `jvm_memory_bytes_used{area="heap"} / jvm_memory_bytes_max{area="heap"}` | > 85% = OOMKill risk |
+| 2 | GC pause rate | `rate(jvm_gc_collection_seconds_sum{gc="G1 Old Generation"}[5m])` | > 0.5s/s = excessive stop-the-world |
+| 3 | Jetty thread pool | `org_eclipse_jetty_util_thread_QueuedThreadPool_threads / org_eclipse_jetty_util_thread_QueuedThreadPool_maxThreads` | > 80% = request queuing |
+| 4 | Direct buffer pressure | `jvm_buffer_pool_used_bytes{pool="direct"} / jvm_buffer_pool_capacity_bytes{pool="direct"}` | > 90% = MaxDirectMemorySize exhaustion |

@@ -201,6 +201,17 @@ These appear only when using the Docker Machine or Instance executor with autosc
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Job failures | `sum(rate(gitlab_runner_errors_total[5m])) by (level)` | > 0 sustained |
+| 2 | Capacity saturation | `gitlab_runner_jobs / gitlab_runner_concurrent` | > 0.8 |
+| 3 | API communication errors | `sum(rate(gitlab_runner_api_request_statuses_total{status=~"4..\|5.."}[5m]))` | > 0 |
+| 4 | Job queue duration p99 | `histogram_quantile(0.99, sum(rate(gitlab_runner_job_queue_duration_seconds_bucket[5m])) by (le))` | > 60s |
+| 5 | Jobs running vs limit | `gitlab_runner_jobs` vs `gitlab_runner_limit` | At or near limit |
+
 ## Complements
 
 - **go-apm-metrics** — full Go runtime metrics reference (goroutines, GC, scheduler)

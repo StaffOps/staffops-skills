@@ -236,3 +236,14 @@ The PodMonitor will be picked up by vmagent's PodMonitor CRD discovery (vm-opera
 - [Monitoring introduction (2025.4)](https://docs.sonarsource.com/sonarqube-server/2025.4/server-installation/on-kubernetes-or-openshift/set-up-monitoring/introduction)
 - [Helm chart values.yaml (master)](https://github.com/SonarSource/helm-chart-sonarqube/blob/master/charts/sonarqube/values.yaml)
 - Deployed config: `<workspace>/02-KUBE/00-CONFIG/k8s-setup/sonarqube/sonarqube/values.yaml.gotmpl`
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Web process health | `sonarqube_health_web_status == 0` | Web server down = UI unavailable |
+| 2 | CE process health | `sonarqube_health_compute_engine_status == 0` | Analysis queue not processing |
+| 3 | CE pending tasks | `sonarqube_compute_engine_pending_tasks_total` | Growing = CE backlog, analyses stuck |
+| 4 | Elasticsearch health | `sonarqube_health_elasticsearch_status == 0` | Search/indexing broken |
+
+> **WARNING**: Metrics NOT currently scraped (JMX exporter disabled, no PodMonitor). Enable `prometheusMonitoring.podMonitor.enabled: true` first.

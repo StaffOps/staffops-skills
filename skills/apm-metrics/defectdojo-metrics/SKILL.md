@@ -131,6 +131,16 @@ Since DefectDojo lacks application-level Prometheus metrics, rely on:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | NGINX up | `nginx_up{namespace="defectdojo"}` | 0 = proxy down |
+| 2 | Connection saturation | `nginx_connections_active{namespace="defectdojo"}` | Near worker_connections limit |
+| 3 | Dropped connections | `rate(nginx_connections_accepted{namespace="defectdojo"}[5m]) - rate(nginx_connections_handled{namespace="defectdojo"}[5m])` | > 0 |
+| 4 | Request rate | `rate(nginx_http_requests_total{namespace="defectdojo"}[5m])` | Sudden drop = backend down |
+
 ## Complements
 
 - **k8s-workload-metrics** — container-level resource metrics (CPU, memory, restarts) for all DefectDojo pods

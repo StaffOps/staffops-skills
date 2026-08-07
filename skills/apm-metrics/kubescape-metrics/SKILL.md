@@ -233,6 +233,16 @@ For a cluster with 200 workloads across 20 namespaces, this produces ~4000+ time
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Process alive | `up{job=~".*kubescape.*"}` | 0 = not being scraped |
+| 2 | Memory growth | `go_memstats_alloc_bytes{job=~".*kubescape.*"}` | Growing unbounded |
+| 3 | Goroutine leak | `go_goroutines{job=~".*kubescape.*"}` | > 1000 or growing |
+| 4 | GC pressure | `rate(go_gc_duration_seconds_sum{job=~".*kubescape.*"}[5m])` | > 0.1 (10% in GC) |
+
 ## Complements
 
 - **`go-apm-metrics`** — full Go runtime metrics reference (what the kubescape ServiceMonitor currently scrapes)

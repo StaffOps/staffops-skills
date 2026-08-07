@@ -347,6 +347,17 @@ rate(microsoft_entityframeworkcore_compiled_query_cache_misses_total[5m])
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | GC heap pressure | `dotnet_gc_last_collection_heap_size_bytes` | Growing monotonically (leak) |
+| 2 | ThreadPool starvation | `dotnet_thread_pool_queue_length_total` | Sustained > 0 |
+| 3 | Exception rate | `rate(dotnet_exceptions_total[5m])` | Spike correlated with errors |
+| 4 | HTTP request latency p99 | `histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le))` | > SLO target |
+| 5 | Lock contention | `rate(dotnet_monitor_lock_contentions_total[5m])` | Sustained high = thread contention |
+
 ## Version Availability Summary
 
 | Metric category | .NET 6 | .NET 7 | .NET 8 | .NET 9 | .NET 10 |

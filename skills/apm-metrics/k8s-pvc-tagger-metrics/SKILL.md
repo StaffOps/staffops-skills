@@ -135,3 +135,12 @@ process_resident_memory_bytes{job=~".*pvc-tagger.*"} / 134217728
 - **Source code**: [github.com/mtougeron/k8s-pvc-tagger/blob/main/main.go](https://github.com/mtougeron/k8s-pvc-tagger/blob/main/main.go) — metric definitions confirmed from `promauto.NewCounterVec` declarations
 - **App version**: ~v1.3.x (latest release v1.3.0 as of 2026-06-29)
 - **Library**: `github.com/prometheus/client_golang` (`promhttp.Handler()` on port 8001)
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Tagging failures | `rate(k8s_pvc_tagger_actions_total{status="error"}[5m]) > 0` | AWS API errors or RBAC problems |
+| 2 | Invalid annotations | `rate(k8s_pvc_tagger_invalid_tags_total[5m]) > 0` | User misconfigured PVC annotations |
+| 3 | Success rate | `rate(k8s_pvc_tagger_actions_total{status="success"}[5m])` | Zero for extended period = controller stuck |
+| 4 | Memory pressure | `process_resident_memory_bytes{job=~".*pvc-tagger.*"} / 134217728` | > 0.8 (approaching 128Mi limit) |

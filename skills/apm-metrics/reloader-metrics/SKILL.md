@@ -167,3 +167,12 @@ sum(rate(reloader_reload_executed_total[5m]))
 - [GitHub stakater/Reloader chart-v2.1.5](https://github.com/stakater/Reloader/tree/chart-v2.1.5) (Chart.yaml: appVersion v1.4.5)
 - Deployed helmfile: `02-KUBE/00-CONFIG/k8s-setup/stakater/helmfile.yaml.gotmpl` (version 2.1.5)
 - Deployed values: `02-KUBE/00-CONFIG/k8s-setup/stakater/reloader/values.yaml.gotmpl`
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Reload failures | `rate(reloader_reload_executed_total{success="false"}[5m]) > 0` | Any = RBAC issue or API server errors |
+| 2 | Failure by namespace | `rate(reloader_reload_executed_total_by_namespace{success="false"}[5m]) > 0` | Identifies which namespace has problems |
+| 3 | Reload activity | `rate(reloader_reload_executed_total{success="true"}[5m])` | Zero for extended period = controller stuck |
+| 4 | Goroutine leak | `go_goroutines{job=~".*reloader.*"}` | Monotonic rise = informer/watcher leak |

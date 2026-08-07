@@ -198,6 +198,17 @@ The `controller` label on `controller_runtime_*` and `workqueue_*` metrics uses 
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Reconcile errors | `sum(rate(awslbc_reconcile_errors_total[5m])) by (controller)` | > 0 sustained |
+| 2 | AWS API throttling | `sum(rate(api_call_throttled_errors_total[5m]))` | > 0 |
+| 3 | Permission errors | `sum(rate(api_call_permission_errors_total[5m]))` | Any > 0 |
+| 4 | Webhook failures | `sum(rate(awslbc_webhook_validation_failures_total[5m])) + sum(rate(awslbc_webhook_mutation_failures_total[5m]))` | > 0 |
+| 5 | Workqueue backlog | `workqueue_depth{name=~".*ingress.*\|.*service.*\|.*targetGroupBinding.*"}` | Growing over time |
+
 ## Complements
 
 - **`go-apm-metrics`** — full Go runtime metrics reference (goroutines, GC, scheduler, memory)

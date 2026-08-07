@@ -346,3 +346,12 @@ http.server.request.duration ↑ (latency spike)
 | High error rate | `http.server.request.duration` count with error.type | `sum(rate(http_server_request_duration_seconds_count{error_type!=""}[5m])) / sum(rate(http_server_request_duration_seconds_count[5m]))` |
 | Memory leak (.NET) | `dotnet.gc.heap.total_size` trending up | `dotnet_gc_heap_total_size_bytes` |
 | Memory leak (Go) | `go.memory.used{go.memory.type="other"}` trending up | `go_memory_used_bytes{go_memory_type="other"}` |
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | HTTP error rate (all) | `sum(rate(http_server_request_duration_seconds_count{error_type!=""}[5m])) by (service_name) / sum(rate(http_server_request_duration_seconds_count[5m])) by (service_name)` | > 1% per service |
+| 2 | HTTP latency p99 | `histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, service_name))` | > 1s for API services |
+| 3 | DB client latency | `histogram_quantile(0.95, rate(db_client_operation_duration_seconds_bucket[5m]))` | > 100ms = backing service pressure |
+| 4 | gRPC errors | `sum(rate(rpc_server_call_duration_seconds_count{error_type!=""}[5m])) by (service_name)` | > 0 = gRPC failures |

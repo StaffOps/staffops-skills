@@ -175,6 +175,17 @@ sum(rate(harbor_core_http_request_total{operation=~".*",method=~".*"}[5m])) by (
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Overall health | `harbor_health` | 0 = unhealthy |
+| 2 | Component down | `harbor_up == 0` | Any component = 0 |
+| 3 | Quota near limit | `harbor_project_quota_usage_byte / harbor_project_quota_byte` | > 0.9 |
+| 4 | Job queue stale | `harbor_task_queue_latency` | > 600s |
+| 5 | Registry 5xx errors | `rate(registry_http_requests_total{code=~"5.."}[5m])` | > 0 |
+
 ## Complements
 
 - **go-apm-metrics** — Go runtime metrics (`go_*`, `process_*`) present on all Harbor components

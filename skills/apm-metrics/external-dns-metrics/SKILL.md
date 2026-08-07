@@ -185,6 +185,17 @@ rate(external_dns_controller_no_op_runs_total[10m])
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Registry errors | `sum(rate(external_dns_registry_errors_total[5m]))` | > 0 sustained |
+| 2 | Last sync age | `time() - external_dns_controller_last_sync_timestamp_seconds` | > 300s (5m stale) |
+| 3 | Verified records count | `external_dns_controller_verified_records` | Unexpected drop |
+| 4 | Consecutive soft errors | `external_dns_controller_consecutive_soft_errors` | > 3 |
+| 5 | Source endpoints vs registry | `external_dns_source_endpoints_total - external_dns_registry_endpoints_total` | Large divergence = drift |
+
 ## Complements
 
 - **go-apm-metrics** — full Go runtime metrics catalog (`go_*`, `process_*`)

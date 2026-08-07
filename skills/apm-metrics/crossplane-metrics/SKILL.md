@@ -221,6 +221,17 @@ Filter by `namespace="crossplane"` and pod label to isolate per-provider metrics
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Reconcile errors | `sum(rate(controller_runtime_reconcile_errors_total[5m])) by (controller)` | > 0 sustained |
+| 2 | Resources not ready | `crossplane_managed_resource_ready == 0` | Any resource not ready > 5m |
+| 3 | Resources not synced | `crossplane_managed_resource_synced == 0` | Drift from desired state |
+| 4 | Worker saturation | `controller_runtime_active_workers / controller_runtime_max_concurrent_reconciles` | > 0.8 |
+| 5 | K8s API errors | `sum(rate(rest_client_requests_total{code=~"4..\|5.."}[5m])) by (code)` | 429s or 5xx > 0 |
+
 ## Complements
 
 - **go-apm-metrics** — Full Go runtime metrics reference (goroutines, GC, scheduler)

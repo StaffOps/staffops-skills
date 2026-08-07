@@ -190,6 +190,16 @@ Key settings affecting metric accuracy in this deployment:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Cost-model API health | `sum(rate(kubecost_http_requests_total{code=~"5.."}[5m]))` | > 0 |
+| 2 | Node pricing present | `count(node_cpu_hourly_cost > 0)` | 0 = pricing data missing |
+| 3 | API response latency | `histogram_quantile(0.99, sum(rate(kubecost_http_response_time_seconds_bucket[5m])) by (le))` | > 10s |
+| 4 | Cluster info available | `kubecost_cluster_info` | Absent = cost-model not running |
+
 ## Complements
 
 - **k8s-workload-metrics** — cAdvisor and kube-state-metrics that Kubecost *consumes* (container_cpu_usage_seconds_total, kube_pod_container_resource_requests, etc.)

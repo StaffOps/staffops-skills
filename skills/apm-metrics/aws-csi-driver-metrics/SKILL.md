@@ -240,6 +240,17 @@ sum(rate(csi_sidecar_operations_seconds_count{driver_name="efs.csi.aws.com", grp
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | EBS API throttling | `sum(rate(aws_ebs_csi_api_request_throttles_total[5m]))` | > 0 |
+| 2 | Volume provision failures | `sum(rate(csi_sidecar_operations_seconds_count{method_name="CreateVolume",grpc_status_code!="OK"}[5m]))` | > 0 |
+| 3 | IOPS exceeded | `sum(rate(aws_ebs_csi_exceeded_iops_seconds_total[5m])) by (volume_id)` | > 0 |
+| 4 | Disk utilization | `kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes` | > 0.85 |
+| 5 | NVMe collector errors | `sum(rate(aws_ebs_csi_nvme_collector_errors_total[5m]))` | > 0 |
+
 ## Complements
 
 - `k8s-workload-metrics` — pod-level CPU/memory for CSI controller/node pods

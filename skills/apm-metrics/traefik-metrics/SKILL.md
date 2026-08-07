@@ -278,3 +278,13 @@ sum by (service) (rate(traefik_service_retries_total[5m]))
 - Deployed Helm chart: `traefik/traefik` **40.2.0** (k8s-setup `traefik/helmfile.yaml.gotmpl`)
 - Deployed values: `traefik/traefik-internal/values.yaml.gotmpl`
 - Deployed alerts: `traefik/traefik-internal/prometheus.rules.yaml`
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Service error rate | `sum(rate(traefik_service_requests_total{code=~"5.."}[5m])) / sum(rate(traefik_service_requests_total[5m]))` | > 1% = backend failures |
+| 2 | Config reload failing | `traefik_config_last_reload_success < (time() - 300) and increase(traefik_config_reloads_total[5m]) > 0` | Reloads attempted but stale = broken config |
+| 3 | TLS cert expiry | `(traefik_tls_certs_not_after - time()) / 86400 < 7` | < 7 days to expiration |
+| 4 | Connection saturation | `traefik_open_connections` | Sustained high = exhaustion risk |
+| 5 | Service latency p99 | `histogram_quantile(0.99, rate(traefik_service_request_duration_seconds_bucket[5m]))` | > 5s = slow backends |

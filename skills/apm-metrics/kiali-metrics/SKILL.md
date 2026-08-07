@@ -173,3 +173,13 @@ sum(rate(controller_runtime_reconcile_errors_total[5m])) by (controller)
 - [Kiali Helm chart 2.17.0](https://kiali.org/helm-charts) — deployed chart
 - Deployed values: `k8s-setup/kiali/kiali-server/values.yaml.gotmpl` (metrics enabled on :9090)
 - Deployed values: `k8s-setup/kiali/kiali-operator/values.yaml.gotmpl` (metrics enabled)
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | API error rate | `rate(kiali_api_failures_total[5m]) > 0` | Any sustained failures = broken UI functionality |
+| 2 | API latency p99 | `histogram_quantile(0.99, rate(kiali_api_processing_duration_seconds_bucket[5m]))` | > 5s per route |
+| 3 | Graph generation time | `histogram_quantile(0.95, rate(kiali_graph_generation_duration_seconds_bucket[5m]))` | > 10s = large mesh or slow backend |
+| 4 | Prometheus query latency | `histogram_quantile(0.95, rate(kiali_prometheus_processing_duration_seconds_bucket[5m]))` | > 3s = VictoriaMetrics under pressure |
+| 5 | Graph node count | `kiali_graph_nodes > 500` | Excessive graph complexity degrading UX |

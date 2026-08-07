@@ -205,3 +205,13 @@ sum(rate(velero_volume_snapshot_attempt_total[1h]))
 - Grafana Cloud Velero integration reference (Velero 1.13+): https://grafana.com/docs/grafana-cloud/monitor-infrastructure/integrations/integration-reference/integration-velero/
 - Google Cloud Managed Prometheus Velero exporter: https://docs.cloud.google.com/stackdriver/docs/managed-prometheus/exporters/velero
 - Velero source `pkg/metrics/metrics.go` (release-1.15): https://github.com/vmware-tanzu/velero/blob/release-1.15/pkg/metrics/metrics.go
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Backup failures | `rate(velero_backup_failure_total[1h]) > 0` | Any failure = data protection gap |
+| 2 | Backup staleness | `time() - velero_backup_last_successful_timestamp > 86400` | No successful backup in 24h |
+| 3 | Last backup status | `velero_backup_last_status == 6 or velero_backup_last_status == 7` | 6=Failed, 7=PartiallyFailed |
+| 4 | Duration trend | `histogram_quantile(0.95, rate(velero_backup_duration_seconds_bucket[1h]))` | Growing = storage degradation |
+| 5 | Restore failures | `rate(velero_restore_failure_total[1h]) > 0` | Recovery capability compromised |

@@ -210,6 +210,17 @@ datanucleus_query_execution_time_ms_avg > 500
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | DB connection pool | `datanucleus_connections_active` | Near max pool size |
+| 2 | Query failures | `rate(datanucleus_queries_failed_total[5m])` | > 0 |
+| 3 | JVM heap usage | `jvm_memory_bytes_used{area="heap"} / jvm_memory_bytes_max{area="heap"}` | > 0.85 |
+| 4 | Event processing backlog | `rate(alpine_event_processing_seconds_count[5m])` | Dropping to 0 (stuck) |
+| 5 | Transaction rollbacks | `rate(datanucleus_transactions_rolledback_total[5m])` | > 0 sustained |
+
 ## Complements
 
 - `skills/security/dependency-track-integration` — REST API integration, project structure, SBOM upload, policy configuration

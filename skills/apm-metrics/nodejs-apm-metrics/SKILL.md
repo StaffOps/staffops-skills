@@ -342,3 +342,13 @@ count by (version) (nodejs_version_info)
 | Open FDs | `prom-client` | `lib/metrics/processOpenFileDescriptors.js` | `/proc/self/fd` |
 | Max FDs | `prom-client` | `lib/metrics/processMaxFileDescriptors.js` | `/proc/self/limits` |
 | Start time | `prom-client` | `lib/metrics/processStartTime.js` | `process.uptime()` + `Date.now()` |
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Event loop saturation | `nodejs_eventloop_lag_p99_seconds` | > 0.1s = loop blocked, all requests delayed |
+| 2 | Major GC pressure | `rate(nodejs_gc_duration_seconds_sum{kind="major"}[5m])` | > 0.1s/s = stop-the-world impacting latency |
+| 3 | Heap growth | `nodejs_heap_size_used_bytes / nodejs_heap_size_total_bytes` | > 85% = approaching V8 heap limit |
+| 4 | Active handles leak | `nodejs_active_handles_total` | Monotonic rise = handle/connection leak |
+| 5 | Process memory | `process_resident_memory_bytes` | Approaching container memory limit = OOMKill imminent |

@@ -255,6 +255,17 @@ sum by (datasource) (grafana_datasource_request_in_flight)
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Alert evaluation failures | `sum(rate(grafana_alerting_rule_evaluation_failures_total[5m]))` | > 0 |
+| 2 | Notification failures | `sum(rate(grafana_alerting_notifications_failed_total[5m])) by (type)` | > 0 |
+| 3 | Datasource errors | `sum(rate(grafana_datasource_request_total{status_code=~"5.."}[5m])) by (datasource)` | > 0 |
+| 4 | Memory pressure | `go_memstats_heap_inuse_bytes{job=~".*grafana.*"}` | Growing unbounded |
+| 5 | Active alert rules | `grafana_alerting_active_configurations` | Drop = config issue |
+
 ## Complements
 
 - **`go-apm-metrics`** — full Go runtime metrics (GC, scheduler, goroutines, mutex) emitted by Grafana

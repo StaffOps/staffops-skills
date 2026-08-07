@@ -303,3 +303,13 @@ From `collectors.NewDBStatsCollector(db, dbName)`. Critical for any Go service u
 - [Go runtime/metrics package](https://pkg.go.dev/runtime/metrics) — authoritative list of runtime metrics with descriptions
 - [client_golang RuntimeMetricsToProm](https://github.com/prometheus/client_golang/blob/main/prometheus/internal/go_runtime_metrics.go) — name conversion logic
 - [client_golang NewDBStatsCollector](https://github.com/prometheus/client_golang/blob/main/prometheus/collectors/dbstats_collector.go) — `go_sql_*` metrics source
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Goroutine leak | `go_goroutines` | Monotonic rise over hours = leak |
+| 2 | Scheduler saturation | `histogram_quantile(0.99, rate(go_sched_latencies_seconds_bucket[5m]))` | > 10ms p99 = goroutines starved for CPU |
+| 3 | GC pause impact | `rate(go_sched_pauses_total_gc_seconds_sum[5m])` | > 50ms/s = excessive stop-the-world |
+| 4 | Heap growth | `go_memstats_heap_inuse_bytes` | Monotonic rise without plateau = memory leak |
+| 5 | GC CPU overhead | `rate(go_gc_duration_seconds_sum[5m])` | > 0.25 = 25% CPU spent in GC |

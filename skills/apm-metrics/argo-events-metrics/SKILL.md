@@ -270,6 +270,17 @@ documentation. Key ones relevant to Argo Events:
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Event delivery failures | `sum(rate(argo_events_events_sent_failed_total[5m])) by (event_source_name)` | Any value > 0 |
+| 2 | Sensor trigger failures | `sum(rate(argo_events_action_failed_total[5m])) by (sensor_name)` | Sustained > 0 |
+| 3 | Controller reconcile errors | `sum(rate(controller_runtime_reconcile_errors_total{controller=~"eventsource.*\|sensor.*"}[5m]))` | > 0 for > 2m |
+| 4 | Queue depth (backlog) | `workqueue_depth{name=~".*eventsource.*\|.*sensor.*"}` | Growing over time |
+| 5 | Event processing latency p99 | `histogram_quantile(0.99, sum(rate(argo_events_event_processing_duration_milliseconds_bucket[5m])) by (le))` | > 5000ms |
+
 ## Complements
 
 - `go-apm-metrics` — full Go runtime metrics catalog (`go_goroutines`,

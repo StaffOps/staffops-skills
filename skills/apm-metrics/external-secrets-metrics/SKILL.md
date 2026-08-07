@@ -226,6 +226,17 @@ histogram_quantile(0.99,
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Reconcile errors | `sum(rate(controller_runtime_reconcile_errors_total{controller=~"externalsecret.*"}[5m]))` | > 0 |
+| 2 | Secret sync status | `externalsecret_status_condition{condition="SecretSynced",status="False"}` | Any = 1 (not synced) |
+| 3 | Provider API failures | `sum(rate(externalsecret_provider_api_calls_count{call="error"}[5m]))` | > 0 |
+| 4 | Reconcile latency p99 | `histogram_quantile(0.99, sum(rate(controller_runtime_reconcile_time_seconds_bucket{controller=~"externalsecret.*"}[5m])) by (le))` | > 30s |
+| 5 | SecretStore unhealthy | `clustersecretstore_status_condition{condition="Ready",status="False"} == 1` | Any store not ready |
+
 ## Related Skills
 
 - `external-secrets-aws-sm` — ExternalSecret/SecretStore CRD configuration,

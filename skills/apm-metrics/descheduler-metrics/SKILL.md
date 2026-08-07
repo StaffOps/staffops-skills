@@ -174,6 +174,16 @@ descheduler_build_info
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Eviction failures | `sum(rate(descheduler_pods_evicted_total{result="error"}[5m]))` | > 0 |
+| 2 | Loop duration | `descheduler_loop_duration_seconds` | Increasing over runs |
+| 3 | Pods evicted per run | `sum(increase(descheduler_pods_evicted_total[10m])) by (strategy)` | 0 = not operating; very high = churn |
+| 4 | Process memory | `process_resident_memory_bytes{job=~".*descheduler.*"}` | Growing unbounded |
+
 ## Complements
 
 - `go-apm-metrics` — full Go runtime metrics catalog (`go_*`, `process_*`)

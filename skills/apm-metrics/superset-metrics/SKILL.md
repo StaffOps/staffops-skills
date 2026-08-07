@@ -143,3 +143,14 @@ To enable Prometheus metrics for this Superset deployment, two approaches:
 - Chart repository: `http://apache.github.io/superset/` version 0.14.0
 - Apache Superset docs: https://superset.apache.org/docs/configuration/configuring-superset
 - Superset Event Logging (STATS_LOGGER): https://superset.apache.org/admin-docs/configuration/event-logging
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Pod restarts | `kube_pod_container_status_restarts_total{namespace="superset"}` | Rising = crash-loop (OOM or config error) |
+| 2 | Memory pressure | `container_memory_working_set_bytes{namespace="superset"} / container_spec_memory_limit_bytes{namespace="superset"}` | > 80% = OOMKill risk |
+| 3 | Backing DB connections | `pg_stat_activity_count{datname="superset"}` | Near max_connections = pool exhaustion |
+| 4 | CPU saturation | `rate(container_cpu_usage_seconds_total{namespace="superset"}[5m])` | Approaching CPU limit = slow queries |
+
+> **Note**: No application-level Prometheus metrics exposed. Use k8s-workload-metrics and backing-services-metrics.

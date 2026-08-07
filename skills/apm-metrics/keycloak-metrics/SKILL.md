@@ -206,6 +206,17 @@ never match on KC 26 without explicit GC algorithm override.
 
 ---
 
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | DB connection pool | `agroal_active_count / (agroal_active_count + agroal_available_count)` | > 0.8 |
+| 2 | HTTP error rate | `sum(rate(http_server_requests_seconds_count{outcome="SERVER_ERROR"}[5m]))` | > 0 sustained |
+| 3 | Request latency p99 | `histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket[5m])) by (le))` | > 2s |
+| 4 | Connection pool exhaustion | `agroal_awaiting_count` | > 0 sustained |
+| 5 | GC pressure | `rate(base_gc_total[5m])` | High frequency = heap too small |
+
 ## Complements
 
 - `k8s-workload-metrics` — pod-level CPU/memory/restarts for Keycloak pods (always available regardless of metrics enablement)

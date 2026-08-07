@@ -199,3 +199,13 @@ for the full catalog. Key ones for metrics-server:
   - `pkg/api/node.go` + `pkg/api/pod.go` → `metrics_server_api_metric_freshness_seconds`
   - Extension API server metrics from `k8s.io/apiserver` → `apiserver_*`
 - Deployed config: `02-KUBE/00-CONFIG/k8s-setup/metrics-server/metrics-server/values.yaml.gotmpl`
+
+## Quick diagnostic procedure
+
+| # | Check | Query | Red flag |
+|---|-------|-------|----------|
+| 1 | Kubelet scrape failures | `rate(metrics_server_kubelet_request_total{success="false"}[5m]) > 0` | Any failures = nodes unreachable, HPA blind |
+| 2 | Tick cycle duration | `rate(metrics_server_manager_tick_duration_seconds_sum[5m]) / rate(metrics_server_manager_tick_duration_seconds_count[5m])` | > 60s = exceeds resolution, metrics go stale |
+| 3 | Stale node scrape | `time() - metrics_server_kubelet_last_request_time_seconds > 120` | Node not scraped in 2+ min |
+| 4 | Storage data points | `metrics_server_storage_points` | Sudden drop = nodes lost from inventory |
+| 5 | API extension latency | `histogram_quantile(0.99, rate(apiserver_request_duration_seconds_bucket{job=~".*metrics-server.*"}[5m]))` | > 1s = slow Metrics API for HPA/kubectl top |
