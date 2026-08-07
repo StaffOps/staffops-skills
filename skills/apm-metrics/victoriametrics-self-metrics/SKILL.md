@@ -58,7 +58,7 @@ and forwards to vmstorage nodes via RPC.
 | `vm_concurrent_insert_limit` | Gauge | Maximum concurrent inserts allowed | Reference ceiling for saturation calculation | — |
 | `vm_rpc_send_duration_seconds_total` | Counter | Cumulative time spent sending RPC data to vmstorage | Rate increase = vmstorage backpressure / slow network | `addr` (storage node) |
 | `vm_rpc_rows_sent_total` | Counter | Rows sent via RPC to each vmstorage node | Even distribution expected; skew = unhealthy storage node | `addr` |
-| `vm_rpc_rows_lost_total` | Counter | **KEY — rows permanently lost** because all vmstorage replicas for a row were unavailable | Non-zero = **data loss**. Requires immediate investigation. | `addr` |
+| `vm_rpc_rows_lost_total` | Counter | **KEY — rows permanently lost** because all vmstorage replicas for a row were unavailable. **Note**: Renamed to `vm_rpc_rows_dropped_on_overload_total` in recent versions — query with `{__name__=~"vm_rpc_rows_(lost\|dropped_on_overload)_total"}` for portability | Non-zero = **data loss**. Requires immediate investigation. | `addr` |
 | `vm_rpc_connection_errors_total` | Counter | RPC connection failures to vmstorage nodes | Spikes = network issue or vmstorage restarts | `addr` |
 | `vm_rpc_buf_pending_bytes` | Gauge | Pending bytes in RPC write buffer | Growing = vmstorage not draining fast enough | `addr` |
 | `vm_slow_row_inserts_total` | Counter | Rows that hit slow-path (TSID cache miss → index lookup) | High rate = new time series storm / cardinality explosion | — |
