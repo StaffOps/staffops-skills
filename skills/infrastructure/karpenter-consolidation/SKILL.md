@@ -120,6 +120,26 @@ kubectl get ec2nodeclass <name> -o json | jq '{securityGroupSelector: .spec.secu
 | `karpenter_voluntary_disruption_consolidation_timeouts_total` | Algorithm timeouts |
 | `karpenter_nodes_current_lifetime_seconds` | Node age distribution |
 
+
+## Decision tree
+
+```
+Karpenter consolidation issue
+├── Nodes NOT consolidating (staying idle)?
+│   ├── PDB blocking eviction → check kubectl get pdb; minAvailable too tight?
+│   ├── Pod has do-not-disrupt annotation → intentional; remove if stale
+│   ├── consolidateAfter too long → reduce from default (check NodePool disruption policy)
+│   └── Spot node already cheapest → no cheaper replacement exists; expected behavior
+├── Consolidation too aggressive (thrashing)?
+│   ├── Pods rescheduling constantly → increase consolidateAfter (e.g., 5m → 30m)
+│   ├── Node fills → empties → refills → set consolidationPolicy: WhenEmpty (not WhenUnderutilized)
+│   └── Workload has bursty traffic → use consolidationPolicy: WhenEmpty + KEDA for scale-to-zero
+└── Pods stuck Pending after consolidation?
+    ├── Anti-affinity required by zone → max replicas = number of AZs
+    ├── No matching instance type → check NodePool.spec.requirements constraints
+    └── Resource fragmentation → add more instance families to diversify options
+```
+
 ## Anti-patterns
 
 - ❌ Setting `consolidateAfter` very low (e.g., `1m`) in busy clusters — causes node churn, repeated pod reschedules, and disruption budget exhaustion

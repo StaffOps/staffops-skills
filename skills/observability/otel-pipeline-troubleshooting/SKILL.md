@@ -1,12 +1,6 @@
 ---
 name: otel-pipeline-troubleshooting
-description: >
-  Diagnose data loss, backpressure, and failures in the OTel Collector pipeline.
-  Symptoms: missing telemetry in Tempo/Loki/VictoriaMetrics, growing Kafka lag,
-  otelcol_exporter_enqueue_failed > 0, otelcol_exporter_send_failed > 0,
-  collector pods OOMKilled or CrashLoopBackOff. Pipeline flow:
-  Agent (DaemonSet, tail_sampling) → Gateway (StatefulSet 5x, exports to Kafka)
-  → Process (KEDA 5–10, consumes Kafka → backends).
+description: "Diagnose data loss, backpressure, and failures in the OTel Collector pipeline. Symptoms: missing telemetry in Tempo/Loki/VictoriaMetrics, growing Kafka lag, otelcol_exporter_enqueue_failed > 0, otelcol_exporter_send_failed > 0, collector pods OOMKilled or CrashLoopBackOff. Pipeline flow: Agent (DaemonSet, tail_sampling) → Gateway (StatefulSet 5x, exports to Kafka) → Process (KEDA 5–10, consumes Kafka → backends)."
 ---
 
 # OTel Pipeline Troubleshooting

@@ -1,10 +1,6 @@
 ---
 name: capacity-projection
-description: >
-  Use when assessing whether storage, ingestion rate, or resource usage will exhaust capacity
-  before the next review cycle. Runs a bundled Python script that fits linear regression on
-  time-series data and projects exhaustion dates per dimension. Covers VictoriaMetrics storage,
-  Kafka partition size, EBS volumes, and any monotonically growing metric. Requires sandbox.
+description: "Use when assessing whether storage, ingestion rate, or resource usage will exhaust capacity before the next review cycle. Runs a bundled Python script that fits linear regression on time-series data and projects exhaustion dates per dimension. Covers VictoriaMetrics storage, Kafka partition size, EBS volumes, and any monotonically growing metric. Requires sandbox."
 ---
 
 # Capacity Projection (Executable)

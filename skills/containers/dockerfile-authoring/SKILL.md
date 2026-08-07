@@ -266,6 +266,25 @@ size.
 - `container-image-optimization` — squeezing size further, layer analysis
 - `docker-cli-operations` — build flags, BuildKit features, registry push
 
+
+## Decision tree
+
+```
+Dockerfile design choice
+├── Which base image?
+│   ├── Golden apko image exists in bdc-images? → use it (signed, minimal, multi-arch)
+│   ├── Need runtime only (no build tools) → use -slim or distroless variant
+│   └── Need build tools at runtime? → probably wrong; use multi-stage instead
+├── Multi-stage needed?
+│   ├── Compiled language (.NET, Go, Rust) → YES: build stage + runtime stage
+│   ├── Interpreted (Python, Node) → MAYBE: install deps in build stage, copy venv/node_modules
+│   └── Simple script/single binary → NO: single FROM is fine
+└── Secrets during build?
+    ├── Need private repo access (pip/go/npm) → BuildKit --mount=type=secret (NEVER ARG/ENV)
+    ├── Need AWS creds for asset download → --mount=type=secret + AWS_SHARED_CREDENTIALS_FILE
+    └── Runtime secret → don't bake in; use ExternalSecret + volume mount at deploy time
+```
+
 ## When NOT to use
 
 - Building golden/hardened base images without Dockerfile — use `container-image-apko`

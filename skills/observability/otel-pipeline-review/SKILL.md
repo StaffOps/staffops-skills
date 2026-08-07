@@ -1,12 +1,6 @@
 ---
 name: otel-pipeline-review
-description: >
-  Proactive operational review of the OTel telemetry pipeline (Evaluation agent type).
-  Produces a findings report covering end-to-end data loss, queue headroom, tail-sampling
-  correctness, cardinality trend, Kafka buffer health, and resource headroom. Pipeline:
-  Agent DaemonSet (tail_sampling) → Gateway StatefulSet (5x, exports to Kafka) → Kafka →
-  Process collector (KEDA 5–10, consumes Kafka) → VictoriaMetrics/Tempo/Loki/Pyroscope.
-  Each dimension reports PASS/FINDING with measured value vs threshold.
+description: "Proactive operational review of the OTel telemetry pipeline (Evaluation agent type). Produces a findings report covering end-to-end data loss, queue headroom, tail-sampling correctness, cardinality trend, Kafka buffer health, and resource headroom. Pipeline: Agent DaemonSet (tail_sampling) → Gateway StatefulSet (5x, exports to Kafka) → Kafka → Process collector (KEDA 5–10, consumes Kafka) → VictoriaMetrics/Tempo/Loki/Pyroscope. Each dimension reports PASS/FINDING with measured value vs threshold."
 ---
 
 # OTel Pipeline Operational Review

@@ -1,15 +1,6 @@
 ---
 name: symptom-router
-description: >
-  ENTRY POINT — load FIRST when any symptom is reported: "API is slow", "high latency",
-  "logs missing", "traces missing", "metrics missing", "gaps in dashboard", "pods Pending",
-  "OOMKilled", "cost spiked", "deploy stuck", "consumer lag", "503 errors", "secret not
-  syncing", "alert not firing", "memory leak", "autoscaling not working", "dashboard no
-  data", "certificate expired", "cardinality explosion", "SLO burn rate", "Redis errors",
-  "database slow", "client says no data", "error rate", "dataset slow", "webhooks stopped",
-  "batch job stuck", "load spike", "partner errors", "unfamiliar service name", "who owns
-  this". Routes to the exact skill(s) to load with first query. Cross-signal correlation
-  and signal precedence (application counters > resources > pod phase).
+description: "ENTRY POINT — load FIRST when any symptom is reported: \"API is slow\", \"high latency\", \"logs missing\", \"traces missing\", \"metrics missing\", \"gaps in dashboard\", \"pods Pending\", \"OOMKilled\", \"cost spiked\", \"deploy stuck\", \"consumer lag\", \"503 errors\", \"secret not syncing\", \"alert not firing\", \"memory leak\", \"autoscaling not working\", \"dashboard no data\", \"certificate expired\", \"cardinality explosion\", \"SLO burn rate\", \"Redis errors\", \"database slow\", \"client says no data\", \"error rate\", \"dataset slow\", \"webhooks stopped\", \"batch job stuck\", \"load spike\", \"partner errors\", \"unfamiliar service name\", \"who owns this\". Routes to the exact skill(s) to load with first query. Cross-signal correlation and signal precedence (application counters > resources > pod phase)."
 ---
 
 # Symptom Router — Correlation Layer

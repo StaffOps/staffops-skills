@@ -1,13 +1,6 @@
 ---
 name: kuma-synthetic-status
-description: >
-  Use when you need to verify whether an API endpoint is actually responding from an
-  external perspective (synthetic test), check endpoint latency as seen by clients, determine
-  24h/30d uptime ratios, or identify which monitors are currently DOWN. Queries Uptime Kuma
-  metrics already scraped into VictoriaMetrics (job="kuma-nv"). Covers: DPM Platform
-  (People, Companies, Custom, Batch, Tokens), Plugins (Validations), and DevOps health
-  endpoints (Grafana, ArgoCD, Harbor, Alertmanager). This is the ground-truth check when
-  internal metrics say "healthy" but clients report failures.
+description: "Use when you need to verify whether an API endpoint is actually responding from an external perspective (synthetic test), check endpoint latency as seen by clients, determine 24h/30d uptime ratios, or identify which monitors are currently DOWN. Queries Uptime Kuma metrics already scraped into VictoriaMetrics (job=\"kuma-nv\"). Covers: DPM Platform (People, Companies, Custom, Batch, Tokens), Plugins (Validations), and DevOps health endpoints (Grafana, ArgoCD, Harbor, Alertmanager). This is the ground-truth check when internal metrics say \"healthy\" but clients report failures."
 ---
 
 # Kuma Synthetic Test Status

@@ -1,11 +1,6 @@
 ---
 name: investigation-cost-guardrail
-description: >
-  Applies to EVERY investigation before the first query is executed. Triggered always —
-  enforces time/cost budgets per incident severity, prevents unbounded queries
-  (PromQL over 30d, TraceQL without time window, repeated kubectl get --all-namespaces),
-  mandates narrow-first query strategy, and defines stop conditions. Cost: $0.50/minute,
-  quota: 10 concurrent chats. A runaway investigation starves other users.
+description: "Applies to EVERY investigation before the first query is executed. Triggered always — enforces time/cost budgets per incident severity, prevents unbounded queries (PromQL over 30d, TraceQL without time window, repeated kubectl get --all-namespaces), mandates narrow-first query strategy, and defines stop conditions. Cost: $0.50/minute, quota: 10 concurrent chats. A runaway investigation starves other users."
 ---
 
 # Investigation Cost Guardrail

@@ -1,11 +1,6 @@
 ---
 name: metric-correlation-analysis
-description: >
-  Use when multiple metrics anomaly at the same time and you need to determine if they
-  share a common cause. Runs a bundled Python script that detects Z-score anomalies per
-  metric and finds temporal correlations across series. Requires sandbox. Load after
-  collecting data from VictoriaMetrics MCP — this skill COMPUTES over collected data,
-  it does not query backends directly.
+description: "Use when multiple metrics anomaly at the same time and you need to determine if they share a common cause. Runs a bundled Python script that detects Z-score anomalies per metric and finds temporal correlations across series. Requires sandbox. Load after collecting data from VictoriaMetrics MCP — this skill COMPUTES over collected data, it does not query backends directly."
 ---
 
 # Metric Correlation Analysis (Executable)

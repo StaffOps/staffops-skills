@@ -1,11 +1,6 @@
 ---
 name: incident-triage
-description: >
-  Use when an alert fires (SLOBurnRateP1/P2, PodCrashLooping, HighErrorRate),
-  a user reports service degradation, or pods are in CrashLoopBackOff/OOMKilled.
-  Provides severity classification, evidence-driven investigation (≥3 signals for RCA),
-  escalation per organizational RACI matrix,
-  and communication templates. This agent is STRICTLY read-only and never executes a change.
+description: "Use when an alert fires (SLOBurnRateP1/P2, PodCrashLooping, HighErrorRate), a user reports service degradation, or pods are in CrashLoopBackOff/OOMKilled. Provides severity classification, evidence-driven investigation (≥3 signals for RCA), escalation per organizational RACI matrix, and communication templates. This agent is STRICTLY read-only and never executes a change."
 ---
 
 # Incident Triage

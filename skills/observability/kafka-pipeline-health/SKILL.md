@@ -1,11 +1,6 @@
 ---
 name: kafka-pipeline-health
-description: >
-  Monitor and troubleshoot the Kafka buffer in the OTel telemetry pipeline
-  (Strimzi-managed, KRaft mode). Symptoms: growing consumer lag for
-  otel-process-consumer, under-replicated partitions, broker pod failures,
-  gateway send_failed to Kafka exporter, delayed telemetry in backends.
-  Topics: otlp_spans, otlp_logs, otlp_metrics.
+description: "Monitor and troubleshoot the Kafka buffer in the OTel telemetry pipeline (Strimzi-managed, KRaft mode). Symptoms: growing consumer lag for otel-process-consumer, under-replicated partitions, broker pod failures, gateway send_failed to Kafka exporter, delayed telemetry in backends. Topics: otlp_spans, otlp_logs, otlp_metrics."
 ---
 
 # Kafka Pipeline Health

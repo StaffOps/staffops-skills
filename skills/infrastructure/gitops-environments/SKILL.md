@@ -1,11 +1,6 @@
 ---
 name: gitops-environments
-description: >
-  Use when tracing which GitOps repo controls a service, understanding the organization
-  domain-to-namespace-to-cluster mapping, investigating why a deploy isn't reaching
-  a specific environment, or onboarding a new service into the GitOps pipeline.
-  Covers domain repos (DPM, DCP, APPS, MDT, BM, ACUM, PLG, SUP), ApplicationSet
-  topology, namespace conventions, and deployment flow.
+description: "Use when tracing which GitOps repo controls a service, understanding the organization domain-to-namespace-to-cluster mapping, investigating why a deploy isn't reaching a specific environment, or onboarding a new service into the GitOps pipeline. Covers domain repos (DPM, DCP, APPS, MDT, BM, ACUM, PLG, SUP), ApplicationSet topology, namespace conventions, and deployment flow."
 version: 1.0.0
 author: Carlos Felipe Gomes
 license: MIT

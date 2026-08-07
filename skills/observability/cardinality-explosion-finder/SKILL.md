@@ -1,11 +1,6 @@
 ---
 name: cardinality-explosion-finder
-description: >
-  Use when VictoriaMetrics is OOMing, vmselect queries are slow, or TSDB cardinality is
-  growing unexpectedly. Runs a bundled Python script that analyzes TSDB status data (top
-  metrics, labels, and label-value pairs by series count), identifies the explosion source,
-  flags known problematic patterns (user_id, request_id, raw URLs), and recommends remediation.
-  Requires sandbox. Collect TSDB status from VictoriaMetrics MCP first.
+description: "Use when VictoriaMetrics is OOMing, vmselect queries are slow, or TSDB cardinality is growing unexpectedly. Runs a bundled Python script that analyzes TSDB status data (top metrics, labels, and label-value pairs by series count), identifies the explosion source, flags known problematic patterns (user_id, request_id, raw URLs), and recommends remediation. Requires sandbox. Collect TSDB status from VictoriaMetrics MCP first."
 ---
 
 # Cardinality Explosion Finder (Executable)

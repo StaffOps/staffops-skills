@@ -351,6 +351,25 @@ Channels:
 - `#eks-notifications-argo` — all sync issues
 - `#eks-notifications-teams` — team-specific routing
 
+
+## Decision tree
+
+```
+ArgoCD problem observed
+├── Sync failing?
+│   ├── Status: OutOfSync + ComparisonError → schema mismatch or CRD missing
+│   ├── Status: OutOfSync + SyncError → Helm template error or invalid manifest
+│   └── Status: Unknown → check network to Git repo / argocd-repo-server health
+├── App degraded (Healthy=False)?
+│   ├── Progressing stuck → resource waiting (PVC, LB, rollout pause)
+│   ├── Degraded → pod crash / readiness probe failing
+│   └── Missing → resource deleted outside GitOps (drift)
+└── Onboarding new app?
+    ├── Multi-env (DEV/HML/PRD) → ApplicationSet with directory generator
+    ├── Single-env → Application CR in the infra repo
+    └── Shared chart, per-team values → ApplicationSet with git-files generator
+```
+
 ## Anti-patterns
 
 - ❌ `selfHeal: true` without understanding implications (reverts ALL manual changes including emergency fixes)

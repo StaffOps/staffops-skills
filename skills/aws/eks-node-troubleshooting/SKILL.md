@@ -1,11 +1,6 @@
 ---
 name: eks-node-troubleshooting
-description: >
-  Use when pods are Pending with scheduling failures, nodes show NotReady, Karpenter
-  isn't provisioning, spot interruptions caused rescheduling, or nodes show resource
-  pressure (MemoryPressure, DiskPressure). Covers Karpenter provisioning diagnostics,
-  node condition analysis, spot interruption handling, and topology constraint debugging.
-  This agent is STRICTLY read-only: node mutations (cordon, drain, terminate) are never executed, only recommended.
+description: "Use when pods are Pending with scheduling failures, nodes show NotReady, Karpenter isn't provisioning, spot interruptions caused rescheduling, or nodes show resource pressure (MemoryPressure, DiskPressure). Covers Karpenter provisioning diagnostics, node condition analysis, spot interruption handling, and topology constraint debugging. This agent is STRICTLY read-only: node mutations (cordon, drain, terminate) are never executed, only recommended."
 ---
 
 # EKS Node Troubleshooting

@@ -394,6 +394,25 @@ docker run --rm -v $(pwd)/python:/app -w /app python:3.11-slim sh -c \
   "pip install -e '.[dev]' -q && pytest tests/ -v"
 ```
 
+
+## Decision tree
+
+```
+FastAPI design choice
+├── Sync vs async handler?
+│   ├── I/O-bound (DB, HTTP, Redis) → async def + await (non-blocking)
+│   ├── CPU-bound (ML inference, crypto) → def (runs in threadpool automatically)
+│   └── Mixed → async def + run_in_executor for CPU-heavy parts
+├── Middleware vs Dependency?
+│   ├── Runs on EVERY request (logging, timing, CORS) → middleware
+│   ├── Runs per-route or per-group (auth, rate limit) → Depends()
+│   └── Needs request body access → Depends() (middleware can't read body twice)
+└── Background task vs external worker?
+    ├── Fire-and-forget, <30s, no retry needed → BackgroundTasks (in-process)
+    ├── Needs retry, persistence, scheduling → Argo CronWorkflow / SQS + worker
+    └── Fan-out to many items → external queue (SQS/Redis) + KEDA-scaled consumer
+```
+
 ## When NOT to use
 
 - Building a gRPC service (not REST) — use `python-grpc-aio`

@@ -1,12 +1,6 @@
 ---
 name: incident-skip-criteria
-description: >
-  Incident Triage agent ONLY. Evaluate whether an alert should be SKIPPED (no paid
-  investigation) or INVESTIGATED. Triggers: every incoming alert before the investigation
-  budget is spent. Criteria: known-noisy signals, in-progress rollouts correlating with
-  the alert, BTC/DEV environment expected saturation, duplicate/child alerts of an
-  active parent investigation. HARD RULE: NEVER skip P1/CRITICAL, data-loss signals,
-  security/auth incidents, or PRD alerts with confirmed user impact.
+description: "Incident Triage agent ONLY. Evaluate whether an alert should be SKIPPED (no paid investigation) or INVESTIGATED. Triggers: every incoming alert before the investigation budget is spent. Criteria: known-noisy signals, in-progress rollouts correlating with the alert, BTC/DEV environment expected saturation, duplicate/child alerts of an active parent investigation. HARD RULE: NEVER skip P1/CRITICAL, data-loss signals, security/auth incidents, or PRD alerts with confirmed user impact."
 ---
 
 # Incident Skip Criteria

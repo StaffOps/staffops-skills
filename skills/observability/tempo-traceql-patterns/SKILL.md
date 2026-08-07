@@ -320,6 +320,24 @@ Remember: PRD keeps only 10% probabilistic + 100% errors/high-latency. Queries i
 - ⚠️ Normal traces are sampled — counts are approximate
 - ✅ DEV/HML/LOCAL: 100% of traces retained
 
+
+## Decision tree
+
+```
+What are you investigating?
+├── High latency → { duration > 1s && resource.service.name = "X" }
+│   └── Add: && span.http.status_code >= 200 to confirm it's not errors masking
+├── Errors / failures → { status = error }
+│   ├── Specific service → && resource.service.name = "X"
+│   └── Specific endpoint → && span.http.route = "/api/v1/orders"
+├── Dependency mapping → { resource.service.name = "A" } >> { resource.service.name = "B" }
+│   └── Service graph metrics: traces_service_graph_request_total
+├── Specific trace by ID → get-trace with the trace_id
+│   └── Follow from exemplar click in VictoriaMetrics/Grafana
+└── Aggregate analysis (p99, error rate) → TraceQL metrics
+    └── { } | rate() by(resource.service.name)  — or quantile_over_time
+```
+
 ## Anti-patterns
 
 - ❌ **Very wide queries without filters** — `{}` scans ALL traces. Always filter by service, time range, or status.

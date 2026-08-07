@@ -21,6 +21,23 @@ Pre-aggregate metrics at scrape time before sending to vmstorage. Reduces cardin
 - Per-instance metrics that don't need raw resolution at storage
 - Pre-computing rollups for dashboards (alternative to recording rules)
 
+
+## Decision tree
+
+```
+Should I use streaming aggregation?
+├── High cardinality metric (>10k series per metric name)?
+│   ├── Labels are per-pod/per-instance → aggregate: drop instance, keep namespace+service
+│   └── Labels are user-generated (IDs, paths) → fix at source first; aggregate as stopgap
+├── Histogram with too many label combos?
+│   ├── Need raw per-instance → keep raw, use recording rules for dashboards
+│   └── Only need namespace-level view → aggregate with sum_samples at scrape time
+├── Cross-cluster dedup needed?
+│   └── Use output_relabel_configs to unify labels before remote_write
+└── Low-cardinality metric (<1k series)?
+    └── Don't aggregate — overhead not justified, keep raw
+```
+
 ## When NOT to use
 
 - Container CPU/memory raw metrics — keep raw, recording rules aggregate per-namespace for dashboards

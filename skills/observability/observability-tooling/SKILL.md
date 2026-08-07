@@ -1,12 +1,6 @@
 ---
 name: observability-tooling
-description: >
-  Route observability symptoms to the correct MCP tool with correct parameters.
-  Use as the FIRST skill loaded when any observability investigation begins.
-  Maps symptoms (slow service, errors spiking, data loss, cost spike, alert
-  firing) to the specific MCP tool invocation, parameters, and result
-  interpretation. Covers VictoriaMetrics MCP, Tempo MCP, Grafana MCP (Loki,
-  dashboards, alerting), and kubectl for pod health.
+description: "Route observability symptoms to the correct MCP tool with correct parameters. Use as the FIRST skill loaded when any observability investigation begins. Maps symptoms (slow service, errors spiking, data loss, cost spike, alert firing) to the specific MCP tool invocation, parameters, and result interpretation. Covers VictoriaMetrics MCP, Tempo MCP, Grafana MCP (Loki, dashboards, alerting), and kubectl for pod health."
 ---
 
 # Observability Tooling — Symptom Router

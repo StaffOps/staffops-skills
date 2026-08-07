@@ -244,6 +244,25 @@ AWS secret names follow the pattern:
 
 Examples: `dpm/people-api/prd`, `dcp/receita-process/dev`, `devops/harbor/prd`
 
+
+## Decision tree
+
+```
+ExternalSecret problem
+├── Secret not syncing (status: SecretSyncedError)?
+│   ├── SecretStore status Ready=False → IRSA role missing or trust policy wrong
+│   ├── "AccessDeniedException" in events → IAM policy doesn't allow secretsmanager:GetSecretValue
+│   └── "ResourceNotFoundException" → secret path/key typo (check exact ARN or name)
+├── Wrong value in K8s Secret?
+│   ├── Using dataFrom → entire JSON blob lands as-is; use data[].remoteRef.property to pick a key
+│   ├── Stale after rotation → check refreshInterval (default 1h); reduce or trigger reconcile
+│   └── Base64 double-encoded → ESO already base64-encodes; don't encode in Secrets Manager
+└── Permission error on SecretStore?
+    ├── Pod identity (IRSA) → verify SA annotation + trust policy has correct OIDC issuer
+    ├── Cross-account → needs sts:AssumeRole + resource policy on the remote secret
+    └── Region mismatch → SecretStore.spec.provider.aws.region must match the secret's region
+```
+
 ## Anti-patterns
 
 - ❌ Secrets in ConfigMaps (not encrypted at rest, visible in plain text)

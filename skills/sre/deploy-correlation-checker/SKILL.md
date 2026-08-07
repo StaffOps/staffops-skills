@@ -1,10 +1,6 @@
 ---
 name: deploy-correlation-checker
-description: >
-  Use when an anomaly is detected and you need to determine if a recent deploy caused it.
-  Cross-references deploy timestamps (from ArgoCD) with metric anomaly start times. Identifies
-  the most likely causal deploy by temporal proximity. Requires sandbox. Collect deploy history
-  and anomaly timestamps from ArgoCD MCP and VictoriaMetrics first.
+description: "Use when an anomaly is detected and you need to determine if a recent deploy caused it. Cross-references deploy timestamps (from ArgoCD) with metric anomaly start times. Identifies the most likely causal deploy by temporal proximity. Requires sandbox. Collect deploy history and anomaly timestamps from ArgoCD MCP and VictoriaMetrics first."
 ---
 
 # Deploy Correlation Checker (Executable)

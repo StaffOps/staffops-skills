@@ -234,6 +234,24 @@ Golden images are rebuilt **weekly** (cron pipeline) to pick up:
 - ✅ Signed with cosign (Kyverno verifies)
 - ✅ Minimal packages (only what's needed)
 
+
+## Decision tree
+
+```
+What do you need?
+├── New base image for a runtime/language not yet in catalog?
+│   ├── Runtime exists in Wolfi repo → apko.yaml with wolfi-base + runtime packages
+│   └── Runtime needs custom build → melange first (build APK), then apko consumes it
+├── Update existing golden image?
+│   ├── Security patch (CVE in OS package) → bump package version in apko.yaml → rebuild
+│   ├── Runtime version bump (e.g., .NET 8→10) → update packages list + test downstream apps
+│   └── apko/melange toolchain update → test in CI first; may change image layer hashes
+└── Add a package to existing base?
+    ├── Package exists in Wolfi repo → add to packages: list in apko.yaml
+    ├── Package needs compilation → create melange.yaml, build APK, add to local repo
+    └── Package is a runtime dep only 1 app needs → don't pollute base; add in app Dockerfile
+```
+
 ## Anti-patterns
 
 - ❌ Adding shell to apko images ("for debugging") — defeats security purpose

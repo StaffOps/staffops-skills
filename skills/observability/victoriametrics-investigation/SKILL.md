@@ -1,11 +1,6 @@
 ---
 name: victoriametrics-investigation
-description: >
-  Diagnose VictoriaMetrics cluster issues — slow queries, ingestion bottlenecks,
-  cache misses, storage pressure, remote_write backpressure from vmagent.
-  Symptoms: dashboard queries timing out, vmselect OOMKilled, vmagent
-  pending_data_bytes growing, vm_slow_row_inserts spiking, gaps in metric data.
-  Cluster: vminsert/vmselect/vmstorage + vmagent.
+description: "Diagnose VictoriaMetrics cluster issues — slow queries, ingestion bottlenecks, cache misses, storage pressure, remote_write backpressure from vmagent. Symptoms: dashboard queries timing out, vmselect OOMKilled, vmagent pending_data_bytes growing, vm_slow_row_inserts spiking, gaps in metric data. Cluster: vminsert/vmselect/vmstorage + vmagent."
 ---
 
 # VictoriaMetrics Investigation

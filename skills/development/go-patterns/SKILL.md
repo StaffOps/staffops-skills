@@ -291,6 +291,28 @@ case result := <-resultCh:
 }
 ```
 
+
+## Decision tree
+
+```
+Go design choice
+├── Error handling pattern?
+│   ├── Caller can handle/retry → return error (don't panic)
+│   ├── Unrecoverable (nil config at startup) → log.Fatal / panic in main only
+│   ├── Need to add context → fmt.Errorf("doing X: %w", err) (wrap, don't shadow)
+│   └── Multiple possible errors → use sentinel errors (errors.Is) or typed errors (errors.As)
+├── Context propagation?
+│   ├── HTTP handler → use r.Context(); pass down to every I/O call
+│   ├── gRPC → ctx comes as first arg; propagate to sub-calls
+│   ├── Background goroutine → derive new context or use context.WithoutCancel (Go 1.21+)
+│   └── Timeout needed → context.WithTimeout; defer cancel() immediately
+└── Concurrency pattern?
+    ├── N independent tasks, wait for all → errgroup.Group
+    ├── Producer/consumer pipeline → channels (buffered) + goroutines
+    ├── Shared state, rare writes → sync.RWMutex
+    └── One-time init → sync.Once
+```
+
 ## When NOT to use
 
 - Python service development — use `python-fastapi-patterns` or `python-grpc-aio`

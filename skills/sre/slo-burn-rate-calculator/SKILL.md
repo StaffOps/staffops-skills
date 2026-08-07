@@ -1,11 +1,6 @@
 ---
 name: slo-burn-rate-calculator
-description: >
-  Use when an SLO burn rate alert fires, when assessing budget health during an incident,
-  or when determining how long until the error budget exhausts at the current rate. Runs
-  a bundled Python script that calculates multi-window burn rates (1h/6h/24h/72h) per the
-  Google SRE Workbook model, classifies severity (CRITICAL_PAGE → WATCH), and recommends
-  action. Requires sandbox. Collect error/total counts from VictoriaMetrics first.
+description: "Use when an SLO burn rate alert fires, when assessing budget health during an incident, or when determining how long until the error budget exhausts at the current rate. Runs a bundled Python script that calculates multi-window burn rates (1h/6h/24h/72h) per the Google SRE Workbook model, classifies severity (CRITICAL_PAGE → WATCH), and recommends action. Requires sandbox. Collect error/total counts from VictoriaMetrics first."
 ---
 
 # SLO Burn Rate Calculator (Executable)

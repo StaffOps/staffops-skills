@@ -360,6 +360,25 @@ kubectl run loki-q -n monitoring --rm -i --restart=Never \
 
 Always use the narrowest time range possible. Loki scans chunks sequentially — wider range = more chunks = slower.
 
+
+## Decision tree
+
+```
+What do you need from Loki?
+├── Find specific log lines → Log filter query
+│   └── {app="X"} |= "error" |~ "timeout|refused"
+├── Count occurrences over time → Metric query (rate/count_over_time)
+│   └── rate({app="X"} |= "error" [5m])
+├── Extract structured data → Parser pipeline
+│   ├── JSON logs → | json | field="value"
+│   ├── Regex extraction → | regexp `(?P<status>\d{3})`
+│   └── Key-value → | logfmt
+├── Aggregate across labels → Aggregation
+│   └── sum by (namespace) (count_over_time({job=~".+"} |= "error" [1h]))
+└── Discover recurring patterns → Pattern detection
+    └── Use query_loki_patterns or | pattern "<_> <method> <path> <_>"
+```
+
 ## Anti-patterns
 
 - ❌ **High-cardinality labels** — `request_id`, `user_id`, `trace_id` as stream labels. These create millions of streams → Loki ingester OOM. Use structured metadata instead.

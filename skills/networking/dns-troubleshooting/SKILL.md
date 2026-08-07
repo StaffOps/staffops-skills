@@ -220,6 +220,26 @@ or not at all.
 - `network-troubleshooting-tools` — `dig`, `nc`, packet capture in more depth
 - `linux-firewall` — where a UDP/53 rule gap actually blocks resolution
 
+
+## Decision tree
+
+```
+DNS problem in cluster
+├── Resolution failing (NXDOMAIN / SERVFAIL)?
+│   ├── Only from specific pods → check /etc/resolv.conf in pod; ndots misconfigured?
+│   ├── All pods affected → CoreDNS pods healthy? kubectl get pods -n kube-system -l k8s-app=kube-dns
+│   ├── External domains only → check upstream forwarders in CoreDNS ConfigMap
+│   └── Internal svc only → check Service exists + correct namespace in FQDN
+├── Wrong answer (resolves but to wrong IP)?
+│   ├── Stale DNS cache → CoreDNS cache TTL; restart CoreDNS pods to flush
+│   ├── ExternalDNS conflict → two resources claiming same hostname; check TXT ownership records
+│   └── Split-horizon (private vs public) → verify Route53 private zone attached to VPC
+└── Timeout (no response)?
+    ├── CoreDNS CPU throttled → check resource limits + throttling metrics
+    ├── conntrack table full on node → check node-level conntrack_entries vs max
+    └── >5 dots in name + ndots:5 → query goes to upstream first; use FQDN with trailing dot
+```
+
 ## When NOT to use
 
 - **Application-level DNS caching** (in-process, HTTP client) — that's app config, not system DNS.

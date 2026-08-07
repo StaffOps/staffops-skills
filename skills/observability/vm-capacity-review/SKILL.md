@@ -1,12 +1,6 @@
 ---
 name: vm-capacity-review
-description: >
-  Proactive VictoriaMetrics capacity and health review (Evaluation agent type).
-  Produces a capacity report covering ingestion rate trend, storage growth and
-  projected exhaustion date, cardinality state, TSID cache efficiency,
-  query layer saturation, replication integrity, and retention vs actual usage.
-  Each dimension reports headroom % and projected exhaustion date where applicable.
-  NOT for active incidents — use victoriametrics-investigation for that.
+description: "Proactive VictoriaMetrics capacity and health review (Evaluation agent type). Produces a capacity report covering ingestion rate trend, storage growth and projected exhaustion date, cardinality state, TSID cache efficiency, query layer saturation, replication integrity, and retention vs actual usage. Each dimension reports headroom % and projected exhaustion date where applicable. NOT for active incidents — use victoriametrics-investigation for that."
 ---
 
 # VictoriaMetrics Capacity Review

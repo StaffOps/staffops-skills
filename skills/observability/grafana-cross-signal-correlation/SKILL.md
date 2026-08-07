@@ -220,6 +220,24 @@ grafana:
 - Spanmetrics connector: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/connector/spanmetricsconnector
 - Local docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/{tempo,loki,pyroscope}/docs`
 
+
+## Decision tree
+
+```
+Which signal leads your investigation?
+├── Metric spike (latency/error rate) → jump to traces
+│   ├── Exemplar available on data point? → click exemplar → Tempo trace
+│   └── No exemplar? → TraceQL: { resource.service.name="X" && duration > 1s }
+├── Log error with trace_id → jump to trace
+│   ├── Loki derivedField configured? → click trace_id link in log line
+│   └── Not configured? → copy trace_id → paste in Tempo search
+├── Trace shows slow span → jump to profile
+│   ├── Pyroscope trace correlation enabled? → click span → flame graph
+│   └── Not enabled? → query Pyroscope by service + time window of the span
+└── Trace shows slow DB/Redis call → jump to backing-service metrics
+    └── Check connection pool saturation / query duration metrics for that time window
+```
+
 ## When NOT to use
 
 - For TraceQL query syntax → use `tempo-traceql-patterns`

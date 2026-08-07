@@ -1,11 +1,6 @@
 ---
 name: tempo-trace-investigation
-description: >
-  Investigate distributed traces using Tempo and TraceQL. Symptoms: high latency
-  on a service, errors propagating across services, need to find which span in a
-  request chain is slow, exemplar drill-down from a metric spike, or mapping
-  service dependencies. Use TraceQL MCP tools (traceql-search, get-trace,
-  get-attribute-names/values, traceql-metrics-instant/range).
+description: "Investigate distributed traces using Tempo and TraceQL. Symptoms: high latency on a service, errors propagating across services, need to find which span in a request chain is slow, exemplar drill-down from a metric spike, or mapping service dependencies. Use TraceQL MCP tools (traceql-search, get-trace, get-attribute-names/values, traceql-metrics-instant/range)."
 ---
 
 # Tempo Trace Investigation

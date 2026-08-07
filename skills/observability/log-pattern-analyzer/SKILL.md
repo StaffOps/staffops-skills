@@ -1,11 +1,6 @@
 ---
 name: log-pattern-analyzer
-description: >
-  Use when investigating log volume spikes, identifying dominant error patterns,
-  or detecting anomalous log messages during an incident. Runs a bundled Python script
-  that normalizes log lines into patterns, clusters errors by similarity, and detects
-  time-based spikes. Handles large log dumps that are impractical to reason over manually.
-  Requires sandbox. Collect logs from Loki MCP first.
+description: "Use when investigating log volume spikes, identifying dominant error patterns, or detecting anomalous log messages during an incident. Runs a bundled Python script that normalizes log lines into patterns, clusters errors by similarity, and detects time-based spikes. Handles large log dumps that are impractical to reason over manually. Requires sandbox. Collect logs from Loki MCP first."
 ---
 
 # Log Pattern Analyzer (Executable)

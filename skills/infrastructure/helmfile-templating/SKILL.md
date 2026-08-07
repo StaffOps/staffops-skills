@@ -284,6 +284,24 @@ Fix: validate gotmpl syntax — `helmfile -e dev write-values --output-file-temp
 - Helm template guide: https://helm.sh/docs/chart_template_guide/
 - Related skills: `vmalert-configuration`, `alertmanager-slack-config`
 
+
+## Decision tree
+
+```
+Helmfile template problem
+├── Value not rendering (shows literal {{ }})?
+│   ├── Inside helmfile values → use {{ .Values.x }} (single layer)
+│   ├── Inside Helm tpl() → use {{ "{{" }} .Values.x {{ "}}" }} (double escape)
+│   └── Inside Go template in extraObjects → triple-escape: {{ "{{" }} "{{" {{ "}}" }} (3 layers)
+├── Secret not injecting?
+│   ├── Using vals? → confirm vals://aws-ssm/path syntax + vals binary in runner
+│   └── Using ExternalSecret? → this isn't helmfile's job — check ESO sync
+└── Env-specific override not applying?
+    ├── Check environments: block in helmfile.yaml has correct values file path
+    ├── Check precedence: last -f wins (env-specific must be AFTER base)
+    └── Check selector: --environment flag matches the key name exactly
+```
+
 ## When NOT to use
 
 - For helmfile environment/release structure → use `helmfile-k8s-addon`
