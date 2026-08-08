@@ -322,6 +322,24 @@ NEXT ACTION: <deepen | pivot to THEN skill | cross-correlate | escalate>
 - **Non-technical symptoms** (user complaints, business metrics) — this routes technical signals.
 - **Deep RCA** once routed — see [root-cause-analysis](../sre/root-cause-analysis/SKILL.md) after initial routing.
 
+## Decision tree
+
+```
+What symptom category?
+├── Latency (slow responses, high p99)?
+│   └── Load apm-metrics-cross-runtime → then tempo-trace-investigation
+├── Errors (5xx, exceptions, failed requests)?
+│   └── Load apm-metrics-cross-runtime → filter by status_code >= 500
+├── Saturation (CPU/mem/queue full, OOM)?
+│   └── Load k8s-workload-metrics → then karpenter-metrics if node-level
+├── Traffic (unexpected volume, zero requests)?
+│   └── Load istio-ambient-metrics → check ingress + service mesh
+└── Data loss (logs/traces/metrics missing)?
+    ├── Logs missing → collector-internal-metrics → loki-tempo-self-metrics
+    ├── Traces missing → otel-pipeline-troubleshooting
+    └── Metrics missing → victoriametrics-self-metrics → collector-internal-metrics
+```
+
 ## Related skills
 
 - [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — triage procedure once routed to a Linux issue.

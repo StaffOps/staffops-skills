@@ -438,6 +438,24 @@ source "amazon-ebs" "ubuntu" {
 - For EKS node management (Bottlerocket, not custom AMI) → use `eks-management`
 - For vulnerability scanning of AMIs post-build → use `sbom-vulnerability-management`
 
+## Decision tree
+
+```
+What do you need?
+├── Build a new AMI variant?
+│   ├── General purpose → Start from <org>-ubuntu-hardened base
+│   ├── Database (MongoDB) → Use MongoDB-ready variant with tuned kernel
+│   └── Custom app → Fork nearest variant, add Ansible role
+├── Update an existing AMI?
+│   ├── Security patch → Rebuild from same Packer template (new base)
+│   ├── CIS benchmark update → Update Ansible hardening role
+│   └── Package upgrade → Edit requirements in Ansible vars
+└── Debug a build failure?
+    ├── Packer phase → Check AWS permissions, VPC/subnet, source AMI
+    ├── Ansible phase → SSH into debug instance, replay failing role
+    └── Trivy scan fails → Review CVE, add exception or fix package
+```
+
 ## Related skills
 
 - `container-image-apko` — container equivalent of golden AMI hardening

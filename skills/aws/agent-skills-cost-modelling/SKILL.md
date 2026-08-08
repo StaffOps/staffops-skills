@@ -129,6 +129,18 @@ Industry averages such as "60% of engineering time goes to production operations
 | Concurrent sessions | 10, shared with real users | Long batch runs occupy capacity. Off-peak only, sequential |
 | Journal pagination | 100 records per page | A deep run's conclusion may be on page 2 — paginate or lose it |
 
+## Decision tree
+
+```
+├── Estimate cost of a new trigger/workflow?
+│   └── Measure duration from harness runs → multiply by $0.50/min
+├── Reduce cost of an existing workflow?
+│   ├── Shorten duration → fewer skills loaded, narrower queries
+│   └── Reduce frequency → debounce triggers, batch investigations
+└── Compare approaches (cost vs accuracy)?
+    └── Run both in harness → compare duration × invocation frequency
+```
+
 ## Anti-patterns
 
 - Multiplying an assumed per-run price by a run count

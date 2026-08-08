@@ -162,6 +162,28 @@ Common errors → fixes.
 - [ ] Ran spellcheck (optional but nice)
 
 ---
+## Decision tree
+
+```
+Documentation type?
+├── README? → Project entry point (index, not encyclopedia)
+│   ├── What is this? → 1-2 sentence purpose
+│   ├── How to run? → Quick start (< 5 commands)
+│   └── Where to find more? → Links to detailed docs
+├── HOW-TO? → Step-by-step problem solving
+│   ├── Single procedure? → HOW-TO.md in repo root
+│   ├── Multiple guides? → docs/how-to/<topic>.md
+│   └── Cookbook style? → EXAMPLES.md with runnable snippets
+├── API docs? → Contract reference (generated when possible)
+│   ├── REST? → OpenAPI spec → Swagger UI / ReDoc
+│   ├── gRPC? → Proto files → protoc-gen-doc
+│   └── Library? → Doc comments → language-native tool
+└── Spec? → Requirements + design + tasks (specs/ dir)
+    ├── New feature? → specs/<feature>/{requirements,design,tasks}.md
+    ├── Bug fix? → specs/<fix>/{bugfix,design,tasks}.md
+    └── Architecture? → specs/<topic>/design.md with Rationale
+```
+
 
 ## Related Skills
 

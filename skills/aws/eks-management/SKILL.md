@@ -321,6 +321,26 @@ aws eks list-clusters --region us-east-1
 - Debugging a specific pod/container crash — use `container-runtime-debugging`
 - Configuring IAM roles for IRSA (policy design) — use `iam-patterns`
 - Node-level OS troubleshooting (kernel, filesystem) — use `eks-node-troubleshooting`
+## Decision tree
+
+```
+EKS issue?
+├── Node problem? → Check node status + events
+│   ├── Not joining? → aws-auth ConfigMap / security groups / AMI
+│   ├── NotReady? → kubelet logs + disk pressure + CNI
+│   └── Scaling? → Karpenter provisioner + NodePool constraints
+├── IRSA issue? → Pod cannot access AWS service
+│   ├── Trust policy? → Check oidc.eks condition + namespace/SA
+│   ├── Permission? → IAM policy attached to role
+│   └── Token? → Verify projected token volume mount
+├── Cluster upgrade? → Control plane → add-ons → node groups
+│   ├── Pre-check? → Deprecated APIs + PSP → PSS migration
+│   └── Rollback? → Cannot rollback control plane — test in HML first
+└── Karpenter? → Provisioner / NodePool / disruption
+    ├── Not scaling up? → Check NodePool limits + instance types
+    └── Not consolidating? → PDB / anti-affinity / do-not-disrupt annotation
+```
+
 
 ## Related skills
 

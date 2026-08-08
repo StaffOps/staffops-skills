@@ -478,6 +478,28 @@ aws rds restore-db-cluster-to-point-in-time \
 - `cost-explorer` — analyzing RDS spend and Reserved Instance utilization
 - `iam-patterns` — IAM authentication for RDS Proxy
 - `eks-management` — EKS pod connectivity to RDS via security groups
+## Decision tree
+
+```
+RDS decision?
+├── Sizing? → Choose instance class + storage
+│   ├── Predictable load? → Provisioned (db.r6g family)
+│   ├── Variable load? → Aurora Serverless v2
+│   └── Dev/test? → db.t4g burstable (NOT for production)
+├── HA / DR? → Multi-AZ + read replicas
+│   ├── Same-region HA? → Multi-AZ deployment
+│   ├── Cross-region DR? → Cross-region read replica
+│   └── RPO near-zero? → Aurora Global Database
+├── Performance? → Diagnose slow queries
+│   ├── CPU high? → Performance Insights → top SQL
+│   ├── IOPS saturated? → Scale storage or switch to io2
+│   └── Connections exhausted? → RDS Proxy or PgBouncer
+└── Backup / restore? → Automated + manual snapshots
+    ├── Point-in-time? → PITR within retention window
+    ├── Cross-account? → Share snapshot + re-encrypt with target KMS key
+    └── Test restore? → Restore to new instance, validate, delete
+```
+
 
 ## Anti-patterns
 

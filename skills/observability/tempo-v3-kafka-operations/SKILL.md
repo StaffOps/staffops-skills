@@ -180,6 +180,28 @@ The chart's default `topologySpreadConstraints` use `whenUnsatisfiable: Schedule
 - For TraceQL query syntax → use `tempo-traceql-patterns`
 - For OTel Collector pipeline feeding Tempo → use `otel-collector-multi-cluster`
 - For Kafka broker/consumer metrics → use `strimzi-kafka-metrics` (apm-metrics)
+## Decision tree
+
+```
+Tempo v3 Kafka issue?
+├── Partition error? → Ownership / ring problem
+│   ├── Orphan partitions? → Kill stuck live-store pod → ring re-election
+│   ├── Ring not converging? → Check memberlist gossip + DNS
+│   └── Partition count mismatch? → Kafka topic partitions must match live-stores
+├── OOM? → Live-store / block-builder memory
+│   ├── Live-store OOM on replay? → Too many pending blocks on partition
+│   ├── Block-builder OOM? → Reduce flush interval or add memory
+│   └── Compactor OOM? → Reduce compaction_window or add memory
+├── Missing PDB? → Rolling restart kills traffic
+│   ├── Chart supports PDB? → tempo-distributed lacks PDB template (known gap)
+│   ├── Workaround? → Create PDB manually via extraObjects
+│   └── Which components? → live-store + query-frontend (critical path)
+└── Migration (v2 → v3)? → Ingester → block-builder/live-store
+    ├── Dual-write phase? → Both ingester and live-store active
+    ├── Cut-over? → Disable ingester after live-store catches up
+    └── Rollback? → Re-enable ingester, drain live-store partitions
+```
+
 
 ## Related skills
 

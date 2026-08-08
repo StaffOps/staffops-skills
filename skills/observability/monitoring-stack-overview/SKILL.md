@@ -172,6 +172,28 @@ Metric spike → click exemplar → Trace in Tempo → click span → Logs in Lo
 - For detailed collector pipeline config → use `otel-collector-multi-cluster`
 - For querying specific backends (LogQL, TraceQL, MetricsQL) → use per-backend skills
 - For alert routing/templating → use `alertmanager-slack-config` or `vmalert-configuration`
+## Decision tree
+
+```
+Which signal do I need?
+├── What happened? (request-level) → Traces
+│   ├── Backend? → Tempo (TraceQL via Grafana)
+│   ├── Query tool? → Grafana Explore or Tempo API
+│   └── Correlation? → Exemplars from metrics → trace_id
+├── How much? (aggregated) → Metrics
+│   ├── Backend? → VictoriaMetrics (MetricsQL)
+│   ├── Query tool? → Grafana dashboards or VM API
+│   └── Alerts? → VMAlert rules → Alertmanager → Slack
+├── Why? (detail/context) → Logs
+│   ├── Backend? → Loki (LogQL)
+│   ├── Query tool? → Grafana Explore or Loki API
+│   └── Correlation? → Derived fields (trace_id → Tempo)
+└── Where in the code? → Profiles
+    ├── Backend? → Pyroscope
+    ├── Query tool? → Grafana Pyroscope panel
+    └── Correlation? → Trace-to-profile via span_id
+```
+
 
 ## Related skills
 

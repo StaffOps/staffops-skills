@@ -299,6 +299,28 @@ istioctl proxy-config listeners <pod>
 - For Istio Ambient + OTel cross-cluster configuration → use `istio-ambient-otel`
 - For general Kubernetes networking issues (not Istio) → use cluster network debugging
 - For Istio metrics interpretation → use `istio-ambient-metrics` (apm-metrics)
+## Decision tree
+
+```
+Istio Ambient issue?
+├── 400 error on gRPC? → Protocol mismatch
+│   ├── ServiceEntry missing? → Add with protocol: GRPC
+│   ├── Port name wrong? → Must be grpc-* or use appProtocol
+│   └── Waypoint SNAT? → Check x-forwarded-for vs source IP
+├── Missing mTLS? → Traffic not encrypted
+│   ├── Namespace labeled? → istio.io/dataplane-mode: ambient
+│   ├── ztunnel running? → Check DaemonSet + logs
+│   └── PeerAuthentication? → Mode STRICT on namespace
+├── Routing wrong? → Traffic not reaching destination
+│   ├── Cross-namespace? → Check AuthorizationPolicy
+│   ├── Cross-cluster? → ServiceEntry + Gateway + hostname match
+│   └── Waypoint needed? → L7 policies require waypoint proxy
+└── Latency? → Unexpected overhead
+    ├── ztunnel overhead? → Normal: < 1ms added (L4 only)
+    ├── Waypoint hop? → Additional L7 proxy in path
+    └── DNS resolution? → Check headless vs ClusterIP service
+```
+
 
 ## Related skills
 

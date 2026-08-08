@@ -76,6 +76,24 @@ Repos should be refreshed periodically (`git pull`) to stay consistent with the 
 - **Organization-internal documentation** — see mkdocs-conventions or the devops-docs portal.
 - **Code-level API references** — read the source or generated API docs directly.
 
+## Decision tree
+
+```
+Which technology docs do you need?
+├── OpenTelemetry (SDK, Collector, specs)?
+│   └── EXTERNAL-DOCS/opentelemetry.io/content/en/docs/
+├── Grafana Tempo (TraceQL, storage, config)?
+│   └── EXTERNAL-DOCS/tempo/docs/
+├── Grafana Loki (LogQL, schema, ingestion)?
+│   └── EXTERNAL-DOCS/loki/docs/
+├── Grafana Pyroscope (profiling, pprof, eBPF)?
+│   └── EXTERNAL-DOCS/pyroscope/docs/
+├── VictoriaMetrics (MetricsQL, cluster, vmagent)?
+│   └── EXTERNAL-DOCS/VictoriaMetrics/docs/
+└── Fluent Bit (pipelines, parsers, outputs)?
+    └── EXTERNAL-DOCS/fluent-bit-docs/
+```
+
 ## Related skills
 
 - [mkdocs-conventions](../documentation/mkdocs-conventions/SKILL.md) — corporate docs authoring.

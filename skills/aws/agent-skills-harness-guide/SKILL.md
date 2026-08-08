@@ -177,6 +177,19 @@ Use `create-backlog-task` (not `create_chat`) when the execution type is INVESTI
 - Importing assets via the API (not running harness) — use `agent-skills-import-and-harness`
 - Writing executable sandbox code — use `agent-skills-sandbox-development`
 
+## Decision tree
+
+```
+├── Run existing cases?
+│   └── ./harness/run.sh --agentspace-id $AS [--case <id>]
+├── Add a new test case?
+│   └── Define: input prompt, expected behaviour, pass criteria
+├── Interpret a failure?
+│   ├── Timeout → agent looped or quota exhausted
+│   ├── Wrong answer → skill not loaded or metric name wrong
+│   └── No output → event-stream closed early, check session logs
+```
+
 ## Related skills
 
 - `agent-skills-debugging` — when a skill misbehaves but you haven't set up the harness yet

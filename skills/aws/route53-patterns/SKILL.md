@@ -399,6 +399,28 @@ kubectl logs -n external-dns -l app.kubernetes.io/name=external-dns --tail=50
 - `eks-management` — ExternalDNS controller managing Route53 records
 - `security-hub-patterns` — DNS-related compliance findings
 - `cost-explorer` — Route53 query volume cost
+## Decision tree
+
+```
+DNS task?
+├── New zone? → Create hosted zone
+│   ├── Public? → Route53 public hosted zone + NS delegation
+│   ├── Private? → VPC-associated private hosted zone
+│   └── Split-horizon? → Same name, one public + one private
+├── Routing policy? → Choose traffic distribution
+│   ├── Active-active? → Weighted routing (equal weights)
+│   ├── Active-passive? → Failover routing + health check
+│   ├── Latency-based? → Latency routing (multi-region)
+│   └── Geolocation? → Geo routing (compliance / localization)
+├── Health check? → Monitor endpoint availability
+│   ├── HTTP(S)? → Endpoint health check (string match optional)
+│   ├── Other protocol? → TCP health check
+│   └── CloudWatch alarm? → Calculated health check
+└── Delegation? → Subdomain to another zone/account
+    ├── Same account? → NS record pointing to child zone
+    └── Cross-account? → NS record + IAM policy for External-DNS
+```
+
 
 ## Anti-patterns
 

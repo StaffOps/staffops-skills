@@ -293,6 +293,24 @@ Only bypass when you have a concrete reason (e.g., `k8sattributes` IP-based pod 
 - For debugging Istio Ambient failures (400s, SNAT, routing) → use `istio-ambient-debugging`
 - For OTel Collector pipeline internals → use `otel-collector-multi-cluster`
 - For Istio metrics and mesh telemetry → use `istio-ambient-metrics` (apm-metrics)
+## Decision tree
+
+```
+Istio + OTel issue?
+├── Traces missing? → Context propagation broken
+│   ├── Intra-cluster? → ztunnel L4 does NOT propagate — app must
+│   ├── Cross-cluster? → ServiceEntry + TLS receiver on gateway
+│   └── Waypoint involved? → Waypoint preserves headers (L7)
+├── Metrics missing? → Istio metrics not in VictoriaMetrics
+│   ├── ztunnel metrics? → Scrape port 15020 /stats/prometheus
+│   ├── Waypoint metrics? → Scrape waypoint pod port 15020
+│   └── Service graph? → Tempo metrics-generator from traces
+└── Cross-cluster? → Multi-cluster telemetry routing
+    ├── Traces? → OTel Collector gateway with TLS + ServiceEntry
+    ├── Metrics? → vmagent remote_write cross-cluster
+    └── DNS? → Use FQDN in ServiceEntry (hostname must match)
+```
+
 
 ## Related skills
 

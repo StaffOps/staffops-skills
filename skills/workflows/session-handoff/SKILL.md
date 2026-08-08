@@ -167,6 +167,23 @@ before calling `claude --bg`.
 - **Persistent project documentation** — use specs or README, not session notes.
 - **Git branch management** — see [git-advanced](../workflows/git-advanced/SKILL.md).
 
+## Decision tree
+
+```
+What kind of handoff?
+├── Planned end-of-shift (incident in progress)?
+│   ├── Write structured handoff doc (timeline, hypothesis, next steps)
+│   ├── Include: what was tried, what was ruled out, open questions
+│   └── Post in incident channel + tag incoming on-call
+├── Incident mid-stream (hard stop, must leave NOW)?
+│   ├── Minimal handoff: current hypothesis + last command + blast radius
+│   ├── Pin in Slack, tag incoming engineer directly
+│   └── Accept lower quality — speed over completeness
+└── Async handoff (migration, multi-day task)?
+    ├── Use spec format: state achieved, state remaining, blockers
+    └── Commit progress to branch or doc — not just chat history
+```
+
 ## Related skills
 
 - [how-this-agent-works](../workflows/how-this-agent-works/SKILL.md) — understanding agent context loading.

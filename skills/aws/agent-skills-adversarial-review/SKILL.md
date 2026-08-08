@@ -103,6 +103,17 @@ Run once over 22 spec files, roughly 3000 lines. Selected findings, to calibrate
 
 **The pattern**: every finding came from checking a primary source or asking "what observation would falsify this?" None came from reading more carefully.
 
+## Decision tree
+
+```
+├── Reviewing a skill (SKILL.md)?
+│   └── Verify: metric names exist, procedure is prescriptive, no dead queries
+├── Reviewing an agents_md?
+│   └── Verify: read-only invariant present, no approval language, tool list current
+└── Reviewing an instruction or spec?
+    └── Try to break it: find unfalsifiable claims, missing edge cases, stale refs
+```
+
 ## Anti-patterns
 
 - Asking a reviewer to "validate" or "check" — those words invite approval

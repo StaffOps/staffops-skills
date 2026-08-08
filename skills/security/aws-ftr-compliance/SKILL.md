@@ -337,6 +337,22 @@ resource "aws_config_config_rule" "encrypted_volumes" {
 - For container vulnerability scanning (Trivy/SBOM) → use `sbom-vulnerability-management`
 - For IAM role/policy design → use `iam-patterns`
 
+## Decision tree
+
+```
+What do you need?
+├── Preparing for FTR review?
+│   ├── First time → Run full gap analysis (Security Hub + Prowler)
+│   └── Re-review → Focus on previously-failed controls
+├── Remediating a specific finding?
+│   ├── CIS control → Check remediation playbook by control ID
+│   ├── FSBP finding → Map to Terraform module fix
+│   └── Custom finding → Identify resource + owner via tags
+└── Ongoing compliance posture?
+    ├── Drift detected → Compare current vs baseline
+    └── New account/region → Extend Security Hub aggregation
+```
+
 ## Related skills
 
 - `security-hub-findings-mgmt` — ongoing finding management after FTR baseline

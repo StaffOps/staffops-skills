@@ -353,6 +353,22 @@ Until then, use manual workflows.
 - **Sprint planning methodology** (Scrum/Kanban) — this skill is about ticket format, not process.
 - **Project roadmapping** — see spec-writing for feature planning.
 
+## Decision tree
+
+```
+What type of issue?
+├── Bug (defect in existing functionality)?
+│   └── Use Bug template: steps to reproduce, expected vs actual, env
+├── Story (user-facing feature with business value)?
+│   └── Use Story template: As a <role>, I want <goal>, So that <value>
+├── Task (no direct user value: refactor, infra, docs)?
+│   └── Use Task template: objective, acceptance criteria, technical notes
+├── Epic (large initiative, multiple stories)?
+│   └── Use Epic template: business goal, success metrics, child stories
+└── Spike (time-boxed research)?
+    └── Use Spike template: question to answer, timebox, deliverable
+```
+
 ## Related skills
 
 - [conventional-commits](../workflows/conventional-commits/SKILL.md) — linking commits to Jira tickets.

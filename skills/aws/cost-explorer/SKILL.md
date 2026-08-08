@@ -399,6 +399,24 @@ AWS Cost Anomaly Detection (uses ML) — free, no setup beyond enabling.
 - Right-sizing EC2/EKS instances — use `ec2-rightsizing-patterns`
 - Evaluating Savings Plans purchases — use `savings-plans-strategy`
 - Fixing untagged resources that break cost allocation — use `untagged-resources-bulk-fix`
+## Decision tree
+
+```
+Cost question?
+├── Spike / anomaly? → Cost Explorer daily granularity + service filter
+│   ├── Which service? → Group by SERVICE, filter last 7d
+│   └── Which account? → Group by LINKED_ACCOUNT
+├── Optimization? → Savings Plans / RI coverage gaps
+│   ├── Compute savings? → Compute SP utilization report
+│   └── Specific service? → EC2/RDS/ElastiCache RI recommendations
+├── Allocation? → CUR via Athena + cost-allocation tags
+│   ├── By team? → GROUP BY cost_center tag
+│   └── By environment? → GROUP BY environment tag
+└── Forecast? → Cost Explorer forecast API (12-month projection)
+    ├── Linear trend sufficient? → Built-in forecast
+    └── Custom model needed? → CUR export → custom analysis
+```
+
 
 ## Related skills
 

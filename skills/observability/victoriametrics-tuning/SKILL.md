@@ -156,6 +156,28 @@ Instantaneous metrics during warm-up or low-traffic periods give false sense of 
 - For diagnosing VM cluster failures (OOM, disk full, split brain) → use `victoriametrics-troubleshooting`
 - For cardinality reduction strategies → use `vm-cardinality-management`
 - For streaming aggregation config → use `streaming-aggregation`
+## Decision tree
+
+```
+VM performance bottleneck?
+├── Insert path? (vminsert → vmstorage)
+│   ├── Slow inserts? → Check vm_slow_row_inserts_total
+│   ├── RPC backpressure? → vm_rpc_buf_pending_bytes growing
+│   └── TSID cache miss? → vm_cache_misses_total (metricName→TSID)
+├── Select path? (vmselect → vmstorage)
+│   ├── Slow queries? → Check query latency percentiles
+│   ├── Too many series? → Limit series with topK / limit_offset
+│   └── Dedup overhead? → Tune dedup.minScrapeInterval
+├── Cache? → Tune cache sizes and eviction
+│   ├── High miss rate? → Increase RAM or cache size flags
+│   ├── Which cache? → indexdb / metricName / dateMetricID
+│   └── Cold start? → Pre-warm after restart (expected ~30min)
+└── Disk? → I/O bottleneck
+    ├── Write latency? → Check EBS burst credits / switch to io2
+    ├── Read IOPS? → Indexdb lookups saturating disk
+    └── Compaction pressure? → Tune merge concurrency
+```
+
 
 ## Related skills
 

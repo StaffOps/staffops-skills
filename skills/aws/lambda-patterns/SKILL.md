@@ -381,6 +381,27 @@ aws lambda update-function-configuration \
 - `cloudfront-patterns` — Lambda@Edge and CloudFront Functions
 - `cost-explorer` — Lambda invocation and duration cost analysis
 - `python-fastapi-patterns` — when the workload outgrows Lambda and needs a service
+## Decision tree
+
+```
+Lambda problem?
+├── Cold start? → Optimize init path
+│   ├── > 3s? → Provisioned Concurrency or SnapStart (Java)
+│   ├── Heavy SDK init? → Lazy-load clients outside handler
+│   └── Large package? → Reduce bundle size / use layers
+├── Timeout? → Execution exceeds configured limit
+│   ├── Downstream slow? → Increase timeout + add circuit breaker
+│   ├── Memory-bound? → Increase memory (also increases CPU)
+│   └── Infinite loop? → Check recursion / retry logic
+├── Memory? → OOM or throttled
+│   ├── OOM kill? → Increase memory allocation
+│   └── Over-provisioned? → Power Tuning tool to right-size
+└── VPC? → ENI / connectivity issues
+    ├── Timeout to internet? → NAT Gateway in private subnet
+    ├── Slow cold start? → VPC adds ~2-5s ENI attach time
+    └── ENI limit? → Check subnet IP availability
+```
+
 
 ## Anti-patterns
 

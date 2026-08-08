@@ -172,6 +172,27 @@ For most <org> workloads, both are fine. Performance is rarely the deciding fact
 - For Fluent Bit configuration details (labels, multiline, filters) → use `fluent-bit-loki-pipeline`
 - For OTel Collector pipeline topology → use `otel-collector-multi-cluster`
 - For querying logs already in Loki → use `loki-logql-patterns`
+## Decision tree
+
+```
+Log collection decision?
+├── Choosing collector? → New project or greenfield
+│   ├── Already have OTel for traces+metrics? → OTel filelog receiver (unify)
+│   ├── Need multiline + complex parsing? → Fluent Bit (more mature parsers)
+│   └── K8s stdout only? → Either works — Fluent Bit has more K8s filters
+├── Migrating? → Moving from one to another
+│   ├── Fluent Bit → OTel? → Gradual: dual-write, compare, cut over
+│   ├── OTel → Fluent Bit? → Rare — only if filelog receiver insufficient
+│   └── Migration risk? → Label naming diverges (fb: kubernetes.*, otel: k8s.*)
+├── Dual pipeline? → Both running simultaneously
+│   ├── OTLP logs (app SDK)? → OTel Collector handles these
+│   ├── Stdout logs (K8s)? → Fluent Bit DaemonSet
+│   └── Overlap? → Deduplicate at Loki with structured_metadata
+└── Debugging? → Logs not arriving
+    ├── Fluent Bit? → Check /api/v1/metrics + output errors
+    └── OTel filelog? → Check otelcol_receiver_accepted_log_records
+```
+
 
 ## Related skills
 

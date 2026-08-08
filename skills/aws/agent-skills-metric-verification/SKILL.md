@@ -66,6 +66,19 @@ Every family has now been checked at least once. If a new family is added, it st
 - Debugging a skill that loads but ignores instructions — use `agent-skills-debugging`
 - Querying VictoriaMetrics for live troubleshooting — use `victoriametrics-investigation`
 
+## Decision tree
+
+```
+├── Does the metric exist at all?
+│   └── metrics(match='{__name__=~"prefix_.*"}') → empty = does not exist
+├── Wrong suffix (_total present/absent)?
+│   └── Check both with and without _total — environment is inconsistent
+├── Metric exists but not scraped for this target?
+│   └── Verify ServiceMonitor/PodMonitor exists and matches labels
+└── Summary vs Histogram confusion?
+    └── Check _bucket (histogram) vs _count/_sum only (summary)
+```
+
 ## Related skills
 
 - `agent-skills-debugging` — when the skill loads but produces wrong output (not metric-specific)

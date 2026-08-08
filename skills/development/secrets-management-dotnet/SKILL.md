@@ -354,6 +354,27 @@ public class SecretsHealthCheck(IOptions<DatabaseOptions> dbOpts) : IHealthCheck
 - `iam-patterns` — IAM roles that grant access to Secrets Manager
 - `dotnet-async-patterns` — async configuration reloading in .NET
 - `dotnet-otel-patterns` — tracing through configuration providers
+## Decision tree
+
+```
+Secrets in .NET?
+├── Local dev? → User Secrets (secrets.json)
+│   ├── Single secret? → dotnet user-secrets set "Key" "Value"
+│   └── Bulk import? → dotnet user-secrets init + set from file
+├── Kubernetes? → External Secrets Operator → K8s Secret → volume/env
+│   ├── File-based? → Volume mount (/etc/secrets/) + *_FILE env var
+│   ├── Env-based? → envFrom secretRef (acceptable fallback)
+│   └── Hot reload? → Volume mount + IOptionsMonitor<T>
+├── Rotation? → Automatic via Secrets Manager + ESO refresh
+│   ├── DB credentials? → Secrets Manager rotation Lambda
+│   ├── API keys? → Manual rotation + ESO refreshInterval
+│   └── Certificates? → cert-manager auto-renewal
+└── Migration? → Moving from hardcoded to managed
+    ├── Inline env → Secret ref? → Move value to AWS SM + create ExternalSecret
+    ├── ConfigMap → Secret? → Reclassify + encrypt at rest
+    └── .env file → Managed? → AWS SM + ESO + remove .env from repo
+```
+
 
 ## Anti-patterns
 

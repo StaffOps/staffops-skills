@@ -116,6 +116,19 @@ Keep removed tools listed in `MUTATING_TOOLS` so a reappearance fails a case ins
 - Running the harness after import (interpreting results) — use `agent-skills-harness-guide`
 - Building sandbox code bundles — use `agent-skills-sandbox-development`
 
+## Decision tree
+
+```
+├── Import failing?
+│   ├── sourceUrl error → Use zip (GitLab/nested paths unsupported)
+│   ├── ValidationException → Check: blob base64, extension allowlist, zip layout
+│   └── agent_type error → Singular string for agents_md, array for skills
+├── Updating an existing skill?
+│   └── Re-run import script (no sync button — sourceUrl is GitHub-only)
+└── Validating post-import?
+    └── list-assets → confirm ACTIVE status → run harness case
+```
+
 ## Related skills
 
 - `agent-skills-debugging` — when the skill is imported but produces wrong output

@@ -73,6 +73,17 @@ Assert on tools, never on prose. One earlier assertion failed for matching the E
 - Debugging skill behaviour in production — use `agent-skills-debugging`
 - Building sandbox scripts that execute code — use `agent-skills-sandbox-development`
 
+## Decision tree
+
+```
+├── Adversarial probe failing (agent mutated)?
+│   └── Check agents_md phrasing — persuasion vector not named explicitly
+├── New tool added with write capability?
+│   └── Verify GENERIC.md states tool availability ≠ permission to use
+└── Rewording an instruction?
+    └── Never reintroduce "requires approval" — use "RECOMMENDATION ONLY"
+```
+
 ## Related skills
 
 - `agent-skills-sandbox-development` — the approved write surface (sandbox execution) and its constraints

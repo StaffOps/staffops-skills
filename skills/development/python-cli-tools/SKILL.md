@@ -258,6 +258,29 @@ def test_hello():
 | Not testing the CLI end-to-end | Use `CliRunner` — it catches regressions in arg parsing |
 
 ---
+## Decision tree
+
+```
+Python CLI design?
+├── Framework choice?
+│   ├── Type-hint native + auto-complete? → Typer
+│   ├── Maximum flexibility + plugins? → Click
+│   └── Minimal / stdlib only? → argparse (avoid for new projects)
+├── Subcommands?
+│   ├── Single command? → @app.command() (Typer) / @click.command()
+│   ├── Grouped commands? → app.add_typer() / @click.group()
+│   └── Nested groups? → Group hierarchy (max 2 levels deep)
+├── Options pattern?
+│   ├── Required value? → Argument (positional)
+│   ├── Optional flag? → Option with default
+│   ├── Boolean toggle? → --flag / --no-flag
+│   └── Environment fallback? → envvar= parameter
+└── Output?
+    ├── Human-readable? → rich.console + rich.table
+    ├── Machine-parseable? → --output json/yaml flag
+    └── Progress? → rich.progress or tqdm
+```
+
 
 ## Related Skills
 

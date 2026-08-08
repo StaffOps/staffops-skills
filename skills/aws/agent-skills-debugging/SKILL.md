@@ -129,6 +129,17 @@ This bypasses the router entirely — useful to confirm the skill works when loa
 - Importing skills into the agentspace — use `agent-skills-import-and-harness`
 - Verifying metric names in PromQL expressions — use `agent-skills-metric-verification`
 
+## Decision tree
+
+```
+├── Skill never loads?
+│   └── Check: description keywords, agent_types, import status (ACTIVE)
+├── Loads but produces empty results?
+│   └── Check: metric names exist, query syntax, time range, target labels
+└── Loads but agent ignores the procedure?
+    └── Check: instruction tone (prescriptive > descriptive), competing skills
+```
+
 ## Related skills
 
 - `agent-skills-import-and-harness` — when the issue is an import API error, not a loaded skill misbehaving

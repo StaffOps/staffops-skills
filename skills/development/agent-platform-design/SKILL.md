@@ -290,6 +290,27 @@ Patterns compose: cron detects anomaly → webhook enriches → Slack bot notifi
 - ❌ Deploying to PRD without testing in DEV — production is not a test environment
 
 ---
+## Decision tree
+
+```
+Agent execution model?
+├── Scheduled / periodic? → Cron-triggered (EventBridge + Lambda/ECS)
+│   ├── < 15 min? → Lambda with cron schedule
+│   └── Long-running? → ECS Task with EventBridge rule
+├── Event-driven? → Webhook-triggered (API Gateway + Lambda)
+│   ├── Sync response needed? → API Gateway + Lambda (< 29s)
+│   └── Async processing? → SQS → Lambda / Step Functions
+├── Conversational? → Slack / Teams bot
+│   ├── Simple Q&A? → Slack Events API + Lambda
+│   └── Multi-turn? → Slack + Step Functions state machine
+├── Multi-agent? → Orchestrator + specialist subagents
+│   ├── Fan-out parallel? → Step Functions Parallel state
+│   └── Sequential pipeline? → Step Functions sequential + error handling
+└── CI-triggered? → Pipeline-embedded agent
+    ├── PR review? → GitLab webhook → agent → MR comment
+    └── Post-merge? → Pipeline job with agent container
+```
+
 
 ## Related skills
 

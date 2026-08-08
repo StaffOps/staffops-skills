@@ -261,6 +261,26 @@ with the same intent as spacing and color.
 - WCAG 2.x contrast formulas: https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html
 - Playwright CLI screenshots: https://playwright.dev/docs/cli#take-screenshots
 
+## Decision tree
+
+```
+What is the design challenge?
+├── New brand identity (from scratch)?
+│   ├── Start with mood board + 3 palette candidates
+│   ├── Choose typeface pairing (display + body)
+│   ├── Define one signature element (not gradient, not glassmorphism)
+│   └── Test against accessibility contrast floor (4.5:1 body, 3:1 large)
+├── Refresh existing UI (keep recognition)?
+│   ├── Audit current tokens (colors, spacing, type scale)
+│   ├── Identify what feels dated vs what carries brand equity
+│   ├── Evolve palette (shift hue/saturation, keep lightness ratios)
+│   └── Update type scale without changing hierarchy
+└── Component system (design tokens)?
+    ├── Extract tokens from existing screens (semantic, not literal)
+    ├── Define scale: spacing (4px base), type (modular), color (semantic)
+    └── Document in a format consumable by code (JSON/CSS vars)
+```
+
 ## Related Skills
 
 - `python-cli-tools` — CLI with rich/textual TUI if the "frontend" is terminal-based

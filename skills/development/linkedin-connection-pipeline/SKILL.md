@@ -530,6 +530,26 @@ Copyright 2025 Linked API), specifically its Node.js scheduler
 - Need email sequences / LinkedIn messaging sequences → out of scope (this is connection-request only)
 - Already locked into a vendor SDK that handles retries internally → adapt rather than replace
 
+## Decision tree
+
+```
+Which pipeline state are you working on?
+├── IDLE (lead exists, no action taken yet)?
+│   ├── Eligible for connection? → Check daily/weekly limits
+│   ├── Account rotation needed? → Pick least-recently-used account
+│   └── Queue for next available slot
+├── CONNECT_SENT (request dispatched, awaiting response)?
+│   ├── Accepted → Transition to FOLLOW_UP
+│   ├── No response after N days → Retry or mark STALE
+│   └── Error (rate limit, already pending) → Classify + backoff
+├── FOLLOW_UP (connected, message sequence active)?
+│   ├── Reply received → Flag for human review
+│   ├── No reply after sequence → Transition to NURTURE
+│   └── Bounce/error → Retry with backoff
+└── NURTURE (long-term, low-touch)?
+    └── Periodic engagement via scheduler (content likes, occasional DM)
+```
+
 ## Related Skills
 
 - `python-scripting` — the patterns used in pipeline.py (argparse, logging, pathlib)

@@ -351,6 +351,28 @@ aws ce get-cost-and-usage \
   --filter '{"Tags":{"Key":"CostCenter","Values":[""],"MatchOptions":["ABSENT"]}}' \
   --group-by Type=DIMENSION,Key=SERVICE
 ```
+## Decision tree
+
+```
+Untagged resources?
+├── Discover? → Find resources missing mandatory tags
+│   ├── AWS-native? → Resource Groups Tagging API (get-resources --tag-filters)
+│   ├── Cross-account? → AWS Config aggregator + required-tags rule
+│   └── Cost impact? → CUR query WHERE tag_cost_center = '' GROUP BY service
+├── Bulk-tag? → Apply tags at scale
+│   ├── Known owner? → boto3 tag_resources() batch script
+│   ├── Unknown owner? → Tag with "UNOWNED" + notify via SNS
+│   └── Retroactive cost? → Cannot retro-tag CUR — only future billing
+├── Enforce policy? → Prevent future untagged resources
+│   ├── Preventive? → SCP deny CreateResource without required tags
+│   ├── Detective? → AWS Config required-tags rule + auto-remediation
+│   └── K8s workloads? → Kyverno policy requiring labels
+└── Audit? → Ongoing compliance reporting
+    ├── Dashboard? → Cost Explorer grouped by tag coverage %
+    ├── Alert? → Config rule non-compliant count → SNS
+    └── Report? → Weekly untagged resource report to team leads
+```
+
 
 ## Anti-patterns
 

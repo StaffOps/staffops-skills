@@ -167,6 +167,29 @@ See related skill: `streaming-aggregation`.
 - For VM cluster performance tuning (flags, cache) → use `victoriametrics-tuning`
 - For VM cluster failures/capacity → use `victoriametrics-troubleshooting`
 - For streaming aggregation config syntax → use `streaming-aggregation`
+## Decision tree
+
+```
+Cardinality problem?
+├── Detect? → Identify explosion early
+│   ├── Sudden spike? → tsdb status API → seriesCountByMetricName
+│   ├── Gradual growth? → vm_new_timeseries_created_total rate
+│   └── Which cluster? → Compare per-tenant active series
+├── Identify source? → Find the metric/label causing it
+│   ├── Which metric? → Top 10 by series count (tsdb status)
+│   ├── Which label? → seriesCountByLabelValuePair
+│   └── Which target? → Check scrape_series_added by job
+├── Fix? → Reduce cardinality
+│   ├── Drop metric? → metric_relabel_configs drop action
+│   ├── Drop label? → labeldrop in relabeling
+│   ├── Aggregate? → streaming_aggregation at vmagent/vminsert
+│   └── Limit per-target? → sample_limit in scrape config
+└── Prevent? → Stop future explosions
+    ├── Scrape config? → sample_limit + series_limit per job
+    ├── Code review? → Catch unbounded labels in PR review
+    └── Alerting? → Alert on vm_new_timeseries_created_total spike
+```
+
 
 ## Related skills
 

@@ -688,6 +688,28 @@ The agent doesn't hardcode API calls — it discovers capabilities via MCP. This
 - `python-grpc-aio` — when the protocol should be gRPC, not MCP
 - `python-otel-patterns` — instrumenting MCP server code with traces
 - `docker-compose-patterns` — local dev stack for MCP servers
+## Decision tree
+
+```
+MCP task?
+├── New server? → Scaffold from template
+│   ├── Python? → mcp[cli] + FastMCP or low-level Server class
+│   ├── TypeScript? → @modelcontextprotocol/sdk
+│   └── Transport? → stdio (local) or HTTP+SSE (remote)
+├── Add tool? → Implement tool handler
+│   ├── Read-only? → No confirmation needed
+│   ├── Mutating? → Add destructiveHint / confirmation
+│   └── Long-running? → Stream progress via notifications
+├── Add resource? → Expose data as URI-addressable content
+│   ├── Static? → Resource with fixed URI
+│   ├── Dynamic? → Resource template with URI pattern
+│   └── Subscriptions? → Implement resource change notifications
+└── Deploy? → Container + registry + MCP config
+    ├── Local dev? → stdio transport, direct process spawn
+    ├── Shared team? → Docker image in Harbor + HTTP transport
+    └── Production? → EKS pod + IRSA + OTel instrumentation
+```
+
 
 ## Anti-patterns
 

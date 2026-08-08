@@ -157,6 +157,28 @@ Until merge purges, deleted series still appear in `/api/v1/status/tsdb`. Wait f
 - For VM performance tuning flags → use `victoriametrics-tuning`
 - For cardinality explosions and label management → use `vm-cardinality-management`
 - For VMAlert rule configuration → use `vmalert-configuration`
+## Decision tree
+
+```
+VictoriaMetrics issue?
+├── Slow queries? → vmselect bottleneck
+│   ├── High cardinality? → Check series count per metric (tsdb status)
+│   ├── Wide time range? → Add step or reduce range
+│   └── Resource starved? → Scale vmselect replicas or memory
+├── Data gaps? → Missing samples in graphs
+│   ├── Scrape failing? → Check vmagent targets + up{} metric
+│   ├── Remote write lag? → vmagent pending_data_bytes growing
+│   └── Retention expired? → Check retentionPeriod vs query range
+├── OOM? → Component killed by K8s
+│   ├── vmselect OOM? → Concurrent heavy queries — add memory or limit
+│   ├── vmstorage OOM? → Cache pressure — tune cacheExpireDuration
+│   └── vmagent OOM? → Too many targets or blocked remote_write
+└── Disk full? → vmstorage running out of space
+    ├── Growth rate? → Check vm_data_size_bytes rate of change
+    ├── Quick fix? → Reduce retentionPeriod or add PV
+    └── Long-term? → Drop unused metrics via relabeling
+```
+
 
 ## Related skills
 

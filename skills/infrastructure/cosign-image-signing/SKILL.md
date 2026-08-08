@@ -283,6 +283,28 @@ cosign verify --key cosign.pub $IMAGE || exit 1
 - For building the golden images that get signed → use `container-image-apko`
 - For Kyverno policies that verify signatures → use `kyverno-bdc-policies`
 - For general CI/CD pipeline structure → use `pipeline-template-apps`
+## Decision tree
+
+```
+cosign task?
+├── Sign new image? → After build, before publish to catalog
+│   ├── Golden base (apko)? → MUST sign (Kyverno enforces)
+│   ├── Application image? → Do NOT sign (inherits trust from base)
+│   └── Key available? → cosign sign --key cosign.key --new-bundle-format=false DIGEST
+├── Verify? → Confirm signature exists and is valid
+│   ├── CLI verify? → cosign verify --key cosign.pub IMAGE
+│   ├── Kyverno policy? → ClusterPolicy with imageVerify rule
+│   └── Harbor UI? → Check "Signed" badge (requires --new-bundle-format=false)
+├── Rotate key? → Generate new pair, re-sign active images
+│   ├── Generate? → cosign generate-key-pair
+│   ├── Distribute pub? → Commit cosign.pub to all repos
+│   └── Update secret? → AWS Secrets Manager COSIGN_PASSWORD
+└── Debug? → Signature present but verification fails
+    ├── Wrong format? → Check --new-bundle-format=false was used
+    ├── Tag vs digest? → Must sign by DIGEST, never by tag
+    └── Wrong key? → Verify cosign.pub matches signing key
+```
+
 
 ## Related skills
 

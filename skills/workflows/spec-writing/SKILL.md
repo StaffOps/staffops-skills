@@ -339,6 +339,26 @@ Event 1──* Delivery (triggers, non-cascading reference)
 - **Quick bug fixes** with obvious cause — just fix it; a spec adds ceremony without value.
 - **API reference docs** — use OpenAPI/proto specs, not feature specs.
 
+## Decision tree
+
+```
+What are you specifying?
+├── New feature (greenfield)?
+│   ├── Start with requirements.md (user stories + acceptance criteria)
+│   ├── Then design.md (architecture, rationale, invariants)
+│   └── Then tasks.md (discrete, ordered implementation steps)
+├── Bug fix?
+│   ├── Start with bugfix.md (current vs expected vs unchanged behavior)
+│   ├── Then design.md (root cause analysis, fix approach)
+│   └── Then tasks.md (fix + test + validation steps)
+├── Architecture change?
+│   ├── Start with design.md (rationale-heavy, trade-offs, alternatives)
+│   ├── Include promotion triggers (when to revisit)
+│   └── Then tasks.md (migration steps with rollback)
+└── Refactor (no behavior change)?
+    └── tasks.md only (what moves where, invariants preserved)
+```
+
 ## Related skills
 
 - [adr-template](../documentation/adr-template/SKILL.md) — documenting architectural decisions within specs.
