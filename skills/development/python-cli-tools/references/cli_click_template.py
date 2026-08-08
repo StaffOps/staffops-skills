@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """CLI entry point using Click — copy-paste starter.
 
 Usage after `pip install -e .`:

@@ -73,5 +73,5 @@ ufw reset                                # remove all rules
 # Check if port is blocked:
 ss -tlnp | grep :8080                    # is something listening?
 iptables -L -n -v | grep -i drop         # are packets being dropped?
-conntrack -L | grep <ip>                 # connection tracking
+conntrack -L | grep "ip"                 # connection tracking
 tcpdump -i eth0 port 8080 -c 5          # do packets arrive?

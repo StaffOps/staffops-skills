@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """MCP Tool Template — Python SDK (mcp >= 1.0)
 
 Complete tool with:

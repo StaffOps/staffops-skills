@@ -43,8 +43,8 @@ lsblk -f                                 # block devices + filesystems
 lsof -i :8080                            # who's using port 8080
 lsof +D /var/log                         # open files in dir
 fuser -v /mount/point                    # processes using mount
-strace -p <pid> -e trace=network        # trace network syscalls
-ltrace -p <pid>                          # library calls
+strace -p "pid" -e trace=network        # trace network syscalls
+ltrace -p "pid"                          # library calls
 
 # ═══ QUICK ONE-LINERS ═══════════════════════════════════════
 # Count lines across all files

@@ -19,7 +19,7 @@ AWS service design and troubleshooting patterns.
 - **cloudfront-patterns** — Configure CloudFront origins, caching and WAF.
 - **cost-explorer** — Analyze AWS spend via Cost Explorer and CUR Athena.
 - **eks-management** — Manage EKS nodes, Karpenter, IRSA and upgrades.
-- **eks-node-troubleshooting** — >
+- **eks-node-troubleshooting** — Use when pods are Pending with scheduling failures, nodes show NotReady, Karpenter isn't provisioning, spot interruptions caused rescheduling, or nodes show resource pressure (MemoryPressure, DiskP...
 - **iam-patterns** — Design least-privilege IAM roles and policies.
 - **lambda-patterns** — Design Lambda cold start, VPC and observability.
 - **rds-patterns** — Design RDS sizing, failover and backup strategy.

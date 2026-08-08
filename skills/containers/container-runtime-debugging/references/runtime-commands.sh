@@ -9,26 +9,26 @@ crictl ps                                      # running containers
 crictl ps -a                                   # all (including exited)
 crictl pods                                    # list pods (CRI concept)
 crictl pods --state Ready                      # only ready pods
-crictl inspect <container-id>                  # full container JSON
-crictl inspect <cid> | jq '.status.state'      # container state
-crictl logs <container-id>                     # stdout/stderr
-crictl logs --tail 50 <container-id>           # last 50 lines
-crictl exec -it <container-id> sh             # shell into container
+crictl inspect "container-id"                  # full container JSON
+crictl inspect "cid" | jq '.status.state'      # container state
+crictl logs "container-id"                     # stdout/stderr
+crictl logs --tail 50 "container-id"           # last 50 lines
+crictl exec -it "container-id" sh             # shell into container
 crictl stats                                   # resource usage
 crictl images                                  # list pulled images
-crictl rmi <image-id>                          # remove image
-crictl inspecti <image-id>                     # image details
+crictl rmi "image-id"                          # remove image
+crictl inspecti "image-id"                     # image details
 
 # Pod-level operations
 crictl runp pod-config.json                    # create pod sandbox
-crictl stopp <pod-id>                          # stop pod
-crictl rmp <pod-id>                            # remove pod
+crictl stopp "pod-id"                          # stop pod
+crictl rmp "pod-id"                            # remove pod
 
 # ═══ NERDCTL (Docker-compatible CLI for containerd) ═════════════
 nerdctl ps                                     # like docker ps
-nerdctl logs -f <container>
-nerdctl exec -it <container> sh
-nerdctl inspect <container>
+nerdctl logs -f "container"
+nerdctl exec -it "container" sh
+nerdctl inspect "container"
 nerdctl images --format "{{.Repository}}:{{.Tag}} {{.Size}}"
 nerdctl system prune -a                        # cleanup
 
@@ -45,12 +45,12 @@ ctr --namespace k8s.io snapshots ls            # filesystem snapshots
 
 # ═══ DEBUGGING STUCK CONTAINERS ═════════════════════════════════
 # Container won't start:
-crictl inspect <cid> | jq '.status.reason'
-crictl inspect <cid> | jq '.info.runtimeSpec.process'  # see entrypoint
+crictl inspect "cid" | jq '.status.reason'
+crictl inspect "cid" | jq '.info.runtimeSpec.process'  # see entrypoint
 journalctl -u containerd --since "5min ago"   # containerd logs
 
 # OOMKilled:
-crictl inspect <cid> | jq '.status.resources.linux.memory_limit_in_bytes'
+crictl inspect "cid" | jq '.status.resources.linux.memory_limit_in_bytes'
 dmesg | grep -i "oom\|killed"
 
 # Image pull failures:

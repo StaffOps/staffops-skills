@@ -11,11 +11,11 @@ journalctl -k | grep -i oom             # kernel OOM messages
 # Who's using memory?
 ps aux --sort=-%mem | head -10           # top memory consumers
 smem -t -k -p | head -20               # proportional memory (more accurate)
-cat /proc/<pid>/status | grep -E "VmRSS|VmSize|VmSwap"  # specific process
-pmap -x <pid> | tail -5                 # memory mapping summary
+cat /proc/"pid"/status | grep -E "VmRSS|VmSize|VmSwap"  # specific process
+pmap -x "pid" | tail -5                 # memory mapping summary
 
 # Memory leak detection (watch RSS grow)
-while true; do ps -p <pid> -o pid,rss,vsz,comm --no-headers; sleep 5; done
+while true; do ps -p "pid" -o pid,rss,vsz,comm --no-headers; sleep 5; done
 
 # Cache/buffer (reclaimable — NOT a problem)
 cat /proc/meminfo | grep -E "Buffers|Cached|SReclaimable"
@@ -32,7 +32,7 @@ find / -xdev -type f -size +100M -printf "%s %p\n" 2>/dev/null | sort -rn | head
 
 # Deleted files still holding space
 lsof +L1 | grep deleted                 # open handles to deleted files
-# Fix: restart the process, or truncate: > /proc/<pid>/fd/<fd_number>
+# Fix: restart the process, or truncate: > /proc/"pid"/fd/"fd_number"
 
 # What filled up recently?
 find /var -mmin -60 -type f -size +10M 2>/dev/null  # grown in last hour
@@ -76,8 +76,8 @@ swapoff -a && swapon -a                 # reset swap (careful if under pressure)
 
 # ═══ KUBERNETES-SPECIFIC ════════════════════════════════════════
 # Container OOMKilled:
-# kubectl describe pod <pod> | grep -A5 "Last State"
-# kubectl get pod <pod> -o jsonpath='{.status.containerStatuses[0].lastState}'
+# kubectl describe pod "pod" | grep -A5 "Last State"
+# kubectl get pod "pod" -o jsonpath='{.status.containerStatuses[0].lastState}'
 # Pod evicted for disk pressure:
-# kubectl describe node <node> | grep -A5 "Conditions"
+# kubectl describe node "node" | grep -A5 "Conditions"
 # kubectl get events --field-selector reason=Evicted

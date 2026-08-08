@@ -4,20 +4,20 @@
 # ═══ PACKAGE MANAGEMENT ════════════════════════════════════════
 apt update                               # refresh package index
 apt upgrade -y                           # upgrade all packages
-apt install -y <package>                 # install
-apt remove <package>                     # remove (keep config)
-apt purge <package>                      # remove + config
+apt install -y "package"                 # install
+apt remove "package"                     # remove (keep config)
+apt purge "package"                      # remove + config
 apt autoremove -y                        # remove unused deps
-apt list --installed | grep <term>       # search installed
-apt-cache search <term>                  # search available
-apt-cache show <package>                 # package info
-dpkg -l | grep <term>                    # low-level package query
-dpkg -L <package>                        # list files in package
+apt list --installed | grep "term"       # search installed
+apt-cache search "term"                  # search available
+apt-cache show "package"                 # package info
+dpkg -l | grep "term"                    # low-level package query
+dpkg -L "package"                        # list files in package
 dpkg -S /path/to/file                    # which package owns file
 
 # Hold package version (prevent upgrade):
-apt-mark hold <package>
-apt-mark unhold <package>
+apt-mark hold "package"
+apt-mark unhold "package"
 apt-mark showhold
 
 # ═══ UNATTENDED UPGRADES ══════════════════════════════════════

@@ -27,16 +27,16 @@ diff <(ssh working-host cat /etc/config) <(ssh broken-host cat /etc/config)
 
 # ═══ OBSERVE (don't guess — look) ══════════════════════════════
 # System calls:
-strace -p <pid> -e trace=network -tt     # what network calls?
-strace -p <pid> -e trace=file -tt        # what file operations?
-strace -f -e trace=write -p <pid>        # what is it writing?
+strace -p "pid" -e trace=network -tt     # what network calls?
+strace -p "pid" -e trace=file -tt        # what file operations?
+strace -f -e trace=write -p "pid"        # what is it writing?
 
 # Network:
 tcpdump -i eth0 port 8080 -c 20         # what's on the wire?
-ss -tnp | grep <pid>                    # what connections does it have?
+ss -tnp | grep "pid"                    # what connections does it have?
 
 # Filesystem:
-lsof -p <pid>                            # what files are open?
+lsof -p "pid"                            # what files are open?
 inotifywait -mr /path -e modify          # watch for file changes
 
 # ═══ HYPOTHESIZE (require evidence) ═════════════════════════════

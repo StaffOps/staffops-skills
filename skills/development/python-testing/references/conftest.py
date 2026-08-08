@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Shared test fixtures — auto-discovered by pytest (no import needed)."""
 from __future__ import annotations
 

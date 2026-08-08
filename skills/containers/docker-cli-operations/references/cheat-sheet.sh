@@ -19,18 +19,18 @@ docker run --rm --user 65534:65534 myapp:v1             # run as nobody
 # ═══ INSPECT ═════════════════════════════════════════════════════
 docker ps                                                # running containers
 docker ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
-docker logs -f --tail 100 <container>                    # follow logs
-docker logs --since 5m <container>                       # last 5 minutes
-docker inspect <container> | jq '.[0].State'             # container state
-docker inspect <container> | jq '.[0].NetworkSettings.Networks'
+docker logs -f --tail 100 "container"                    # follow logs
+docker logs --since 5m "container"                       # last 5 minutes
+docker inspect "container" | jq '.[0].State'             # container state
+docker inspect "container" | jq '.[0].NetworkSettings.Networks'
 docker stats --no-stream                                 # resource usage snapshot
-docker top <container>                                   # processes in container
+docker top "container"                                   # processes in container
 
 # ═══ EXEC / DEBUG ════════════════════════════════════════════════
-docker exec -it <container> sh                           # shell into running
-docker exec <container> cat /etc/os-release              # check distro
-docker cp <container>:/app/config.yaml ./config.yaml     # copy file out
-docker diff <container>                                  # filesystem changes
+docker exec -it "container" sh                           # shell into running
+docker exec "container" cat /etc/os-release              # check distro
+docker cp "container":/app/config.yaml ./config.yaml     # copy file out
+docker diff "container"                                  # filesystem changes
 
 # ═══ IMAGES ══════════════════════════════════════════════════════
 docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"

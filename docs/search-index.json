@@ -1,0 +1,3110 @@
+[
+  {
+    "name": "agent-evals",
+    "category": "ai",
+    "description": "Use when building golden-dataset regression suites to measure agent/skill correctness over time, designing rubrics for graded evaluation, setting release gates based on eval scores, or deciding whether a prompt/tool change improved or degraded quality.",
+    "tags": [
+      "agent",
+      "ai",
+      "building",
+      "dataset",
+      "evals",
+      "golden",
+      "measure",
+      "regression",
+      "suites"
+    ],
+    "path": "skills/ai/agent-evals/SKILL.md"
+  },
+  {
+    "name": "agent-memory-patterns",
+    "category": "ai",
+    "description": "Use when designing memory and context systems for AI agents \u2014 short-term session buffers, long-term knowledge bases, episodic recall. Covers memory types (buffer, summary, vector, graph), retrieval strategies, TTL/eviction policies, knowledge base indexing, and context window management. Decision tree for which memory type fits which use case.",
+    "tags": [
+      "agent",
+      "ai",
+      "context",
+      "designing",
+      "knowledge",
+      "memory",
+      "patterns",
+      "systems",
+      "term"
+    ],
+    "path": "skills/ai/agent-memory-patterns/SKILL.md"
+  },
+  {
+    "name": "agent-observability",
+    "category": "ai",
+    "description": "Use when instrumenting LLM agent calls with OTel spans for token counts, cost tracking, tool-call structure, and sensitive-content redaction \u2014 the delta between normal service tracing and tracing an agentic loop.",
+    "tags": [
+      "agent",
+      "ai",
+      "calls",
+      "instrumenting",
+      "observability",
+      "otel",
+      "spans",
+      "tracing"
+    ],
+    "path": "skills/ai/agent-observability/SKILL.md"
+  },
+  {
+    "name": "ai-agent-security",
+    "category": "ai",
+    "description": "Use when designing or auditing the security posture of an AI agent \u2014 tool permission scoping, blast-radius tiering, exfiltration prevention, credential isolation, and human-in-the-loop gates for high-risk actions.",
+    "tags": [
+      "agent",
+      "ai",
+      "auditing",
+      "designing",
+      "posture",
+      "security",
+      "tool"
+    ],
+    "path": "skills/ai/ai-agent-security/SKILL.md"
+  },
+  {
+    "name": "ai-coding-agent-guardrails",
+    "category": "ai",
+    "description": "Use when scoping file, shell, and git permissions for coding agents (Claude Code, Cursor, Copilot, Codex) \u2014 deciding which actions auto-apply vs require human review, preventing secret leakage from repo reads, and configuring subagent permission inheritance.",
+    "tags": [
+      "agent",
+      "agents",
+      "ai",
+      "coding",
+      "file",
+      "guardrails",
+      "permissions",
+      "scoping",
+      "shell"
+    ],
+    "path": "skills/ai/ai-coding-agent-guardrails/SKILL.md"
+  },
+  {
+    "name": "ai-pipeline-orchestration",
+    "category": "ai",
+    "description": "Use when designing multi-step LLM pipelines \u2014 chaining prompts, routing between models, implementing fallback/retry, managing context windows across steps, and orchestrating async fan-out/fan-in patterns for agent workflows.",
+    "tags": [
+      "ai",
+      "chaining",
+      "designing",
+      "multi",
+      "orchestration",
+      "pipeline",
+      "pipelines",
+      "prompts",
+      "step"
+    ],
+    "path": "skills/ai/ai-pipeline-orchestration/SKILL.md"
+  },
+  {
+    "name": "ai-red-teaming",
+    "category": "ai",
+    "description": "Use when adversarially testing an AI agent's security controls \u2014 probing for prompt injection bypasses, tool abuse, privilege escalation, data exfiltration, and guardrail evasion before production deployment.",
+    "tags": [
+      "adversarially",
+      "agent",
+      "ai",
+      "controls",
+      "probing",
+      "red",
+      "security",
+      "teaming",
+      "testing"
+    ],
+    "path": "skills/ai/ai-red-teaming/SKILL.md"
+  },
+  {
+    "name": "ai-security-hardening",
+    "category": "ai",
+    "description": "Use when hardening AI/ML infrastructure \u2014 securing model serving endpoints, API key rotation, rate limiting LLM APIs, network isolation for inference workloads, and securing the training/fine-tuning pipeline from data poisoning.",
+    "tags": [
+      "ai",
+      "endpoints",
+      "hardening",
+      "infrastructure",
+      "model",
+      "securing",
+      "security",
+      "serving"
+    ],
+    "path": "skills/ai/ai-security-hardening/SKILL.md"
+  },
+  {
+    "name": "ai-sre-incident-response",
+    "category": "ai",
+    "description": "Use when an AI/LLM system is involved in a production incident \u2014 agent runaway loops, cost spikes, model degradation, hallucination-caused bad actions, or cascading failures from AI tool calls affecting infrastructure.",
+    "tags": [
+      "agent",
+      "ai",
+      "incident",
+      "involved",
+      "production",
+      "response",
+      "runaway",
+      "sre",
+      "system"
+    ],
+    "path": "skills/ai/ai-sre-incident-response/SKILL.md"
+  },
+  {
+    "name": "llm-app-security",
+    "category": "ai",
+    "description": "Use when building application-layer security for LLM-powered features \u2014 output validation, PII filtering, content moderation, output format enforcement, and preventing the application from acting on hallucinated or manipulated LLM responses.",
+    "tags": [
+      "ai",
+      "app",
+      "application",
+      "building",
+      "layer",
+      "llm",
+      "output",
+      "powered",
+      "security"
+    ],
+    "path": "skills/ai/llm-app-security/SKILL.md"
+  },
+  {
+    "name": "llm-caching",
+    "category": "ai",
+    "description": "Use when reducing LLM API costs and latency through semantic caching, prompt caching (provider-native), response memoization, and embedding-based cache lookup \u2014 choosing the right caching strategy per use case.",
+    "tags": [
+      "ai",
+      "caching",
+      "costs",
+      "latency",
+      "llm",
+      "prompt",
+      "reducing",
+      "semantic"
+    ],
+    "path": "skills/ai/llm-caching/SKILL.md"
+  },
+  {
+    "name": "llm-cost-optimization",
+    "category": "ai",
+    "description": "Use when reducing LLM API spend \u2014 model tier selection per task, token budget management, prompt compression, batch API usage for async workloads, and the self-hosting crossover decision for high-volume inference.",
+    "tags": [
+      "ai",
+      "cost",
+      "llm",
+      "model",
+      "optimization",
+      "reducing",
+      "selection",
+      "spend",
+      "task",
+      "tier"
+    ],
+    "path": "skills/ai/llm-cost-optimization/SKILL.md"
+  },
+  {
+    "name": "llmops-platform-engineering",
+    "category": "ai",
+    "description": "Use when building the platform layer for LLM operations \u2014 API gateway for model routing, shared inference infrastructure, A/B model deployment, feature flags for AI capabilities, and providing golden-path templates for teams adopting LLM features.",
+    "tags": [
+      "ai",
+      "building",
+      "engineering",
+      "gateway",
+      "layer",
+      "llmops",
+      "model",
+      "operations",
+      "platform"
+    ],
+    "path": "skills/ai/llmops-platform-engineering/SKILL.md"
+  },
+  {
+    "name": "mcp-server-security",
+    "category": "ai",
+    "description": "Use when securing MCP (Model Context Protocol) servers \u2014 transport encryption, tool-level authorization, input validation on tool arguments, output sanitization to prevent injection back into calling agent, rate limiting, and audit logging of all tool invocations.",
+    "tags": [
+      "ai",
+      "context",
+      "mcp",
+      "model",
+      "protocol",
+      "securing",
+      "security",
+      "server",
+      "servers",
+      "tool"
+    ],
+    "path": "skills/ai/mcp-server-security/SKILL.md"
+  },
+  {
+    "name": "mcp-tool-design-patterns",
+    "category": "ai",
+    "description": "Use when designing MCP (Model Context Protocol) tools \u2014 input schemas, error handling, idempotency, pagination, naming conventions. Covers validation with Zod/Pydantic, output structure (structured vs streaming), error codes, rate limiting, testing patterns, and the decision tree for when to build a new tool vs extend an existing one.",
+    "tags": [
+      "ai",
+      "context",
+      "design",
+      "designing",
+      "error",
+      "mcp",
+      "model",
+      "patterns",
+      "protocol",
+      "tool"
+    ],
+    "path": "skills/ai/mcp-tool-design-patterns/SKILL.md"
+  },
+  {
+    "name": "model-registry-governance",
+    "category": "ai",
+    "description": "Use when managing model lifecycle governance \u2014 tracking which models are deployed where, version control for model artifacts, approval workflows for model promotion, deprecation policies, and compliance documentation for model usage across the organization.",
+    "tags": [
+      "ai",
+      "governance",
+      "lifecycle",
+      "managing",
+      "model",
+      "models",
+      "registry",
+      "tracking"
+    ],
+    "path": "skills/ai/model-registry-governance/SKILL.md"
+  },
+  {
+    "name": "model-supply-chain-security",
+    "category": "ai",
+    "description": "Use when securing the model artifact supply chain \u2014 verifying model provenance, detecting tampered weights, signing model artifacts, scanning for embedded malware in model files, and ensuring fine-tuned models haven't been poisoned.",
+    "tags": [
+      "ai",
+      "artifact",
+      "chain",
+      "model",
+      "securing",
+      "security",
+      "supply",
+      "verifying"
+    ],
+    "path": "skills/ai/model-supply-chain-security/SKILL.md"
+  },
+  {
+    "name": "prompt-injection-defense",
+    "category": "ai",
+    "description": "Use when defending against prompt injection carried in untrusted input \u2014 detecting injected instructions in fetched content, tool results, RAG chunks, or user-submitted data that enters an LLM's context window alongside the operator's legitimate instructions.",
+    "tags": [
+      "against",
+      "ai",
+      "carried",
+      "defending",
+      "defense",
+      "injection",
+      "instructions",
+      "prompt"
+    ],
+    "path": "skills/ai/prompt-injection-defense/SKILL.md"
+  },
+  {
+    "name": "rag-observability-evals",
+    "category": "ai",
+    "description": "Use when measuring RAG pipeline quality \u2014 retrieval precision/recall, answer groundedness (faithfulness to retrieved context), chunk relevance scoring, detecting hallucination beyond retrieved context, and monitoring retrieval drift in production.",
+    "tags": [
+      "ai",
+      "context",
+      "evals",
+      "measuring",
+      "observability",
+      "pipeline",
+      "quality",
+      "rag",
+      "retrieval",
+      "retrieved"
+    ],
+    "path": "skills/ai/rag-observability-evals/SKILL.md"
+  },
+  {
+    "name": "agent-instruction-authoring",
+    "category": "aws",
+    "description": "Use when writing or editing an agents_md or a SKILL.md for the AWS DevOps Agent. Carries the rule that an instruction must prescribe substance rather than labels, because the platform overrides the output format on deep investigations; the official SKILL.md procedure structure; what is observable about an instruction and what is not; and the two ways a well-written instruction still fails to land.",
+    "tags": [
+      "agent",
+      "agents",
+      "authoring",
+      "aws",
+      "devops",
+      "editing",
+      "instruction",
+      "skill",
+      "writing"
+    ],
+    "path": "skills/aws/agent-instruction-authoring/SKILL.md"
+  },
+  {
+    "name": "agent-skills-adversarial-review",
+    "category": "aws",
+    "description": "Refute a document with independent reviewers before commit.",
+    "tags": [
+      "adversarial",
+      "agent",
+      "aws",
+      "commit",
+      "document",
+      "independent",
+      "refute",
+      "review",
+      "reviewers",
+      "skills"
+    ],
+    "path": "skills/aws/agent-skills-adversarial-review/SKILL.md"
+  },
+  {
+    "name": "agent-skills-cost-modelling",
+    "category": "aws",
+    "description": "Estimate agent cost from observed duration, not guesses.",
+    "tags": [
+      "agent",
+      "aws",
+      "cost",
+      "duration",
+      "estimate",
+      "guesses",
+      "modelling",
+      "observed",
+      "skills"
+    ],
+    "path": "skills/aws/agent-skills-cost-modelling/SKILL.md"
+  },
+  {
+    "name": "agent-skills-debugging",
+    "category": "aws",
+    "description": "Troubleshooting guide for when a skill doesn't load, loads but produces empty results, or loads but the agent ignores its procedure.",
+    "tags": [
+      "agent",
+      "aws",
+      "debugging",
+      "doesn",
+      "guide",
+      "load",
+      "loads",
+      "skill",
+      "skills",
+      "troubleshooting"
+    ],
+    "path": "skills/aws/agent-skills-debugging/SKILL.md"
+  },
+  {
+    "name": "agent-skills-harness-guide",
+    "category": "aws",
+    "description": "How to run the behaviour harness, interpret results, add new cases, understand costs, and recover from common failures.",
+    "tags": [
+      "agent",
+      "aws",
+      "behaviour",
+      "cases",
+      "guide",
+      "harness",
+      "interpret",
+      "results",
+      "skills",
+      "understand"
+    ],
+    "path": "skills/aws/agent-skills-harness-guide/SKILL.md"
+  },
+  {
+    "name": "agent-skills-import-and-harness",
+    "category": "aws",
+    "description": "Use when importing assets to the agentspace or running the behaviour harness. Carries every API constraint that cost a failed attempt \u2014 sourceUrl being GitHub-only, base64 inline blobs, the extension allowlist, agent_type singular vs plural, the userType enum, the event-stream shape \u2014 plus how typed executions are created and what the harness cannot reach.",
+    "tags": [
+      "agent",
+      "agentspace",
+      "assets",
+      "aws",
+      "behaviour",
+      "harness",
+      "import",
+      "importing",
+      "running",
+      "skills"
+    ],
+    "path": "skills/aws/agent-skills-import-and-harness/SKILL.md"
+  },
+  {
+    "name": "agent-skills-metric-verification",
+    "category": "aws",
+    "description": "Use before writing, editing or reviewing any metric name or PromQL query in this repo. Carries the verified environment traps \u2014 the inconsistent `_total` suffix, Summary-vs-Histogram, Tempo v3 without ingester/compactor metrics, LEGACY-only .NET, unscraped Strimzi, latent MCP tool names \u2014 and the verification procedure. A wrong metric name returns an empty result, which the agent reads as \"no problem found\".",
+    "tags": [
+      "agent",
+      "aws",
+      "editing",
+      "metric",
+      "name",
+      "promql",
+      "reviewing",
+      "skills",
+      "verification",
+      "writing"
+    ],
+    "path": "skills/aws/agent-skills-metric-verification/SKILL.md"
+  },
+  {
+    "name": "agent-skills-new-skill-checklist",
+    "category": "aws",
+    "description": "Step-by-step procedure for adding a new skill to the AWS DevOps Agent catalog \u2014 from scaffolding through import and validation.",
+    "tags": [
+      "adding",
+      "agent",
+      "aws",
+      "checklist",
+      "devops",
+      "new",
+      "procedure",
+      "skill",
+      "skills",
+      "step"
+    ],
+    "path": "skills/aws/agent-skills-new-skill-checklist/SKILL.md"
+  },
+  {
+    "name": "agent-skills-readonly-invariant",
+    "category": "aws",
+    "description": "Use when touching the read-only prohibition, the agents_md, the tool associations, or anything about what the agent may execute. Carries the invariant, why the approval-gated model was wrong, the current write surface with its residual risk, and the 7 adversarial probes that are the only evidence the prohibition holds.",
+    "tags": [
+      "agent",
+      "agents",
+      "associations",
+      "aws",
+      "invariant",
+      "prohibition",
+      "read",
+      "readonly",
+      "skills",
+      "tool"
+    ],
+    "path": "skills/aws/agent-skills-readonly-invariant/SKILL.md"
+  },
+  {
+    "name": "agent-skills-sandbox-development",
+    "category": "aws",
+    "description": "How to build skills with executable code for the AWS DevOps Agent sandbox \u2014 bundling Python/bash scripts, filesystem layout, pre-installed packages, and testing patterns.",
+    "tags": [
+      "agent",
+      "aws",
+      "build",
+      "code",
+      "development",
+      "devops",
+      "executable",
+      "sandbox",
+      "skills"
+    ],
+    "path": "skills/aws/agent-skills-sandbox-development/SKILL.md"
+  },
+  {
+    "name": "agent-skills-specs-authoring",
+    "category": "aws",
+    "description": "Where planning artefacts go, and what makes one valid.",
+    "tags": [
+      "agent",
+      "artefacts",
+      "authoring",
+      "aws",
+      "makes",
+      "planning",
+      "skills",
+      "specs",
+      "valid"
+    ],
+    "path": "skills/aws/agent-skills-specs-authoring/SKILL.md"
+  },
+  {
+    "name": "aws-devops-agent-skills",
+    "category": "aws",
+    "description": "Use when authoring, importing, validating, or troubleshooting skills for the AWS DevOps Agent (aidevops) \u2014 writing SKILL.md, choosing agent_types, importing via zip or sourceUrl, debugging ValidationException on import, or auditing an existing skill catalog. Covers the asset model, the official SKILL.md procedure structure, the verified agent_types enum, the GitHub-only sourceUrl constraint, and the verification discipline that prevents silent false-negative skills.",
+    "tags": [
+      "agent",
+      "aws",
+      "devops",
+      "importing",
+      "skill",
+      "skills",
+      "sourceurl",
+      "types"
+    ],
+    "path": "skills/aws/aws-devops-agent-skills/SKILL.md"
+  },
+  {
+    "name": "cloudfront-patterns",
+    "category": "aws",
+    "description": "Configure CloudFront origins, caching and WAF.",
+    "tags": [
+      "aws",
+      "caching",
+      "cloudfront",
+      "configure",
+      "origins",
+      "patterns"
+    ],
+    "path": "skills/aws/cloudfront-patterns/SKILL.md"
+  },
+  {
+    "name": "cost-explorer",
+    "category": "aws",
+    "description": "Analyze AWS spend via Cost Explorer and CUR Athena.",
+    "tags": [
+      "analyze",
+      "athena",
+      "aws",
+      "cost",
+      "explorer",
+      "spend"
+    ],
+    "path": "skills/aws/cost-explorer/SKILL.md"
+  },
+  {
+    "name": "eks-management",
+    "category": "aws",
+    "description": "Manage EKS nodes, Karpenter, IRSA and upgrades.",
+    "tags": [
+      "aws",
+      "eks",
+      "irsa",
+      "karpenter",
+      "manage",
+      "management",
+      "nodes",
+      "upgrades"
+    ],
+    "path": "skills/aws/eks-management/SKILL.md"
+  },
+  {
+    "name": "eks-node-troubleshooting",
+    "category": "aws",
+    "description": "Use when pods are Pending with scheduling failures, nodes show NotReady, Karpenter isn't provisioning, spot interruptions caused rescheduling, or nodes show resource pressure (MemoryPressure, DiskPressure). Covers Karpenter provisioning diagnostics, node condition analysis, spot interruption handling, and topology constraint debugging. This agent is STRICTLY read-only: node mutations (cordon, drain, terminate) are never executed, only recommended.",
+    "tags": [
+      "aws",
+      "eks",
+      "karpenter",
+      "node",
+      "nodes",
+      "provisioning",
+      "show",
+      "spot",
+      "troubleshooting"
+    ],
+    "path": "skills/aws/eks-node-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "iam-patterns",
+    "category": "aws",
+    "description": "Design least-privilege IAM roles and policies.",
+    "tags": [
+      "aws",
+      "design",
+      "iam",
+      "least",
+      "patterns",
+      "policies",
+      "privilege",
+      "roles"
+    ],
+    "path": "skills/aws/iam-patterns/SKILL.md"
+  },
+  {
+    "name": "lambda-patterns",
+    "category": "aws",
+    "description": "Design Lambda cold start, VPC and observability.",
+    "tags": [
+      "aws",
+      "cold",
+      "design",
+      "lambda",
+      "observability",
+      "patterns",
+      "start"
+    ],
+    "path": "skills/aws/lambda-patterns/SKILL.md"
+  },
+  {
+    "name": "rds-patterns",
+    "category": "aws",
+    "description": "Design RDS sizing, failover and backup strategy.",
+    "tags": [
+      "aws",
+      "backup",
+      "design",
+      "failover",
+      "patterns",
+      "rds",
+      "sizing",
+      "strategy"
+    ],
+    "path": "skills/aws/rds-patterns/SKILL.md"
+  },
+  {
+    "name": "route53-patterns",
+    "category": "aws",
+    "description": "Design Route 53 zones, records and health checks.",
+    "tags": [
+      "aws",
+      "checks",
+      "design",
+      "health",
+      "patterns",
+      "records",
+      "route",
+      "route53",
+      "zones"
+    ],
+    "path": "skills/aws/route53-patterns/SKILL.md"
+  },
+  {
+    "name": "security-hub-patterns",
+    "category": "aws",
+    "description": "Configure Security Hub standards and aggregation.",
+    "tags": [
+      "aggregation",
+      "aws",
+      "configure",
+      "hub",
+      "patterns",
+      "security",
+      "standards"
+    ],
+    "path": "skills/aws/security-hub-patterns/SKILL.md"
+  },
+  {
+    "name": "buildkit-cache-optimization",
+    "category": "containers",
+    "description": "Use when Docker builds are slow in CI. Covers layer ordering, cache mounts, registry cache backend, BuildKit inline cache, before/after patterns, and common mistakes that bust cache.",
+    "tags": [
+      "buildkit",
+      "builds",
+      "cache",
+      "containers",
+      "covers",
+      "docker",
+      "layer",
+      "optimization",
+      "slow"
+    ],
+    "path": "skills/containers/buildkit-cache-optimization/SKILL.md"
+  },
+  {
+    "name": "container-image-optimization",
+    "category": "containers",
+    "description": "Shrink image size and speed up builds and pulls.",
+    "tags": [
+      "builds",
+      "container",
+      "containers",
+      "image",
+      "optimization",
+      "pulls",
+      "shrink",
+      "size",
+      "speed"
+    ],
+    "path": "skills/containers/container-image-optimization/SKILL.md"
+  },
+  {
+    "name": "container-runtime-debugging",
+    "category": "containers",
+    "description": "Debug crashing, hanging or misbehaving containers.",
+    "tags": [
+      "container",
+      "containers",
+      "crashing",
+      "debug",
+      "debugging",
+      "hanging",
+      "misbehaving",
+      "runtime"
+    ],
+    "path": "skills/containers/container-runtime-debugging/SKILL.md"
+  },
+  {
+    "name": "docker-cli-operations",
+    "category": "containers",
+    "description": "Run, inspect and debug containers with the Docker CLI.",
+    "tags": [
+      "cli",
+      "containers",
+      "debug",
+      "docker",
+      "inspect",
+      "operations"
+    ],
+    "path": "skills/containers/docker-cli-operations/SKILL.md"
+  },
+  {
+    "name": "docker-compose-patterns",
+    "category": "containers",
+    "description": "Compose multi-container apps with healthchecks and profiles.",
+    "tags": [
+      "apps",
+      "compose",
+      "container",
+      "containers",
+      "docker",
+      "healthchecks",
+      "multi",
+      "patterns",
+      "profiles"
+    ],
+    "path": "skills/containers/docker-compose-patterns/SKILL.md"
+  },
+  {
+    "name": "dockerfile-authoring",
+    "category": "containers",
+    "description": "Write small, cacheable, secure Dockerfiles.",
+    "tags": [
+      "authoring",
+      "cacheable",
+      "containers",
+      "dockerfile",
+      "dockerfiles",
+      "secure",
+      "small",
+      "write"
+    ],
+    "path": "skills/containers/dockerfile-authoring/SKILL.md"
+  },
+  {
+    "name": "multi-arch-builds",
+    "category": "containers",
+    "description": "Use when building container images for mixed amd64/arm64 clusters (Graviton). Covers buildx setup, Dockerfile TARGETARCH, CI parallel builds, tag conventions, testing both architectures, and manifest list vs suffixed tags decision.",
+    "tags": [
+      "arch",
+      "building",
+      "builds",
+      "clusters",
+      "container",
+      "containers",
+      "graviton",
+      "images",
+      "mixed",
+      "multi"
+    ],
+    "path": "skills/containers/multi-arch-builds/SKILL.md"
+  },
+  {
+    "name": "registry-operations",
+    "category": "containers",
+    "description": "Use when managing container registries (Harbor, ECR, GHCR). Covers garbage collection, retention policies, replication, vulnerability scanning integration, pull-through cache setup, and which registry for what.",
+    "tags": [
+      "container",
+      "containers",
+      "covers",
+      "ghcr",
+      "harbor",
+      "managing",
+      "operations",
+      "registries",
+      "registry"
+    ],
+    "path": "skills/containers/registry-operations/SKILL.md"
+  },
+  {
+    "name": "agent-platform-design",
+    "category": "development",
+    "description": "Design autonomous agent execution and guardrails.",
+    "tags": [
+      "agent",
+      "autonomous",
+      "design",
+      "development",
+      "execution",
+      "guardrails",
+      "platform"
+    ],
+    "path": "skills/development/agent-platform-design/SKILL.md"
+  },
+  {
+    "name": "anomaly-detection-deep",
+    "category": "development",
+    "description": "Choose detection algorithms and tune false positives.",
+    "tags": [
+      "algorithms",
+      "anomaly",
+      "choose",
+      "deep",
+      "detection",
+      "development",
+      "false",
+      "positives",
+      "tune"
+    ],
+    "path": "skills/development/anomaly-detection-deep/SKILL.md"
+  },
+  {
+    "name": "dotnet-async-patterns",
+    "category": "development",
+    "description": "Write async .NET workers, channels and pipelines.",
+    "tags": [
+      "async",
+      "channels",
+      "development",
+      "dotnet",
+      "patterns",
+      "pipelines",
+      "workers",
+      "write"
+    ],
+    "path": "skills/development/dotnet-async-patterns/SKILL.md"
+  },
+  {
+    "name": "dotnet-otel-patterns",
+    "category": "development",
+    "description": "Instrument .NET workers, spans and debug tracing.",
+    "tags": [
+      "debug",
+      "development",
+      "dotnet",
+      "instrument",
+      "otel",
+      "patterns",
+      "spans",
+      "tracing",
+      "workers"
+    ],
+    "path": "skills/development/dotnet-otel-patterns/SKILL.md"
+  },
+  {
+    "name": "frontend-design",
+    "category": "development",
+    "description": "Use when building or restyling a UI that needs a distinct identity \u2014 choosing color palettes, typeface pairings, layout concepts, and avoiding generic AI-generated clich\u00e9s. Covers the brainstorm-critique process, accessibility contrast floor, token system, and mechanical self-check.",
+    "tags": [
+      "building",
+      "choosing",
+      "design",
+      "development",
+      "distinct",
+      "frontend",
+      "identity",
+      "needs",
+      "restyling"
+    ],
+    "path": "skills/development/frontend-design/SKILL.md"
+  },
+  {
+    "name": "go-patterns",
+    "category": "development",
+    "description": "Write idiomatic Go services, context and gRPC.",
+    "tags": [
+      "context",
+      "development",
+      "grpc",
+      "idiomatic",
+      "patterns",
+      "services",
+      "write"
+    ],
+    "path": "skills/development/go-patterns/SKILL.md"
+  },
+  {
+    "name": "grpc-distributed-tracing",
+    "category": "development",
+    "description": "Propagate trace context across gRPC languages.",
+    "tags": [
+      "across",
+      "context",
+      "development",
+      "distributed",
+      "grpc",
+      "languages",
+      "propagate",
+      "trace",
+      "tracing"
+    ],
+    "path": "skills/development/grpc-distributed-tracing/SKILL.md"
+  },
+  {
+    "name": "interactive-debugging",
+    "category": "development",
+    "description": "Use when you need live process state (locals, call stack, breakpoints) that logs/traces can't answer \u2014 via DAP CLI. Covers Python debugpy, Go dlv, .NET, Node, Kubernetes remote debug, and the dap command cheat sheet.",
+    "tags": [
+      "call",
+      "debugging",
+      "development",
+      "interactive",
+      "live",
+      "locals",
+      "need",
+      "process",
+      "state"
+    ],
+    "path": "skills/development/interactive-debugging/SKILL.md"
+  },
+  {
+    "name": "linkedin-connection-pipeline",
+    "category": "development",
+    "description": "Use when building or extending a vendor-agnostic LinkedIn outreach pipeline \u2014 SQLite state machine, retry policies, account rotation, liveness scheduling, and abstract backend adapters. Ships a complete implementation with tests.",
+    "tags": [
+      "agnostic",
+      "building",
+      "connection",
+      "development",
+      "extending",
+      "linkedin",
+      "outreach",
+      "pipeline",
+      "vendor"
+    ],
+    "path": "skills/development/linkedin-connection-pipeline/SKILL.md"
+  },
+  {
+    "name": "mcp-server-development",
+    "category": "development",
+    "description": "Build MCP servers with tools, resources and prompts.",
+    "tags": [
+      "build",
+      "development",
+      "mcp",
+      "prompts",
+      "resources",
+      "server",
+      "servers",
+      "tools"
+    ],
+    "path": "skills/development/mcp-server-development/SKILL.md"
+  },
+  {
+    "name": "prophet-isolation-forest-patterns",
+    "category": "development",
+    "description": "Forecast and detect outliers with Prophet.",
+    "tags": [
+      "detect",
+      "development",
+      "forecast",
+      "forest",
+      "isolation",
+      "outliers",
+      "patterns",
+      "prophet"
+    ],
+    "path": "skills/development/prophet-isolation-forest-patterns/SKILL.md"
+  },
+  {
+    "name": "python-cli-tools",
+    "category": "development",
+    "description": "Use when building a pip-installable CLI with subcommands using Click or Typer, configuring entry points, or migrating from argparse to a proper CLI framework. Covers Click decorators, Typer type-hint patterns, testing CLIs, and packaging.",
+    "tags": [
+      "building",
+      "cli",
+      "click",
+      "development",
+      "installable",
+      "python",
+      "subcommands",
+      "tools",
+      "typer",
+      "using"
+    ],
+    "path": "skills/development/python-cli-tools/SKILL.md"
+  },
+  {
+    "name": "python-fastapi-patterns",
+    "category": "development",
+    "description": "Build FastAPI services, deps and validation.",
+    "tags": [
+      "build",
+      "deps",
+      "development",
+      "fastapi",
+      "patterns",
+      "python",
+      "services",
+      "validation"
+    ],
+    "path": "skills/development/python-fastapi-patterns/SKILL.md"
+  },
+  {
+    "name": "python-grpc-aio",
+    "category": "development",
+    "description": "Build async Python gRPC servers and clients.",
+    "tags": [
+      "aio",
+      "async",
+      "build",
+      "clients",
+      "development",
+      "grpc",
+      "python",
+      "servers"
+    ],
+    "path": "skills/development/python-grpc-aio/SKILL.md"
+  },
+  {
+    "name": "python-otel-patterns",
+    "category": "development",
+    "description": "Instrument Python traces, metrics and logs.",
+    "tags": [
+      "development",
+      "instrument",
+      "logs",
+      "metrics",
+      "otel",
+      "patterns",
+      "python",
+      "traces"
+    ],
+    "path": "skills/development/python-otel-patterns/SKILL.md"
+  },
+  {
+    "name": "python-packaging",
+    "category": "development",
+    "description": "Use when creating a new Python project with pyproject.toml, managing dependencies, configuring virtual environments, or publishing packages. Covers the complete pyproject.toml, src layout, dependency pinning strategy, and Docker build patterns.",
+    "tags": [
+      "creating",
+      "development",
+      "managing",
+      "packaging",
+      "project",
+      "pyproject",
+      "python",
+      "toml"
+    ],
+    "path": "skills/development/python-packaging/SKILL.md"
+  },
+  {
+    "name": "python-performance",
+    "category": "development",
+    "description": "Use when profiling slow Python code, choosing between threading/multiprocessing/asyncio, diagnosing GIL contention, or optimizing hot paths. Covers cProfile, line_profiler, memory_profiler, and concurrency decision tree.",
+    "tags": [
+      "choosing",
+      "code",
+      "development",
+      "performance",
+      "profiler",
+      "profiling",
+      "python",
+      "slow"
+    ],
+    "path": "skills/development/python-performance/SKILL.md"
+  },
+  {
+    "name": "python-scripting",
+    "category": "development",
+    "description": "Use when writing standalone Python scripts that need argument parsing, safe file/path handling, subprocess calls, or structured logging. Covers the complete script skeleton, pathlib idioms, subprocess patterns, and logging setup.",
+    "tags": [
+      "development",
+      "logging",
+      "python",
+      "scripting",
+      "scripts",
+      "standalone",
+      "subprocess",
+      "writing"
+    ],
+    "path": "skills/development/python-scripting/SKILL.md"
+  },
+  {
+    "name": "python-testing",
+    "category": "development",
+    "description": "Use when writing pytest test suites, designing fixtures, mocking external dependencies, parametrizing test cases, or measuring coverage. Covers conftest patterns, factory fixtures, async testing, Docker-based coverage commands, and the \u226590% gate.",
+    "tags": [
+      "coverage",
+      "development",
+      "fixtures",
+      "pytest",
+      "python",
+      "suites",
+      "test",
+      "testing",
+      "writing"
+    ],
+    "path": "skills/development/python-testing/SKILL.md"
+  },
+  {
+    "name": "secrets-management-dotnet",
+    "category": "development",
+    "description": "Load secrets into .NET configuration safely.",
+    "tags": [
+      "configuration",
+      "development",
+      "dotnet",
+      "load",
+      "management",
+      "safely",
+      "secrets"
+    ],
+    "path": "skills/development/secrets-management-dotnet/SKILL.md"
+  },
+  {
+    "name": "telemetry-standard",
+    "category": "development",
+    "description": "Use when integrating telemetry into apps via the shared OTel helper for .NET and Python, choosing between manual OTel SDK config vs the corporate libs, or designing new services that emit traces/metrics/logs. Covers lib API, env vars, sampling strategy, and behavior per environment.",
+    "tags": [
+      "apps",
+      "development",
+      "helper",
+      "integrating",
+      "otel",
+      "shared",
+      "standard",
+      "telemetry"
+    ],
+    "path": "skills/development/telemetry-standard/SKILL.md"
+  },
+  {
+    "name": "adr-template",
+    "category": "documentation",
+    "description": "Write MADR architecture decision records.",
+    "tags": [
+      "adr",
+      "architecture",
+      "decision",
+      "documentation",
+      "madr",
+      "records",
+      "template",
+      "write"
+    ],
+    "path": "skills/documentation/adr-template/SKILL.md"
+  },
+  {
+    "name": "api-docs-patterns",
+    "category": "documentation",
+    "description": "Generate API docs from OpenAPI and protobuf.",
+    "tags": [
+      "api",
+      "docs",
+      "documentation",
+      "generate",
+      "openapi",
+      "patterns",
+      "protobuf"
+    ],
+    "path": "skills/documentation/api-docs-patterns/SKILL.md"
+  },
+  {
+    "name": "diagram-patterns",
+    "category": "documentation",
+    "description": "Choose Mermaid, drawio or ASCII for diagrams.",
+    "tags": [
+      "ascii",
+      "choose",
+      "diagram",
+      "diagrams",
+      "documentation",
+      "drawio",
+      "mermaid",
+      "patterns"
+    ],
+    "path": "skills/documentation/diagram-patterns/SKILL.md"
+  },
+  {
+    "name": "file-organizer",
+    "category": "documentation",
+    "description": "Scan, dedupe, plan, apply, and undo file reorganizations.",
+    "tags": [
+      "apply",
+      "dedupe",
+      "documentation",
+      "file",
+      "organizer",
+      "plan",
+      "scan",
+      "undo"
+    ],
+    "path": "skills/documentation/file-organizer/SKILL.md"
+  },
+  {
+    "name": "image-enhancer",
+    "category": "documentation",
+    "description": "Upscale, sharpen, denoise, and resize images via Pillow.",
+    "tags": [
+      "denoise",
+      "documentation",
+      "enhancer",
+      "image",
+      "images",
+      "pillow",
+      "resize",
+      "sharpen",
+      "upscale"
+    ],
+    "path": "skills/documentation/image-enhancer/SKILL.md"
+  },
+  {
+    "name": "invoice-organizer",
+    "category": "documentation",
+    "description": "Extract, rename, organize, and CSV-export invoices/receipts.",
+    "tags": [
+      "documentation",
+      "export",
+      "extract",
+      "invoice",
+      "invoices",
+      "organize",
+      "organizer",
+      "receipts",
+      "rename"
+    ],
+    "path": "skills/documentation/invoice-organizer/SKILL.md"
+  },
+  {
+    "name": "markdown-docs",
+    "category": "documentation",
+    "description": "Write structured, reviewable Markdown docs.",
+    "tags": [
+      "docs",
+      "documentation",
+      "markdown",
+      "reviewable",
+      "structured",
+      "write"
+    ],
+    "path": "skills/documentation/markdown-docs/SKILL.md"
+  },
+  {
+    "name": "mkdocs-conventions",
+    "category": "documentation",
+    "description": "Configure MkDocs Material sites and navigation.",
+    "tags": [
+      "configure",
+      "conventions",
+      "documentation",
+      "material",
+      "mkdocs",
+      "navigation",
+      "sites"
+    ],
+    "path": "skills/documentation/mkdocs-conventions/SKILL.md"
+  },
+  {
+    "name": "pdf-operations",
+    "category": "documentation",
+    "description": "Extract, merge, split, watermark, OCR, and fill PDF forms.",
+    "tags": [
+      "documentation",
+      "extract",
+      "fill",
+      "forms",
+      "merge",
+      "operations",
+      "pdf",
+      "split",
+      "watermark"
+    ],
+    "path": "skills/documentation/pdf-operations/SKILL.md"
+  },
+  {
+    "name": "cost-anomaly-detection",
+    "category": "finops",
+    "description": "Use when a cost spike appears in billing \u2014 AWS Cost Anomaly Detection, CUR queries via Athena, correlation with deploy/traffic changes. Decision tree: is it traffic, new resource, pricing change, or waste.",
+    "tags": [
+      "anomaly",
+      "appears",
+      "billing",
+      "cost",
+      "detection",
+      "finops",
+      "spike",
+      "traffic"
+    ],
+    "path": "skills/finops/cost-anomaly-detection/SKILL.md"
+  },
+  {
+    "name": "data-transfer-cost-analysis",
+    "category": "finops",
+    "description": "Use when investigating high data transfer costs in AWS/cloud \u2014 cross-AZ, cross-region, internet egress. Covers VPC Flow Logs analysis, OTel eBPF network metrics, NAT Gateway costs, ELB cross-AZ charges, and S3 transfer patterns.",
+    "tags": [
+      "analysis",
+      "cost",
+      "costs",
+      "cross",
+      "data",
+      "finops",
+      "high",
+      "investigating",
+      "transfer"
+    ],
+    "path": "skills/finops/data-transfer-cost-analysis/SKILL.md"
+  },
+  {
+    "name": "ec2-rightsizing-patterns",
+    "category": "finops",
+    "description": "Right-size EC2 with utilization and Optimizer data.",
+    "tags": [
+      "data",
+      "ec2",
+      "finops",
+      "optimizer",
+      "patterns",
+      "right",
+      "rightsizing",
+      "size",
+      "utilization"
+    ],
+    "path": "skills/finops/ec2-rightsizing-patterns/SKILL.md"
+  },
+  {
+    "name": "reserved-capacity-planning",
+    "category": "finops",
+    "description": "Use when evaluating commitment purchases (Reserved Instances, Savings Plans, capacity reservations). Covers utilization analysis, break-even calculation, coverage gaps, and the broader decision framework.",
+    "tags": [
+      "capacity",
+      "commitment",
+      "evaluating",
+      "finops",
+      "instances",
+      "planning",
+      "purchases",
+      "reserved",
+      "savings"
+    ],
+    "path": "skills/finops/reserved-capacity-planning/SKILL.md"
+  },
+  {
+    "name": "savings-plans-strategy",
+    "category": "finops",
+    "description": "Plan Savings Plans and reserved capacity coverage.",
+    "tags": [
+      "capacity",
+      "coverage",
+      "finops",
+      "plan",
+      "plans",
+      "reserved",
+      "savings",
+      "strategy"
+    ],
+    "path": "skills/finops/savings-plans-strategy/SKILL.md"
+  },
+  {
+    "name": "untagged-resources-bulk-fix",
+    "category": "finops",
+    "description": "Find and bulk-tag untagged AWS resources.",
+    "tags": [
+      "bulk",
+      "find",
+      "finops",
+      "fix",
+      "resources",
+      "untagged"
+    ],
+    "path": "skills/finops/untagged-resources-bulk-fix/SKILL.md"
+  },
+  {
+    "name": "argocd-patterns",
+    "category": "infrastructure",
+    "description": "Configure ApplicationSets, sync waves and hooks.",
+    "tags": [
+      "applicationsets",
+      "argocd",
+      "configure",
+      "hooks",
+      "infrastructure",
+      "patterns",
+      "sync",
+      "waves"
+    ],
+    "path": "skills/infrastructure/argocd-patterns/SKILL.md"
+  },
+  {
+    "name": "cosign-image-signing",
+    "category": "infrastructure",
+    "description": "Sign and verify container images with cosign.",
+    "tags": [
+      "container",
+      "cosign",
+      "image",
+      "images",
+      "infrastructure",
+      "sign",
+      "signing",
+      "verify"
+    ],
+    "path": "skills/infrastructure/cosign-image-signing/SKILL.md"
+  },
+  {
+    "name": "external-secrets-aws-sm",
+    "category": "infrastructure",
+    "description": "Sync AWS Secrets Manager into Kubernetes secrets.",
+    "tags": [
+      "aws",
+      "external",
+      "infrastructure",
+      "kubernetes",
+      "manager",
+      "secrets",
+      "sync"
+    ],
+    "path": "skills/infrastructure/external-secrets-aws-sm/SKILL.md"
+  },
+  {
+    "name": "gitops-environments",
+    "category": "infrastructure",
+    "description": "Use when tracing which GitOps repo controls a service, understanding the organization domain-to-namespace-to-cluster mapping, investigating why a deploy isn't reaching a specific environment, or onboarding a new service into the GitOps pipeline. Covers domain repos (DPM, DCP, APPS, MDT, BM, ACUM, PLG, SUP), ApplicationSet topology, namespace conventions, and deployment flow.",
+    "tags": [
+      "domain",
+      "environments",
+      "gitops",
+      "infrastructure",
+      "namespace",
+      "repo",
+      "service",
+      "tracing"
+    ],
+    "path": "skills/infrastructure/gitops-environments/SKILL.md"
+  },
+  {
+    "name": "helm-chart-app",
+    "category": "infrastructure",
+    "description": "Deploy apps with the shared application Helm chart.",
+    "tags": [
+      "app",
+      "application",
+      "apps",
+      "chart",
+      "deploy",
+      "helm",
+      "infrastructure",
+      "shared"
+    ],
+    "path": "skills/infrastructure/helm-chart-app/SKILL.md"
+  },
+  {
+    "name": "helm-chart-cronworkflow",
+    "category": "infrastructure",
+    "description": "Schedule Argo CronWorkflows via the shared chart.",
+    "tags": [
+      "argo",
+      "chart",
+      "cronworkflow",
+      "cronworkflows",
+      "helm",
+      "infrastructure",
+      "schedule",
+      "shared"
+    ],
+    "path": "skills/infrastructure/helm-chart-cronworkflow/SKILL.md"
+  },
+  {
+    "name": "helmfile-applicationset",
+    "category": "infrastructure",
+    "description": "Register services in GitOps ApplicationSets.",
+    "tags": [
+      "applicationset",
+      "applicationsets",
+      "gitops",
+      "helmfile",
+      "infrastructure",
+      "register",
+      "services"
+    ],
+    "path": "skills/infrastructure/helmfile-applicationset/SKILL.md"
+  },
+  {
+    "name": "helmfile-k8s-addon",
+    "category": "infrastructure",
+    "description": "Package cluster addons as helmfile releases.",
+    "tags": [
+      "addon",
+      "addons",
+      "cluster",
+      "helmfile",
+      "infrastructure",
+      "k8s",
+      "package",
+      "releases"
+    ],
+    "path": "skills/infrastructure/helmfile-k8s-addon/SKILL.md"
+  },
+  {
+    "name": "helmfile-templating",
+    "category": "infrastructure",
+    "description": "Template helmfile values, envs and secrets.",
+    "tags": [
+      "envs",
+      "helmfile",
+      "infrastructure",
+      "secrets",
+      "template",
+      "templating",
+      "values"
+    ],
+    "path": "skills/infrastructure/helmfile-templating/SKILL.md"
+  },
+  {
+    "name": "istio-ambient-debugging",
+    "category": "infrastructure",
+    "description": "Debug ztunnel, waypoints and ambient traffic.",
+    "tags": [
+      "ambient",
+      "debug",
+      "debugging",
+      "infrastructure",
+      "istio",
+      "traffic",
+      "waypoints",
+      "ztunnel"
+    ],
+    "path": "skills/infrastructure/istio-ambient-debugging/SKILL.md"
+  },
+  {
+    "name": "istio-ambient-otel",
+    "category": "infrastructure",
+    "description": "Wire ambient mesh telemetry into OTel.",
+    "tags": [
+      "ambient",
+      "infrastructure",
+      "istio",
+      "mesh",
+      "otel",
+      "telemetry",
+      "wire"
+    ],
+    "path": "skills/infrastructure/istio-ambient-otel/SKILL.md"
+  },
+  {
+    "name": "karpenter-consolidation",
+    "category": "infrastructure",
+    "description": "Tune consolidation and disruption budgets.",
+    "tags": [
+      "budgets",
+      "consolidation",
+      "disruption",
+      "infrastructure",
+      "karpenter",
+      "tune"
+    ],
+    "path": "skills/infrastructure/karpenter-consolidation/SKILL.md"
+  },
+  {
+    "name": "kyverno-policies",
+    "category": "infrastructure",
+    "description": "Apply the shared Kyverno policy baseline.",
+    "tags": [
+      "apply",
+      "baseline",
+      "infrastructure",
+      "kyverno",
+      "policies",
+      "policy",
+      "shared"
+    ],
+    "path": "skills/infrastructure/kyverno-policies/SKILL.md"
+  },
+  {
+    "name": "terraform-modules",
+    "category": "infrastructure",
+    "description": "Use the shared Terraform module catalog.",
+    "tags": [
+      "catalog",
+      "infrastructure",
+      "module",
+      "modules",
+      "shared",
+      "terraform"
+    ],
+    "path": "skills/infrastructure/terraform-modules/SKILL.md"
+  },
+  {
+    "name": "linux-command-line",
+    "category": "linux",
+    "description": "Navigate the shell with pipes, globs and job control.",
+    "tags": [
+      "command",
+      "control",
+      "globs",
+      "line",
+      "linux",
+      "navigate",
+      "pipes",
+      "shell"
+    ],
+    "path": "skills/linux/linux-command-line/SKILL.md"
+  },
+  {
+    "name": "linux-filesystem",
+    "category": "linux",
+    "description": "Manage permissions, mounts, links and disk usage.",
+    "tags": [
+      "disk",
+      "filesystem",
+      "links",
+      "linux",
+      "manage",
+      "mounts",
+      "permissions",
+      "usage"
+    ],
+    "path": "skills/linux/linux-filesystem/SKILL.md"
+  },
+  {
+    "name": "linux-performance-analysis",
+    "category": "linux",
+    "description": "Diagnose CPU, memory, disk and network bottlenecks.",
+    "tags": [
+      "analysis",
+      "bottlenecks",
+      "diagnose",
+      "disk",
+      "linux",
+      "memory",
+      "network",
+      "performance"
+    ],
+    "path": "skills/linux/linux-performance-analysis/SKILL.md"
+  },
+  {
+    "name": "linux-process-management",
+    "category": "linux",
+    "description": "Inspect processes, signals, limits and cgroups.",
+    "tags": [
+      "cgroups",
+      "inspect",
+      "limits",
+      "linux",
+      "management",
+      "process",
+      "processes",
+      "signals"
+    ],
+    "path": "skills/linux/linux-process-management/SKILL.md"
+  },
+  {
+    "name": "systemd-services",
+    "category": "linux",
+    "description": "Write, debug and manage systemd units and timers.",
+    "tags": [
+      "debug",
+      "linux",
+      "manage",
+      "services",
+      "systemd",
+      "timers",
+      "units",
+      "write"
+    ],
+    "path": "skills/linux/systemd-services/SKILL.md"
+  },
+  {
+    "name": "ubuntu-administration",
+    "category": "linux",
+    "description": "Manage packages, users, network and updates on Ubuntu.",
+    "tags": [
+      "administration",
+      "linux",
+      "manage",
+      "network",
+      "packages",
+      "ubuntu",
+      "updates",
+      "users"
+    ],
+    "path": "skills/linux/ubuntu-administration/SKILL.md"
+  },
+  {
+    "name": "dns-troubleshooting",
+    "category": "networking",
+    "description": "Diagnose DNS resolution failures with dig and resolvectl.",
+    "tags": [
+      "diagnose",
+      "dns",
+      "failures",
+      "networking",
+      "resolution",
+      "resolvectl",
+      "troubleshooting"
+    ],
+    "path": "skills/networking/dns-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "linux-firewall",
+    "category": "networking",
+    "description": "Write and debug nftables/iptables firewall rules.",
+    "tags": [
+      "debug",
+      "firewall",
+      "iptables",
+      "linux",
+      "networking",
+      "nftables",
+      "rules",
+      "write"
+    ],
+    "path": "skills/networking/linux-firewall/SKILL.md"
+  },
+  {
+    "name": "load-balancer-troubleshooting",
+    "category": "networking",
+    "description": "Use when debugging ALB/NLB/ingress controller target group issues \u2014 502/503/504 errors, failing health checks, connection draining problems, cross-AZ traffic costs, sticky sessions, or TLS termination failures. Decision tree organized by HTTP error code.",
+    "tags": [
+      "balancer",
+      "controller",
+      "debugging",
+      "group",
+      "ingress",
+      "issues",
+      "load",
+      "networking",
+      "target",
+      "troubleshooting"
+    ],
+    "path": "skills/networking/load-balancer-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "network-troubleshooting-tools",
+    "category": "networking",
+    "description": "Use ss, tcpdump, curl and traceroute to diagnose issues.",
+    "tags": [
+      "curl",
+      "diagnose",
+      "issues",
+      "network",
+      "networking",
+      "tcpdump",
+      "tools",
+      "traceroute",
+      "troubleshooting"
+    ],
+    "path": "skills/networking/network-troubleshooting-tools/SKILL.md"
+  },
+  {
+    "name": "service-mesh-troubleshooting",
+    "category": "networking",
+    "description": "Use when debugging service mesh issues \u2014 mTLS failures, sidecar injection problems, traffic policy misroutes, proxy latency overhead, or config sync delays. Covers Istio, Linkerd, and Consul Connect. Decision tree to isolate mesh vs application problems.",
+    "tags": [
+      "debugging",
+      "issues",
+      "mesh",
+      "mtls",
+      "networking",
+      "problems",
+      "service",
+      "troubleshooting"
+    ],
+    "path": "skills/networking/service-mesh-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "tcp-ip-fundamentals",
+    "category": "networking",
+    "description": "Understand TCP handshakes, states and packet flow.",
+    "tags": [
+      "flow",
+      "fundamentals",
+      "handshakes",
+      "networking",
+      "packet",
+      "states",
+      "tcp",
+      "understand"
+    ],
+    "path": "skills/networking/tcp-ip-fundamentals/SKILL.md"
+  },
+  {
+    "name": "tls-troubleshooting",
+    "category": "networking",
+    "description": "Diagnose certificate chains, expiry and handshake failures.",
+    "tags": [
+      "certificate",
+      "chains",
+      "diagnose",
+      "expiry",
+      "failures",
+      "handshake",
+      "networking",
+      "tls",
+      "troubleshooting"
+    ],
+    "path": "skills/networking/tls-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "alertmanager-slack-config",
+    "category": "observability",
+    "description": "Route Alertmanager alerts to Slack with context.",
+    "tags": [
+      "alertmanager",
+      "alerts",
+      "config",
+      "context",
+      "observability",
+      "route",
+      "slack"
+    ],
+    "path": "skills/observability/alertmanager-slack-config/SKILL.md"
+  },
+  {
+    "name": "cardinality-explosion-finder",
+    "category": "observability",
+    "description": "Use when VictoriaMetrics is OOMing, vmselect queries are slow, or TSDB cardinality is growing unexpectedly. Runs a bundled Python script that analyzes TSDB status data (top metrics, labels, and label-value pairs by series count), identifies the explosion source, flags known problematic patterns (user_id, request_id, raw URLs), and recommends remediation. Requires sandbox. Collect TSDB status from VictoriaMetrics MCP first.",
+    "tags": [
+      "cardinality",
+      "explosion",
+      "finder",
+      "observability",
+      "ooming",
+      "queries",
+      "status",
+      "tsdb",
+      "victoriametrics",
+      "vmselect"
+    ],
+    "path": "skills/observability/cardinality-explosion-finder/SKILL.md"
+  },
+  {
+    "name": "fluent-bit-loki-pipeline",
+    "category": "observability",
+    "description": "Ship logs to Loki with labels and multiline parsing.",
+    "tags": [
+      "bit",
+      "fluent",
+      "labels",
+      "logs",
+      "loki",
+      "multiline",
+      "observability",
+      "parsing",
+      "pipeline",
+      "ship"
+    ],
+    "path": "skills/observability/fluent-bit-loki-pipeline/SKILL.md"
+  },
+  {
+    "name": "fluent-bit-vs-otel-logs",
+    "category": "observability",
+    "description": "Compare Fluent Bit and OTel log collection paths.",
+    "tags": [
+      "bit",
+      "collection",
+      "compare",
+      "fluent",
+      "logs",
+      "observability",
+      "otel",
+      "paths"
+    ],
+    "path": "skills/observability/fluent-bit-vs-otel-logs/SKILL.md"
+  },
+  {
+    "name": "grafana-cross-signal-correlation",
+    "category": "observability",
+    "description": "Link metrics, traces, logs and profiles in Grafana.",
+    "tags": [
+      "correlation",
+      "cross",
+      "grafana",
+      "link",
+      "logs",
+      "metrics",
+      "observability",
+      "profiles",
+      "signal",
+      "traces"
+    ],
+    "path": "skills/observability/grafana-cross-signal-correlation/SKILL.md"
+  },
+  {
+    "name": "kafka-pipeline-health",
+    "category": "observability",
+    "description": "Monitor and troubleshoot the Kafka buffer in the OTel telemetry pipeline (Strimzi-managed, KRaft mode). Symptoms: growing consumer lag for otel-process-consumer, under-replicated partitions, broker pod failures, gateway send_failed to Kafka exporter, delayed telemetry in backends. Topics: otlp_spans, otlp_logs, otlp_metrics.",
+    "tags": [
+      "consumer",
+      "health",
+      "kafka",
+      "monitor",
+      "observability",
+      "otel",
+      "otlp",
+      "pipeline",
+      "telemetry"
+    ],
+    "path": "skills/observability/kafka-pipeline-health/SKILL.md"
+  },
+  {
+    "name": "kubelet-scrape-architecture",
+    "category": "observability",
+    "description": "Understand kubelet and cAdvisor scrape paths.",
+    "tags": [
+      "architecture",
+      "cadvisor",
+      "kubelet",
+      "observability",
+      "paths",
+      "scrape",
+      "understand"
+    ],
+    "path": "skills/observability/kubelet-scrape-architecture/SKILL.md"
+  },
+  {
+    "name": "kuma-synthetic-status",
+    "category": "observability",
+    "description": "Use when you need to verify whether an API endpoint is actually responding from an external perspective (synthetic test), check endpoint latency as seen by clients, determine 24h/30d uptime ratios, or identify which monitors are currently DOWN. Queries Uptime Kuma metrics already scraped into VictoriaMetrics (job=\\\"kuma-nv\\\"). Covers: DPM Platform (People, Companies, Custom, Batch, Tokens), Plugins (Validations), and DevOps health endpoints (Grafana, ArgoCD, Harbor, Alertmanager). This is the ground-truth check when internal metrics say \\\"healthy\\\" but clients report failures.",
+    "tags": [
+      "check",
+      "clients",
+      "endpoint",
+      "kuma",
+      "metrics",
+      "observability",
+      "status",
+      "synthetic",
+      "uptime"
+    ],
+    "path": "skills/observability/kuma-synthetic-status/SKILL.md"
+  },
+  {
+    "name": "log-pattern-analyzer",
+    "category": "observability",
+    "description": "Use when investigating log volume spikes, identifying dominant error patterns, or detecting anomalous log messages during an incident. Runs a bundled Python script that normalizes log lines into patterns, clusters errors by similarity, and detects time-based spikes. Handles large log dumps that are impractical to reason over manually. Requires sandbox. Collect logs from Loki MCP first.",
+    "tags": [
+      "analyzer",
+      "dominant",
+      "identifying",
+      "investigating",
+      "log",
+      "observability",
+      "pattern",
+      "patterns",
+      "spikes",
+      "volume"
+    ],
+    "path": "skills/observability/log-pattern-analyzer/SKILL.md"
+  },
+  {
+    "name": "loki-logql-patterns",
+    "category": "observability",
+    "description": "Query logs with LogQL filters and aggregations.",
+    "tags": [
+      "aggregations",
+      "filters",
+      "logql",
+      "logs",
+      "loki",
+      "observability",
+      "patterns",
+      "query"
+    ],
+    "path": "skills/observability/loki-logql-patterns/SKILL.md"
+  },
+  {
+    "name": "monitoring-stack-overview",
+    "category": "observability",
+    "description": "Navigate the monitoring stack topology.",
+    "tags": [
+      "monitoring",
+      "navigate",
+      "observability",
+      "overview",
+      "stack",
+      "topology"
+    ],
+    "path": "skills/observability/monitoring-stack-overview/SKILL.md"
+  },
+  {
+    "name": "multicluster-label-strategy",
+    "category": "observability",
+    "description": "Align cluster labels for multi-cluster queries.",
+    "tags": [
+      "align",
+      "cluster",
+      "label",
+      "labels",
+      "multi",
+      "multicluster",
+      "observability",
+      "queries",
+      "strategy"
+    ],
+    "path": "skills/observability/multicluster-label-strategy/SKILL.md"
+  },
+  {
+    "name": "observability-tooling",
+    "category": "observability",
+    "description": "Route observability symptoms to the correct MCP tool with correct parameters. Use as the FIRST skill loaded when any observability investigation begins. Maps symptoms (slow service, errors spiking, data loss, cost spike, alert firing) to the specific MCP tool invocation, parameters, and result interpretation. Covers VictoriaMetrics MCP, Tempo MCP, Grafana MCP (Loki, dashboards, alerting), and kubectl for pod health.",
+    "tags": [
+      "correct",
+      "observability",
+      "parameters",
+      "route",
+      "symptoms",
+      "tool",
+      "tooling"
+    ],
+    "path": "skills/observability/observability-tooling/SKILL.md"
+  },
+  {
+    "name": "otel-collector-multi-cluster",
+    "category": "observability",
+    "description": "Design multi-cluster OTel Collector pipelines.",
+    "tags": [
+      "cluster",
+      "collector",
+      "design",
+      "multi",
+      "observability",
+      "otel",
+      "pipelines"
+    ],
+    "path": "skills/observability/otel-collector-multi-cluster/SKILL.md"
+  },
+  {
+    "name": "otel-ebpf-instrumentation",
+    "category": "observability",
+    "description": "Instrument services with eBPF, no code changes.",
+    "tags": [
+      "changes",
+      "code",
+      "ebpf",
+      "instrument",
+      "instrumentation",
+      "observability",
+      "otel",
+      "services"
+    ],
+    "path": "skills/observability/otel-ebpf-instrumentation/SKILL.md"
+  },
+  {
+    "name": "otel-pipeline-review",
+    "category": "observability",
+    "description": "Proactive operational review of the OTel telemetry pipeline (Evaluation agent type). Produces a findings report covering end-to-end data loss, queue headroom, tail-sampling correctness, cardinality trend, Kafka buffer health, and resource headroom. Pipeline: Agent DaemonSet (tail_sampling) \u2192 Gateway StatefulSet (5x, exports to Kafka) \u2192 Kafka \u2192 Process collector (KEDA 5\u201310, consumes Kafka) \u2192 VictoriaMetrics/Tempo/Loki/Pyroscope. Each dimension reports PASS/FINDING with measured value vs threshold.",
+    "tags": [
+      "agent",
+      "headroom",
+      "kafka",
+      "observability",
+      "otel",
+      "pipeline",
+      "review",
+      "sampling",
+      "tail"
+    ],
+    "path": "skills/observability/otel-pipeline-review/SKILL.md"
+  },
+  {
+    "name": "otel-pipeline-troubleshooting",
+    "category": "observability",
+    "description": "Diagnose data loss, backpressure, and failures in the OTel Collector pipeline. Symptoms: missing telemetry in Tempo/Loki/VictoriaMetrics, growing Kafka lag, otelcol_exporter_enqueue_failed > 0, otelcol_exporter_send_failed > 0, collector pods OOMKilled or CrashLoopBackOff. Pipeline flow: Agent (DaemonSet, tail_sampling) \u2192 Gateway (StatefulSet 5x, exports to Kafka) \u2192 Process (KEDA 5\u201310, consumes Kafka \u2192 backends).",
+    "tags": [
+      "collector",
+      "exporter",
+      "failed",
+      "kafka",
+      "observability",
+      "otel",
+      "otelcol",
+      "pipeline",
+      "troubleshooting"
+    ],
+    "path": "skills/observability/otel-pipeline-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "pyroscope-profiling-patterns",
+    "category": "observability",
+    "description": "Profile CPU and memory continuously with Pyroscope.",
+    "tags": [
+      "continuously",
+      "memory",
+      "observability",
+      "patterns",
+      "profile",
+      "profiling",
+      "pyroscope"
+    ],
+    "path": "skills/observability/pyroscope-profiling-patterns/SKILL.md"
+  },
+  {
+    "name": "streaming-aggregation",
+    "category": "observability",
+    "description": "Cut cardinality with streaming aggregation rules.",
+    "tags": [
+      "aggregation",
+      "cardinality",
+      "observability",
+      "rules",
+      "streaming"
+    ],
+    "path": "skills/observability/streaming-aggregation/SKILL.md"
+  },
+  {
+    "name": "tempo-trace-investigation",
+    "category": "observability",
+    "description": "Investigate distributed traces using Tempo and TraceQL. Symptoms: high latency on a service, errors propagating across services, need to find which span in a request chain is slow, exemplar drill-down from a metric spike, or mapping service dependencies. Use TraceQL MCP tools (traceql-search, get-trace, get-attribute-names/values, traceql-metrics-instant/range).",
+    "tags": [
+      "distributed",
+      "investigate",
+      "investigation",
+      "observability",
+      "service",
+      "tempo",
+      "trace",
+      "traceql",
+      "traces",
+      "using"
+    ],
+    "path": "skills/observability/tempo-trace-investigation/SKILL.md"
+  },
+  {
+    "name": "tempo-traceql-patterns",
+    "category": "observability",
+    "description": "Query traces with TraceQL selectors and aggregates.",
+    "tags": [
+      "aggregates",
+      "observability",
+      "patterns",
+      "query",
+      "selectors",
+      "tempo",
+      "traceql",
+      "traces"
+    ],
+    "path": "skills/observability/tempo-traceql-patterns/SKILL.md"
+  },
+  {
+    "name": "tempo-v3-kafka-operations",
+    "category": "observability",
+    "description": "Use when migrating Grafana Tempo v2\u2192v3, operating the v3 Kafka-based ingest path, or debugging partition-ring errors, orphan partitions, OOM on replay, or missing PDBs. Covers the ingester\u2192block-builder/live-store architecture change, partition ownership (1:1 live-store\u2194partition), Kafka topic partition-count gotchas, memberlist ring reset, and the tempo-distributed chart's missing PDB templates.",
+    "tags": [
+      "kafka",
+      "live",
+      "missing",
+      "observability",
+      "operations",
+      "partition",
+      "ring",
+      "tempo"
+    ],
+    "path": "skills/observability/tempo-v3-kafka-operations/SKILL.md"
+  },
+  {
+    "name": "victoriametrics-investigation",
+    "category": "observability",
+    "description": "Diagnose VictoriaMetrics cluster issues \u2014 slow queries, ingestion bottlenecks, cache misses, storage pressure, remote_write backpressure from vmagent. Symptoms: dashboard queries timing out, vmselect OOMKilled, vmagent pending_data_bytes growing, vm_slow_row_inserts spiking, gaps in metric data. Cluster: vminsert/vmselect/vmstorage + vmagent.",
+    "tags": [
+      "cluster",
+      "data",
+      "investigation",
+      "observability",
+      "queries",
+      "slow",
+      "victoriametrics",
+      "vmagent",
+      "vmselect"
+    ],
+    "path": "skills/observability/victoriametrics-investigation/SKILL.md"
+  },
+  {
+    "name": "victoriametrics-troubleshooting",
+    "category": "observability",
+    "description": "Debug VictoriaMetrics ingest and query failures.",
+    "tags": [
+      "debug",
+      "failures",
+      "ingest",
+      "observability",
+      "query",
+      "troubleshooting",
+      "victoriametrics"
+    ],
+    "path": "skills/observability/victoriametrics-troubleshooting/SKILL.md"
+  },
+  {
+    "name": "victoriametrics-tuning",
+    "category": "observability",
+    "description": "Tune VictoriaMetrics retention, memory and dedup.",
+    "tags": [
+      "dedup",
+      "memory",
+      "observability",
+      "retention",
+      "tune",
+      "tuning",
+      "victoriametrics"
+    ],
+    "path": "skills/observability/victoriametrics-tuning/SKILL.md"
+  },
+  {
+    "name": "vm-capacity-review",
+    "category": "observability",
+    "description": "Proactive VictoriaMetrics capacity and health review (Evaluation agent type). Produces a capacity report covering ingestion rate trend, storage growth and projected exhaustion date, cardinality state, TSID cache efficiency, query layer saturation, replication integrity, and retention vs actual usage. Each dimension reports headroom % and projected exhaustion date where applicable. NOT for active incidents \u2014 use victoriametrics-investigation for that.",
+    "tags": [
+      "capacity",
+      "date",
+      "exhaustion",
+      "observability",
+      "proactive",
+      "projected",
+      "review",
+      "victoriametrics"
+    ],
+    "path": "skills/observability/vm-capacity-review/SKILL.md"
+  },
+  {
+    "name": "vm-cardinality-management",
+    "category": "observability",
+    "description": "Find and cut high-cardinality metric series.",
+    "tags": [
+      "cardinality",
+      "find",
+      "high",
+      "management",
+      "metric",
+      "observability",
+      "series"
+    ],
+    "path": "skills/observability/vm-cardinality-management/SKILL.md"
+  },
+  {
+    "name": "vmalert-configuration",
+    "category": "observability",
+    "description": "Configure VMAlert rules, groups and notifiers.",
+    "tags": [
+      "configuration",
+      "configure",
+      "groups",
+      "notifiers",
+      "observability",
+      "rules",
+      "vmalert"
+    ],
+    "path": "skills/observability/vmalert-configuration/SKILL.md"
+  },
+  {
+    "name": "telemetry-helper",
+    "category": "projects",
+    "description": "Use when working on the StaffOps otel-libs monorepo \u2014 releasing new versions, understanding the .NET/Python helper API, or referring to sample apps for OTel instrumentation patterns.",
+    "tags": [
+      "helper",
+      "libs",
+      "monorepo",
+      "otel",
+      "projects",
+      "releasing",
+      "staffops",
+      "telemetry",
+      "working"
+    ],
+    "path": "skills/projects/telemetry-helper/SKILL.md"
+  },
+  {
+    "name": "aws-ftr-compliance",
+    "category": "security",
+    "description": "Prepare AWS Foundational Technical Review evidence.",
+    "tags": [
+      "aws",
+      "compliance",
+      "evidence",
+      "foundational",
+      "ftr",
+      "prepare",
+      "review",
+      "security",
+      "technical"
+    ],
+    "path": "skills/security/aws-ftr-compliance/SKILL.md"
+  },
+  {
+    "name": "container-image-apko",
+    "category": "security",
+    "description": "Build hardened base images with apko.",
+    "tags": [
+      "apko",
+      "base",
+      "build",
+      "container",
+      "hardened",
+      "image",
+      "images",
+      "security"
+    ],
+    "path": "skills/security/container-image-apko/SKILL.md"
+  },
+  {
+    "name": "container-package-melange",
+    "category": "security",
+    "description": "Build custom APK packages with melange.",
+    "tags": [
+      "build",
+      "container",
+      "custom",
+      "melange",
+      "package",
+      "packages",
+      "security"
+    ],
+    "path": "skills/security/container-package-melange/SKILL.md"
+  },
+  {
+    "name": "dependency-track-integration",
+    "category": "security",
+    "description": "Upload SBOMs and manage projects via API.",
+    "tags": [
+      "dependency",
+      "integration",
+      "manage",
+      "projects",
+      "sboms",
+      "security",
+      "track",
+      "upload"
+    ],
+    "path": "skills/security/dependency-track-integration/SKILL.md"
+  },
+  {
+    "name": "golden-ami-creation",
+    "category": "security",
+    "description": "Build hardened AMIs with Packer and Ansible.",
+    "tags": [
+      "ami",
+      "amis",
+      "ansible",
+      "build",
+      "creation",
+      "golden",
+      "hardened",
+      "packer",
+      "security"
+    ],
+    "path": "skills/security/golden-ami-creation/SKILL.md"
+  },
+  {
+    "name": "linux-hardening",
+    "category": "security",
+    "description": "Apply baseline OS hardening: sysctl, PAM, mounts, kernel.",
+    "tags": [
+      "apply",
+      "baseline",
+      "hardening",
+      "kernel",
+      "linux",
+      "mounts",
+      "security",
+      "sysctl"
+    ],
+    "path": "skills/security/linux-hardening/SKILL.md"
+  },
+  {
+    "name": "linux-security-auditing",
+    "category": "security",
+    "description": "Audit a Linux host for common misconfigurations.",
+    "tags": [
+      "audit",
+      "auditing",
+      "common",
+      "host",
+      "linux",
+      "misconfigurations",
+      "security"
+    ],
+    "path": "skills/security/linux-security-auditing/SKILL.md"
+  },
+  {
+    "name": "sbom-vulnerability-management",
+    "category": "security",
+    "description": "Generate SBOMs and triage vulnerabilities.",
+    "tags": [
+      "generate",
+      "management",
+      "sbom",
+      "sboms",
+      "security",
+      "triage",
+      "vulnerabilities",
+      "vulnerability"
+    ],
+    "path": "skills/security/sbom-vulnerability-management/SKILL.md"
+  },
+  {
+    "name": "secrets-handling-shell",
+    "category": "security",
+    "description": "Avoid leaking secrets through shell history, env and logs.",
+    "tags": [
+      "avoid",
+      "handling",
+      "history",
+      "leaking",
+      "logs",
+      "secrets",
+      "security",
+      "shell"
+    ],
+    "path": "skills/security/secrets-handling-shell/SKILL.md"
+  },
+  {
+    "name": "security-hub-findings-mgmt",
+    "category": "security",
+    "description": "Triage and remediate Security Hub findings.",
+    "tags": [
+      "findings",
+      "hub",
+      "mgmt",
+      "remediate",
+      "security",
+      "triage"
+    ],
+    "path": "skills/security/security-hub-findings-mgmt/SKILL.md"
+  },
+  {
+    "name": "ssh-hardening",
+    "category": "security",
+    "description": "Configure SSH for key-only, restricted, auditable access.",
+    "tags": [
+      "access",
+      "auditable",
+      "configure",
+      "hardening",
+      "restricted",
+      "security",
+      "ssh"
+    ],
+    "path": "skills/security/ssh-hardening/SKILL.md"
+  },
+  {
+    "name": "bash-error-handling",
+    "category": "shell",
+    "description": "Make shell scripts fail fast, loudly, and cleanly.",
+    "tags": [
+      "bash",
+      "error",
+      "fail",
+      "fast",
+      "handling",
+      "loudly",
+      "make",
+      "scripts",
+      "shell"
+    ],
+    "path": "skills/shell/bash-error-handling/SKILL.md"
+  },
+  {
+    "name": "bash-scripting",
+    "category": "shell",
+    "description": "Write portable, safe Bash scripts that fail loudly.",
+    "tags": [
+      "bash",
+      "fail",
+      "portable",
+      "safe",
+      "scripting",
+      "scripts",
+      "shell",
+      "write"
+    ],
+    "path": "skills/shell/bash-scripting/SKILL.md"
+  },
+  {
+    "name": "shell-cli-design",
+    "category": "shell",
+    "description": "Design CLI tools with sane flags, streams and codes.",
+    "tags": [
+      "cli",
+      "codes",
+      "design",
+      "flags",
+      "sane",
+      "shell",
+      "streams",
+      "tools"
+    ],
+    "path": "skills/shell/shell-cli-design/SKILL.md"
+  },
+  {
+    "name": "shell-testing-linting",
+    "category": "shell",
+    "description": "Lint with shellcheck and test scripts with bats.",
+    "tags": [
+      "bats",
+      "lint",
+      "linting",
+      "scripts",
+      "shell",
+      "shellcheck",
+      "test",
+      "testing"
+    ],
+    "path": "skills/shell/shell-testing-linting/SKILL.md"
+  },
+  {
+    "name": "shell-text-processing",
+    "category": "shell",
+    "description": "Transform text with awk, sed, grep, sort and jq.",
+    "tags": [
+      "grep",
+      "processing",
+      "shell",
+      "sort",
+      "text",
+      "transform"
+    ],
+    "path": "skills/shell/shell-text-processing/SKILL.md"
+  },
+  {
+    "name": "alerting-strategy",
+    "category": "sre",
+    "description": "Use when designing new alert rules, reducing alert fatigue, routing alerts to correct channels, evaluating alert quality (MTTA/MTTR/false-positive rate), or deciding between symptom-based vs cause-based alerting. Covers multi-window burn rate, Alertmanager routing, silence/inhibit patterns, severity assignment decision tree, and weekly review cadence.",
+    "tags": [
+      "alert",
+      "alerting",
+      "based",
+      "designing",
+      "rate",
+      "routing",
+      "rules",
+      "sre",
+      "strategy"
+    ],
+    "path": "skills/sre/alerting-strategy/SKILL.md"
+  },
+  {
+    "name": "capacity-projection",
+    "category": "sre",
+    "description": "Use when assessing whether storage, ingestion rate, or resource usage will exhaust capacity before the next review cycle. Runs a bundled Python script that fits linear regression on time-series data and projects exhaustion dates per dimension. Covers VictoriaMetrics storage, Kafka partition size, EBS volumes, and any monotonically growing metric. Requires sandbox.",
+    "tags": [
+      "assessing",
+      "capacity",
+      "ingestion",
+      "projection",
+      "rate",
+      "resource",
+      "sre",
+      "storage",
+      "whether"
+    ],
+    "path": "skills/sre/capacity-projection/SKILL.md"
+  },
+  {
+    "name": "chaos-engineering-patterns",
+    "category": "sre",
+    "description": "Use when designing chaos experiments or running game days. Covers steady state hypothesis, experiment design (pod kill, network partition, CPU stress, disk fill), Litmus/Chaos Mesh CRDs, blast radius control, and abort conditions. Decision tree for what to break first based on SLO type.",
+    "tags": [
+      "chaos",
+      "days",
+      "designing",
+      "engineering",
+      "experiments",
+      "game",
+      "patterns",
+      "running",
+      "sre"
+    ],
+    "path": "skills/sre/chaos-engineering-patterns/SKILL.md"
+  },
+  {
+    "name": "deploy-correlation-checker",
+    "category": "sre",
+    "description": "Use when an anomaly is detected and you need to determine if a recent deploy caused it. Cross-references deploy timestamps (from ArgoCD) with metric anomaly start times. Identifies the most likely causal deploy by temporal proximity. Requires sandbox. Collect deploy history and anomaly timestamps from ArgoCD MCP and VictoriaMetrics first.",
+    "tags": [
+      "anomaly",
+      "argocd",
+      "checker",
+      "correlation",
+      "deploy",
+      "detected",
+      "need",
+      "sre",
+      "timestamps"
+    ],
+    "path": "skills/sre/deploy-correlation-checker/SKILL.md"
+  },
+  {
+    "name": "error-budget-framework",
+    "category": "sre",
+    "description": "Use when implementing error budget tracking, burn rate alerting, or defining budget exhaustion policies. Provides complete VMRule recording rules and alert rules (copy-paste ready), multi-window burn rate thresholds (Google SRE workbook), budget policy enforcement tiers, Alertmanager routing for SLO alerts, and Grafana dashboard panel queries.",
+    "tags": [
+      "budget",
+      "burn",
+      "error",
+      "framework",
+      "implementing",
+      "rate",
+      "rules",
+      "sre"
+    ],
+    "path": "skills/sre/error-budget-framework/SKILL.md"
+  },
+  {
+    "name": "incident-response-runbook",
+    "category": "sre",
+    "description": "Run incident command, severity and comms.",
+    "tags": [
+      "command",
+      "comms",
+      "incident",
+      "response",
+      "runbook",
+      "severity",
+      "sre"
+    ],
+    "path": "skills/sre/incident-response-runbook/SKILL.md"
+  },
+  {
+    "name": "incident-skip-criteria",
+    "category": "sre",
+    "description": "Incident Triage agent ONLY. Evaluate whether an alert should be SKIPPED (no paid investigation) or INVESTIGATED. Triggers: every incoming alert before the investigation budget is spent. Criteria: known-noisy signals, in-progress rollouts correlating with the alert, BTC/DEV environment expected saturation, duplicate/child alerts of an active parent investigation. HARD RULE: NEVER skip P1/CRITICAL, data-loss signals, security/auth incidents, or PRD alerts with confirmed user impact.",
+    "tags": [
+      "alert",
+      "alerts",
+      "criteria",
+      "incident",
+      "investigation",
+      "signals",
+      "skip",
+      "sre",
+      "triage"
+    ],
+    "path": "skills/sre/incident-skip-criteria/SKILL.md"
+  },
+  {
+    "name": "incident-triage",
+    "category": "sre",
+    "description": "Use when an alert fires (SLOBurnRateP1/P2, PodCrashLooping, HighErrorRate), a user reports service degradation, or pods are in CrashLoopBackOff/OOMKilled. Provides severity classification, evidence-driven investigation (\u22653 signals for RCA), escalation per organizational RACI matrix, and communication templates. This agent is STRICTLY read-only and never executes a change.",
+    "tags": [
+      "alert",
+      "fires",
+      "higherrorrate",
+      "incident",
+      "podcrashlooping",
+      "sloburnratep",
+      "sre",
+      "triage",
+      "user"
+    ],
+    "path": "skills/sre/incident-triage/SKILL.md"
+  },
+  {
+    "name": "investigation-cost-guardrail",
+    "category": "sre",
+    "description": "Applies to EVERY investigation before the first query is executed. Triggered always \u2014 enforces time/cost budgets per incident severity, prevents unbounded queries (PromQL over 30d, TraceQL without time window, repeated kubectl get --all-namespaces), mandates narrow-first query strategy, and defines stop conditions. Cost: $0.50/minute, quota: 10 concurrent chats. A runaway investigation starves other users.",
+    "tags": [
+      "applies",
+      "cost",
+      "first",
+      "guardrail",
+      "investigation",
+      "query",
+      "sre",
+      "time"
+    ],
+    "path": "skills/sre/investigation-cost-guardrail/SKILL.md"
+  },
+  {
+    "name": "metric-correlation-analysis",
+    "category": "sre",
+    "description": "Use when multiple metrics anomaly at the same time and you need to determine if they share a common cause. Runs a bundled Python script that detects Z-score anomalies per metric and finds temporal correlations across series. Requires sandbox. Load after collecting data from VictoriaMetrics MCP \u2014 this skill COMPUTES over collected data, it does not query backends directly.",
+    "tags": [
+      "analysis",
+      "anomaly",
+      "correlation",
+      "data",
+      "metric",
+      "metrics",
+      "multiple",
+      "same",
+      "sre",
+      "time"
+    ],
+    "path": "skills/sre/metric-correlation-analysis/SKILL.md"
+  },
+  {
+    "name": "on-call-handoff-protocol",
+    "category": "sre",
+    "description": "Use when handing off an on-call shift or starting a new one. Structured checklist covering active incidents, recent deploys, error budget burn, silenced alerts, known issues, and status page state. Ensures no context is lost between shifts.",
+    "tags": [
+      "call",
+      "checklist",
+      "handing",
+      "handoff",
+      "protocol",
+      "shift",
+      "sre",
+      "starting",
+      "structured"
+    ],
+    "path": "skills/sre/on-call-handoff-protocol/SKILL.md"
+  },
+  {
+    "name": "post-mortem-templates",
+    "category": "sre",
+    "description": "Use when writing a blameless post-mortem after a production incident (SEV1-2 mandatory, SEV3 encouraged). Provides copy-paste templates by severity, 5-Whys and fishbone RCA techniques, action item standards (owner + Jira + due date), review meeting format, and blameless language guide. Template is ready to fill \u2014 no structural work needed.",
+    "tags": [
+      "blameless",
+      "incident",
+      "mortem",
+      "post",
+      "production",
+      "sre",
+      "templates",
+      "writing"
+    ],
+    "path": "skills/sre/post-mortem-templates/SKILL.md"
+  },
+  {
+    "name": "root-cause-analysis",
+    "category": "sre",
+    "description": "Use when investigating production incidents where the root cause is unknown. Provides structured techniques (5 Whys, fault tree, elimination), cross-signal correlation patterns, timeline construction from K8s/ArgoCD/VictoriaMetrics/Loki, and empirical validation checklist. Grounded on VictoriaMetrics + OTel + Loki + Tempo stack.",
+    "tags": [
+      "analysis",
+      "cause",
+      "incidents",
+      "investigating",
+      "loki",
+      "production",
+      "root",
+      "sre",
+      "victoriametrics"
+    ],
+    "path": "skills/sre/root-cause-analysis/SKILL.md"
+  },
+  {
+    "name": "runbook-authoring",
+    "category": "sre",
+    "description": "Use when writing an operational runbook for a new or existing alert. Every production alert MUST have a linked runbook. Provides copy-paste template with diagnostics/mitigation/verification/escalation sections, naming convention (alert \u2192 file path), VMRule annotation integration, and validation script to find alerts missing runbook_url.",
+    "tags": [
+      "alert",
+      "authoring",
+      "existing",
+      "operational",
+      "production",
+      "runbook",
+      "sre",
+      "writing"
+    ],
+    "path": "skills/sre/runbook-authoring/SKILL.md"
+  },
+  {
+    "name": "sla-slo-design",
+    "category": "sre",
+    "description": "Use when defining reliability targets (SLI/SLO/SLA) for a new or existing service, choosing service tier, writing recording rules for VictoriaMetrics, or setting up burn rate alerting. Covers availability/latency/freshness SLI types, tier classification (Tier 1-3), example VMRule recording rules with exact PromQL, error budget calculation, and quarterly review process.",
+    "tags": [
+      "defining",
+      "design",
+      "recording",
+      "reliability",
+      "rules",
+      "service",
+      "sla",
+      "slo",
+      "sre",
+      "tier"
+    ],
+    "path": "skills/sre/sla-slo-design/SKILL.md"
+  },
+  {
+    "name": "slo-burn-rate-calculator",
+    "category": "sre",
+    "description": "Use when an SLO burn rate alert fires, when assessing budget health during an incident, or when determining how long until the error budget exhausts at the current rate. Runs a bundled Python script that calculates multi-window burn rates (1h/6h/24h/72h) per the Google SRE Workbook model, classifies severity (CRITICAL_PAGE \u2192 WATCH), and recommends action. Requires sandbox. Collect error/total counts from VictoriaMetrics first.",
+    "tags": [
+      "alert",
+      "budget",
+      "burn",
+      "calculator",
+      "error",
+      "fires",
+      "rate",
+      "slo",
+      "sre"
+    ],
+    "path": "skills/sre/slo-burn-rate-calculator/SKILL.md"
+  },
+  {
+    "name": "symptom-router",
+    "category": "sre",
+    "description": "ENTRY POINT \u2014 load FIRST when any symptom is reported: \\\"API is slow\\\", \\\"high latency\\\", \\\"logs missing\\\", \\\"traces missing\\\", \\\"metrics missing\\\", \\\"gaps in dashboard\\\", \\\"pods Pending\\\", \\\"OOMKilled\\\", \\\"cost spiked\\\", \\\"deploy stuck\\\", \\\"consumer lag\\\", \\\"503 errors\\\", \\\"secret not syncing\\\", \\\"alert not firing\\\", \\\"memory leak\\\", \\\"autoscaling not working\\\", \\\"dashboard no data\\\", \\\"certificate expired\\\", \\\"cardinality explosion\\\", \\\"SLO burn rate\\\", \\\"Redis errors\\\", \\\"database slow\\\", \\\"client says no data\\\", \\\"error rate\\\", \\\"dataset slow\\\", \\\"webhooks stopped\\\", \\\"batch job stuck\\\", \\\"load spike\\\", \\\"partner errors\\\", \\\"unfamiliar service name\\\", \\\"who owns this\\\". Routes to the exact skill(s) to load with first query. Cross-signal correlation and signal precedence (application counters > resources > pod phase).",
+    "tags": [
+      "dashboard",
+      "errors",
+      "first",
+      "load",
+      "missing",
+      "router",
+      "slow",
+      "sre",
+      "symptom"
+    ],
+    "path": "skills/sre/symptom-router/SKILL.md"
+  },
+  {
+    "name": "disk-and-memory-issues",
+    "category": "troubleshooting",
+    "description": "Diagnose OOM kills, leaks, disk pressure and swap.",
+    "tags": [
+      "diagnose",
+      "disk",
+      "issues",
+      "kills",
+      "leaks",
+      "memory",
+      "pressure",
+      "swap",
+      "troubleshooting"
+    ],
+    "path": "skills/troubleshooting/disk-and-memory-issues/SKILL.md"
+  },
+  {
+    "name": "incident-triage-linux",
+    "category": "troubleshooting",
+    "description": "Triage a live Linux incident quickly and safely.",
+    "tags": [
+      "incident",
+      "linux",
+      "live",
+      "quickly",
+      "safely",
+      "triage",
+      "troubleshooting"
+    ],
+    "path": "skills/troubleshooting/incident-triage-linux/SKILL.md"
+  },
+  {
+    "name": "linux-troubleshooting-methodology",
+    "category": "troubleshooting",
+    "description": "Apply a systematic approach to diagnosing Linux issues.",
+    "tags": [
+      "apply",
+      "approach",
+      "diagnosing",
+      "issues",
+      "linux",
+      "methodology",
+      "systematic",
+      "troubleshooting"
+    ],
+    "path": "skills/troubleshooting/linux-troubleshooting-methodology/SKILL.md"
+  },
+  {
+    "name": "log-analysis",
+    "category": "troubleshooting",
+    "description": "Extract signal from logs with grep, awk and journalctl.",
+    "tags": [
+      "analysis",
+      "extract",
+      "grep",
+      "journalctl",
+      "log",
+      "logs",
+      "signal",
+      "troubleshooting"
+    ],
+    "path": "skills/troubleshooting/log-analysis/SKILL.md"
+  },
+  {
+    "name": "systematic-debugging",
+    "category": "troubleshooting",
+    "description": "Investigate root cause before proposing any fix.",
+    "tags": [
+      "cause",
+      "debugging",
+      "investigate",
+      "proposing",
+      "root",
+      "systematic",
+      "troubleshooting"
+    ],
+    "path": "skills/troubleshooting/systematic-debugging/SKILL.md"
+  },
+  {
+    "name": "conventional-commits",
+    "category": "workflows",
+    "description": "Write Conventional Commits and changelogs.",
+    "tags": [
+      "changelogs",
+      "commits",
+      "conventional",
+      "workflows",
+      "write"
+    ],
+    "path": "skills/workflows/conventional-commits/SKILL.md"
+  },
+  {
+    "name": "git-advanced",
+    "category": "workflows",
+    "description": "Rebase, bisect and recover Git history safely.",
+    "tags": [
+      "advanced",
+      "bisect",
+      "git",
+      "history",
+      "rebase",
+      "recover",
+      "safely",
+      "workflows"
+    ],
+    "path": "skills/workflows/git-advanced/SKILL.md"
+  },
+  {
+    "name": "git-guardrails",
+    "category": "workflows",
+    "description": "Block destructive git commands before Claude runs them.",
+    "tags": [
+      "block",
+      "claude",
+      "commands",
+      "destructive",
+      "git",
+      "guardrails",
+      "runs",
+      "workflows"
+    ],
+    "path": "skills/workflows/git-guardrails/SKILL.md"
+  },
+  {
+    "name": "gitops-environment-onboard",
+    "category": "workflows",
+    "description": "Onboard a service into the GitOps pipeline.",
+    "tags": [
+      "environment",
+      "gitops",
+      "onboard",
+      "pipeline",
+      "service",
+      "workflows"
+    ],
+    "path": "skills/workflows/gitops-environment-onboard/SKILL.md"
+  },
+  {
+    "name": "harness-score-audit",
+    "category": "workflows",
+    "description": "Use when auditing a repository's AI agent harness maturity or improving its score. The harness-score tool (MIT, npx harness-score) measures 6 dimensions across 36 checks (108 points, L0-L4 maturity). Steps: run baseline, interpret dimensions, fix by priority, re-run, gate CI.",
+    "tags": [
+      "audit",
+      "auditing",
+      "dimensions",
+      "harness",
+      "maturity",
+      "repository",
+      "score",
+      "workflows"
+    ],
+    "path": "skills/workflows/harness-score-audit/SKILL.md"
+  },
+  {
+    "name": "how-this-agent-works",
+    "category": "workflows",
+    "description": "Understand this agent's skills and steering.",
+    "tags": [
+      "agent",
+      "skills",
+      "steering",
+      "understand",
+      "workflows",
+      "works"
+    ],
+    "path": "skills/workflows/how-this-agent-works/SKILL.md"
+  },
+  {
+    "name": "jira-conventions",
+    "category": "workflows",
+    "description": "Write Jira issues with consistent conventions.",
+    "tags": [
+      "consistent",
+      "conventions",
+      "issues",
+      "jira",
+      "workflows",
+      "write"
+    ],
+    "path": "skills/workflows/jira-conventions/SKILL.md"
+  },
+  {
+    "name": "local-reference-docs",
+    "category": "workflows",
+    "description": "Find vendored reference docs offline.",
+    "tags": [
+      "docs",
+      "find",
+      "local",
+      "offline",
+      "reference",
+      "vendored",
+      "workflows"
+    ],
+    "path": "skills/workflows/local-reference-docs/SKILL.md"
+  },
+  {
+    "name": "pipeline-template-apps",
+    "category": "workflows",
+    "description": "Wire apps into the shared CI/CD templates.",
+    "tags": [
+      "apps",
+      "pipeline",
+      "shared",
+      "template",
+      "templates",
+      "wire",
+      "workflows"
+    ],
+    "path": "skills/workflows/pipeline-template-apps/SKILL.md"
+  },
+  {
+    "name": "session-handoff",
+    "category": "workflows",
+    "description": "Hand off an incident or migration to the next on-call shift.",
+    "tags": [
+      "call",
+      "hand",
+      "handoff",
+      "incident",
+      "migration",
+      "next",
+      "session",
+      "shift",
+      "workflows"
+    ],
+    "path": "skills/workflows/session-handoff/SKILL.md"
+  },
+  {
+    "name": "skill-authoring",
+    "category": "workflows",
+    "description": "Use when creating a new SKILL.md, rewriting a description that doesn't trigger correctly, splitting an overgrown skill into references/, or deciding whether something belongs as a skill vs steering vs runbook. Covers the canonical template, frontmatter rules, description formula, collision checks, and pre-flight checklist.",
+    "tags": [
+      "authoring",
+      "creating",
+      "description",
+      "doesn",
+      "rewriting",
+      "skill",
+      "trigger",
+      "workflows"
+    ],
+    "path": "skills/workflows/skill-authoring/SKILL.md"
+  },
+  {
+    "name": "skill-eval-harness",
+    "category": "workflows",
+    "description": "Use when validating whether a skill edit actually improved behavior, running paired budget-capped evals against case files, checking trigger collision against the catalog, or deciding if an edit warrants full behavioral testing vs a simple read-through. Covers case validation, cost preflight, paired blind scoring, assertion analysis, and collision scanning.",
+    "tags": [
+      "against",
+      "case",
+      "collision",
+      "edit",
+      "eval",
+      "harness",
+      "paired",
+      "skill",
+      "validating",
+      "workflows"
+    ],
+    "path": "skills/workflows/skill-eval-harness/SKILL.md"
+  },
+  {
+    "name": "skill-share",
+    "category": "workflows",
+    "description": "Use when scaffolding a new skill directory, running per-skill validation, packaging a skill as a zip for distribution, or formatting an announcement summary. Covers the scaffold/validate/package/announce lifecycle with vendor-agnostic distribution.",
+    "tags": [
+      "directory",
+      "distribution",
+      "running",
+      "scaffolding",
+      "share",
+      "skill",
+      "validation",
+      "workflows"
+    ],
+    "path": "skills/workflows/skill-share/SKILL.md"
+  },
+  {
+    "name": "spec-writing",
+    "category": "workflows",
+    "description": "Write requirements, design and task specs.",
+    "tags": [
+      "design",
+      "requirements",
+      "spec",
+      "specs",
+      "task",
+      "workflows",
+      "write",
+      "writing"
+    ],
+    "path": "skills/workflows/spec-writing/SKILL.md"
+  }
+]

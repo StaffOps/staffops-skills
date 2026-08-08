@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Agent Eval Harness Template
 
 Simple evaluation framework:
