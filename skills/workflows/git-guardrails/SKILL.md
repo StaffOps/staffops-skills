@@ -382,3 +382,20 @@ pre-commit install --hook-type commit-msg
 - **Greenfield repos with no CI** — hooks add friction before value exists; add them when the team grows.
 - **Scripting git operations** (rebase, cherry-pick) — see [git-advanced](../workflows/git-advanced/SKILL.md).
 - **Understanding git internals** (reflog, objects) — this skill is about guardrails, not mechanisms.
+
+## Decision tree
+
+```
+Git operation intercepted
+├── Is it destructive? (force-push, reset --hard, clean -f, branch -D)
+│   ├── On main/production? → BLOCK unconditionally
+│   └── On feature branch? → WARN + require confirmation
+├── Is it a commit?
+│   ├── Staged files include secrets? (.env, keys, tokens) → BLOCK
+│   ├── Staged files >5MB? → WARN (use LFS)
+│   └── Clean? → ALLOW
+├── Is it a push?
+│   ├── To main without PR? → BLOCK
+│   └── To feature branch? → ALLOW
+└── Other operation → ALLOW (read-only is always safe)
+```
