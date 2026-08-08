@@ -342,6 +342,29 @@ cat /sys/fs/cgroup/system.slice/myapp.service/memory.events
 - **Container process namespaces** — use container runtime docs or Kubernetes debugging tools.
 - **Performance root-cause analysis** (CPU flamegraphs, scheduler latency) — see [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
 
+
+## Decision tree
+
+```
+What's wrong with the process?
+├── Process stuck / unresponsive?
+│   ├── State D (uninterruptible sleep) → blocked on I/O, check disk/NFS
+│   ├── State S but not responding → strace -p PID to see what it's waiting on
+│   └── State T (stopped) → someone sent SIGSTOP; kill -CONT PID
+├── Too much CPU?
+│   ├── Legitimate load → renice / cpulimit / cgroups
+│   ├── Runaway loop → strace / perf top to identify hot path
+│   └── Fork bomb → kill process group: kill -9 -PGID
+├── Zombie (Z state)?
+│   ├── Parent alive → parent isn't calling wait(); fix or restart parent
+│   └── Parent dead → init should reap; if stuck, only reboot clears
+├── Can't kill it (kill -9 doesn't work)?
+│   ├── State D → kernel-level block; fix underlying I/O (unmount, etc.)
+│   └── Kernel thread → cannot kill; address root cause
+└── Too many open files?
+    └── Check → ls /proc/PID/fd | wc -l; raise via ulimit or systemd LimitNOFILE
+```
+
 ## Related skills
 
 - [systemd-services](../linux/systemd-services/SKILL.md) — managing services, timers, journald.

@@ -239,6 +239,26 @@ def retry(fn, max_attempts=3, delay=1.0):
 
 ---
 
+
+## Decision tree
+
+```
+One-off or reusable?
+├── One-off (quick task, no args needed)
+│   └── Single file, if __name__ guard, pathlib, done
+├── Reusable (will be called again / by others)
+│   ├── Needs CLI args?
+│   │   ├── 1-2 simple args → argparse (stdlib, no deps)
+│   │   └── Complex subcommands → typer or click
+│   ├── Needs subprocess calls?
+│   │   ├── Simple command → subprocess.run(["cmd"], check=True)
+│   │   ├── Need stdout capture → subprocess.run(..., capture_output=True)
+│   │   └── Streaming output → Popen + line-by-line read
+│   └── Needs file manipulation?
+│       └── Always pathlib (never os.path) — see patterns above
+└── Growing beyond 200 LOC? → split into package with __main__.py
+```
+
 ## Pitfalls
 
 | Mistake | Fix |

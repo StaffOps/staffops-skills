@@ -220,6 +220,30 @@ localhost is only reachable from inside that same network namespace, which
 - `docker-cli-operations` — the commands used throughout this skill
 - `linux-process-management` — signals, `/proc`, cgroups in depth
 
+
+## Decision tree
+
+```
+What is the container doing?
+├── Crashing (exits immediately)
+│   ├── Exit code 1? → app error — check logs: docker logs <cid>
+│   ├── Exit code 137? → OOM killed — raise memory limit or fix leak
+│   ├── Exit code 139? → segfault — wrong arch or corrupt binary
+│   └── Exit code 126/127? → bad entrypoint — check CMD/ENTRYPOINT path
+├── Hanging (runs but unresponsive)
+│   ├── CPU 100%? → infinite loop — docker exec + strace/gdb
+│   ├── CPU 0%? → deadlock or waiting on IO — check network/mounts
+│   └── Healthcheck failing? → exec into container, curl localhost
+├── Wrong output / behavior
+│   ├── Env vars wrong? → docker inspect, check .env loading
+│   ├── Config file missing? → check volume mounts and paths
+│   └── DNS failing? → docker exec + nslookup/dig
+└── Cannot exec into container
+    ├── No shell? → docker cp a static busybox in, or use debug container
+    ├── Read-only fs? → override with --read-only=false or tmpfs
+    └── Already exited? → docker run --entrypoint sh <image>
+```
+
 ## When NOT to use
 
 - Image build failures (not runtime) — use `dockerfile-authoring`

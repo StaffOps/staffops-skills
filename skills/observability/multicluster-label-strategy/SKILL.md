@@ -148,6 +148,22 @@ Should return zero (or only externally-pushed metrics from systems you don't con
 - kubernetes-mixin: https://github.com/kubernetes-monitoring/kubernetes-mixin
 - Related skills: `kubelet-scrape-architecture`, `vm-cardinality-management`
 
+## Decision tree
+
+```
+Multi-cluster label issue?
+├── Label conflict (same metric, different meaning across clusters)?
+│   ├── Check: vmagent externalLabels — is `cluster` set uniquely per cluster?
+│   └── Check: recording rules — do they preserve the cluster label in `by()`?
+├── Missing cluster label on some series?
+│   ├── Check: scrape config vs externalLabels — external only applies to remote_write
+│   ├── Check: streaming aggregation — does `output_relabel_configs` drop it?
+│   └── Check: VMRule recording — does the `expr` aggregate away `cluster`?
+└── Recording rule returning wrong cluster data?
+    ├── Check: `on()` or `ignoring()` in join — cluster label mismatch
+    └── Check: `eks_cluster` vs `cluster` — use the correct one for the context
+```
+
 ## When NOT to use
 
 - For kubelet scrape config mechanics → use `kubelet-scrape-architecture`

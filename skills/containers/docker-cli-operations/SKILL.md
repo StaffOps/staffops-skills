@@ -231,6 +231,31 @@ instead. These map directly onto cgroup v2 `memory.max` — see
 - `docker-compose-patterns` — orchestrating multiple containers together
 - `linux-process-management` — signals, `/proc`, and cgroups underneath these commands
 
+
+## Decision tree
+
+```
+What do you need to do?
+├── Build an image
+│   ├── Standard build → docker build -t name:tag .
+│   ├── Multi-arch → docker buildx build --platform linux/amd64,linux/arm64
+│   └── No cache (force rebuild) → docker build --no-cache
+├── Run a container
+│   ├── Interactive (debug) → docker run --rm -it <image> sh
+│   ├── Background service → docker run -d --name <n> -p host:ctr <image>
+│   └── One-off command → docker run --rm <image> <cmd>
+├── Inspect / debug
+│   ├── What's running? → docker ps (add -a for exited)
+│   ├── Why did it die? → docker logs <cid> + docker inspect <cid>
+│   ├── What's inside? → docker exec -it <cid> sh
+│   └── Filesystem diff? → docker diff <cid>
+└── Cleanup
+    ├── Stopped containers → docker container prune
+    ├── Dangling images → docker image prune
+    ├── Everything unused → docker system prune -a --volumes
+    └── Specific image → docker rmi <image>
+```
+
 ## When NOT to use
 
 - Multi-container environments (compose up/down/profiles) — use `docker-compose-patterns`

@@ -82,6 +82,23 @@ Key fields: `days_to_exhaustion`, `growth_per_day`, `r_squared` (confidence: >0.
 4. **Confidence** — R² of the linear fit (LOW = noisy data, re-check with longer window)
 5. **Recommendation** — expand capacity (⚠️ RECOMMENDATION ONLY) or "healthy, no action"
 
+## Decision tree
+
+```
+Capacity concern detected
+├── Which dimension is growing?
+│   ├── Storage (disk/PV) → check retention policies + growth rate
+│   ├── Ingestion (samples/s, logs/s) → check new workloads or cardinality spike
+│   ├── Memory (RSS/heap) → check cache hit ratio + leak signals
+│   └── CPU (cores) → check concurrency + query complexity
+├── Is it urgent? (< 7 days to exhaustion)
+│   ├── Yes → immediate mitigation: scale up, drop low-value data, throttle
+│   └── No → planned: model trend, set budget, schedule expansion
+└── Action
+    ├── Short-term: vertical scale or horizontal replicas
+    └── Long-term: retention reduction, streaming aggregation, architecture change
+```
+
 ## Related skills
 
 - `vm-capacity-review` — scheduled VictoriaMetrics capacity report (non-executable)

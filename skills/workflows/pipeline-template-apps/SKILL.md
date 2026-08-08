@@ -311,6 +311,30 @@ production branch:
 - **GitHub Actions** — this skill is GitLab CI focused.
 - **Pipeline debugging** (runner issues, Docker-in-Docker) — see CI/CD troubleshooting docs.
 
+
+## Decision tree
+
+```
+What do you need?
+├── Onboard a new service?
+│   ├── Identify domain → pick the *-ci-templates repo
+│   ├── Copy .gitlab-ci.yml from template (include: reference)
+│   ├── Set CI/CD variables (IMAGE, HARBOR_PROJECT, etc.)
+│   └── Verify: push feature branch → pipeline runs unit-test + build-dev
+├── Fix a broken pipeline?
+│   ├── Which stage failed? → read the job log, not just "failed"
+│   ├── Docker build fails → check Dockerfile, base image, build args
+│   ├── Test fails → run locally via Docker first (dev-environment.md)
+│   ├── Push to registry fails → credentials, project path, tag format
+│   └── Deploy fails → check ArgoCD sync, Helm values, image tag
+├── Add a new stage?
+│   ├── Shared across domain → add to ci-templates include file
+│   ├── Project-specific → add job in project .gitlab-ci.yml
+│   └── Follow convention: stage name, rules, artifacts, needs
+└── Promote to production?
+    └── Manual trigger on build stage (main branch only) → tag + ArgoCD picks up
+```
+
 ## Related skills
 
 - [conventional-commits](../workflows/conventional-commits/SKILL.md) — commit format that triggers pipeline stages.

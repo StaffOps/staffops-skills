@@ -287,6 +287,27 @@ bats -t test/
 - **Validating YAML/JSON config** — use dedicated linters (yamllint, jsonlint, helm lint).
 - **Integration/E2E tests** that spin up services — use Docker Compose or a CI pipeline.
 
+
+## Decision tree
+
+```
+What do you need?
+├── Writing a new script?
+│   ├── Add shellcheck directive: # shellcheck shell=bash
+│   ├── Format with shfmt -i 2 -ci before first commit
+│   └── Write bats tests for non-trivial logic
+├── Existing script is broken / untested?
+│   ├── Run shellcheck first → fix all errors (SC level)
+│   ├── Then shfmt to normalize style
+│   └── Add bats tests for the fixed behavior
+├── CI integration?
+│   ├── Pre-commit hook → shellcheck + shfmt --diff (zero tolerance)
+│   ├── Pipeline stage → shellcheck --format=gcc, bats --formatter tap
+│   └── Monorepo → find . -name '*.sh' | xargs shellcheck
+└── False positive from shellcheck?
+    └── Disable with # shellcheck disable=SCNNNN (inline, with reason)
+```
+
 ## Related skills
 
 - [bash-scripting](../shell/bash-scripting/SKILL.md) — writing the scripts under test.

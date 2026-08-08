@@ -291,6 +291,25 @@ ls /tmp/scriptname.* 2>/dev/null && echo "LEAK: temp files remain"
 - **Argument parsing and CLI UX** — see [shell-cli-design](../shell/shell-cli-design/SKILL.md).
 - **Complex error recovery** that needs retry logic across services — consider Python or a proper orchestrator.
 
+
+## Decision tree
+
+```
+What failure mode are you handling?
+├── Exit code from a command?
+│   ├── Single command → if ! cmd; then handle; fi
+│   └── Pipeline → set -o pipefail + check $?
+├── Subshell swallowing errors?
+│   ├── $() substitution → assign + check: out=$(cmd) || die
+│   └── Piped subshell → use process substitution or temp file
+├── Need cleanup on ANY exit?
+│   ├── Single resource → trap cleanup EXIT
+│   └── Multiple resources → trap with stack pattern
+└── Script-wide strictness?
+    ├── New script → set -euo pipefail (strict mode)
+    └── Legacy script → add guards incrementally, test each
+```
+
 ## Related skills
 
 - [bash-scripting](../shell/bash-scripting/SKILL.md) — script structure, quoting, parameter expansion.

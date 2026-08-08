@@ -225,6 +225,23 @@ kubectl get events -n <namespace> --field-selector reason=PolicyViolation
 5. Switch to `Enforce` after validation period
 6. Deploy to PRD
 
+## Decision tree
+
+```
+Pod rejected by admission webhook?
+├── Identify which policy blocked it
+│   ├── kubectl get events -n <ns> | grep "policy"
+│   └── kubectl get policyreport -n <ns> (if using PolicyReports)
+├── Understand the violation
+│   ├── Missing mandatory label? → add to Helm values.labels
+│   ├── Image not from allowed registry? → check Kyverno image mutation rules
+│   ├── No resource requests? → add resources.requests to container spec
+│   └── Security context violation? → set runAsNonRoot, drop ALL capabilities
+└── Fix or request exception?
+    ├── Fix in chart (95% of cases) → update values, redeploy
+    └── Legitimate exception → create PolicyException CR (requires justification + approval)
+```
+
 ## Anti-patterns
 
 - ❌ Deploying policies in `Enforce` mode without testing in `Audit` first

@@ -286,6 +286,27 @@ docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/dotnet/sdk:8.0 dotnet t
 - OTel .NET docs: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/opentelemetry.io/content/en/docs/languages/dotnet/`
 - Related skills: `telemetry-standard`, `grpc-distributed-tracing`, `python-otel-patterns`
 
+
+## Decision tree
+
+```
+Which telemetry signal?
+├── Traces
+│   ├── Background worker / cron? → StartRootActivity (independent trace)
+│   ├── Need to force-sample one request? → DebugTraceStateProcessor
+│   ├── Pass business context across services? → Baggage
+│   ├── Catch & record exception in span? → RecordException + SetStatus
+│   └── Retry / parallel / cache spans? → child Activity under current
+├── Metrics
+│   ├── Counter (monotonic)? → Meter.CreateCounter<T>
+│   ├── Gauge (current value)? → Meter.CreateObservableGauge
+│   ├── Distribution (latency)? → Meter.CreateHistogram + Exemplars
+│   └── Metric→Trace link? → .SetExemplarFilter(TraceBased)
+└── Logs
+    ├── Structured log with trace context? → ILogger (OTel bridges auto)
+    └── Filter noisy health-check logs? → AddFilter / endpoint filter
+```
+
 ## When NOT to use
 
 - Python OTel instrumentation — use `python-otel-patterns`

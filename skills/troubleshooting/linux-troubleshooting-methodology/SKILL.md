@@ -210,6 +210,29 @@ from memory.
 - **Application-level debugging** (stepping through code, unit test failures) — see [systematic-debugging](../troubleshooting/systematic-debugging/SKILL.md).
 - **Cloud/K8s-specific issues** — start with platform-native observability tools first.
 
+
+## Decision tree
+
+```
+Symptom observed → form hypothesis BEFORE running commands
+├── Step 1: Which resource layer? (USE method)
+│   ├── CPU → uptime (load), mpstat (per-core), pidstat (per-process)
+│   ├── Memory → free -h, vmstat 1 (si/so), dmesg | grep oom
+│   ├── Disk → df -h, iostat -xz 1, iotop
+│   ├── Network → ss -s, sar -n DEV 1, nstat (errors)
+│   └── Not resource? → application layer (logs, traces, config)
+├── Step 2: Utilization → Saturation → Errors (per resource)
+│   ├── Utilization high → who is consuming? (top, pidstat, iotop)
+│   ├── Saturation (queuing) → capacity limit hit, scale or optimize
+│   └── Errors → hardware fault? driver? config? (dmesg, journalctl)
+├── Step 3: Correlate
+│   ├── Did it start at a known time? → check deploys, crons, config changes
+│   ├── Multiple symptoms → shared root cause (e.g., disk full → many failures)
+│   └── Single symptom → narrow the hypothesis, test one variable
+└── Step 4: Validate fix
+    └── Symptom gone AND root cause addressed (not just restarted)
+```
+
 ## Related skills
 
 - [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) — first-response procedure.

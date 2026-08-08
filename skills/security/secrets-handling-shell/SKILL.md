@@ -226,6 +226,27 @@ rewriting as sufficient remediation on its own.
 [ ] Does this need to be saved locally at all, or fetched fresh each time?
 ```
 
+## Decision tree
+
+```
+Secret exposure detected?
+├── Secret visible in environment variables?
+│   ├── Switch to file-based injection (envFile, mounted secret volume)
+│   └── Rotate the secret immediately (assume compromised)
+├── Secret in shell history?
+│   ├── Clear: history -d <line> or truncate ~/.bash_history
+│   ├── Prevent: prefix command with space (HISTCONTROL=ignorespace)
+│   └── Rotate the exposed secret
+├── Secret in logs?
+│   ├── Identify log destination (stdout, file, remote collector)
+│   ├── Scrub or rotate log data if possible
+│   └── Fix source: mask/redact in code, use structured logging
+└── Secret committed to git?
+    ├── Use git-filter-repo or BFG to rewrite history
+    ├── Force-push (with team coordination)
+    └── Rotate the secret — history may already be cloned
+```
+
 ## Pitfalls
 
 - **Passing a secret as a CLI argument** — visible to every user on the

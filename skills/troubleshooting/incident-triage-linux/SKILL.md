@@ -201,6 +201,29 @@ investigation from scratch.
 - **Application-level bugs** (logic errors, data corruption) — this is for infrastructure symptoms.
 - **Post-incident analysis / RCA writing** — see [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md).
 
+
+## Decision tree
+
+```
+What's the symptom?
+├── System completely unresponsive?
+│   ├── Can SSH? → yes: check load, OOM, disk full
+│   ├── Cannot SSH → console access? check kernel panic (dmesg via serial)
+│   └── Partial (slow) → load average >> CPU count? → CPU or I/O saturation
+├── Single service down?
+│   ├── systemctl status → Active: failed → journalctl -u SVC -n 100
+│   ├── Running but not responding → check port (ss -tlnp), strace attach
+│   └── Keeps restarting → OOM? config error? dependency down?
+├── Network issues?
+│   ├── Total loss → ip link, ip route, check upstream (ping gateway)
+│   ├── Partial (some hosts) → DNS? routes? firewall? traceroute
+│   └── Slow/dropping → packet loss (mtr), interface errors (ip -s link)
+└── Disk full / I/O stall?
+    ├── df -h shows 100% → find large files: du -sh /* | sort -rh | head
+    ├── Inodes exhausted → df -i
+    └── I/O wait high → iostat -xz 1, check %util and await
+```
+
 ## Related skills
 
 - [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md) — structured approach after initial triage.

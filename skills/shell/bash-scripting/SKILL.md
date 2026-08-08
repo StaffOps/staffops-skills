@@ -260,6 +260,27 @@ Run `scripts/lint.sh` to apply all four to a directory tree.
 - **Cross-platform portability** where only POSIX sh is available — avoid Bash-specific features.
 - **Error handling / trap patterns** — see [bash-error-handling](../shell/bash-error-handling/SKILL.md) for the dedicated treatment.
 
+
+## Decision tree
+
+```
+Starting a new script?
+├── Must run on sh/dash (Alpine, Debian minimal)?
+│   ├── Yes → POSIX only: no arrays, no [[ ]], no local -n
+│   └── No → Use #!/usr/bin/env bash, leverage bashisms
+├── Needs robust error handling?
+│   ├── Yes → set -euo pipefail + trap cleanup EXIT
+│   └── No (quick one-off) → at minimum set -e
+├── Accepts arguments?
+│   ├── Simple flags → while getopts / shift loop
+│   └── Complex (subcommands, long opts) → see shell-cli-design
+├── Needs logging/verbosity?
+│   ├── Yes → log() to stderr, conditional VERBOSE flag
+│   └── No → echo to stdout for data, stderr for errors
+└── Will others maintain it?
+    └── Yes → add usage(), header comment, shellcheck CI
+```
+
 ## Related skills
 
 - [bash-error-handling](../shell/bash-error-handling/SKILL.md) — set -euo pipefail, traps, cleanup.

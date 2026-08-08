@@ -319,6 +319,31 @@ counts and exit statuses per stage.
 - **Text transformation logic** (awk/sed/jq pipelines) — see [shell-text-processing](../shell/shell-text-processing/SKILL.md).
 - **Debugging slow commands or high load** — use [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md) instead.
 
+
+## Decision tree
+
+```
+What do you need to do?
+├── Find files?
+│   ├── By name/pattern → find . -name "*.log"
+│   ├── By content → grep -rl "pattern" /path
+│   ├── By age/size → find . -mtime -1 / -size +100M
+│   └── Fastest (name only) → locate / fd
+├── Process text?
+│   ├── Filter → grep / awk
+│   ├── Transform → sed / awk / tr
+│   └── See → shell-text-processing skill
+├── Manage background jobs?
+│   ├── Run in background → cmd &, nohup, disown
+│   ├── List jobs → jobs, then fg %N or bg %N
+│   └── Persistent session → tmux / screen
+└── Redirect / combine I/O?
+    ├── Stdout to file → cmd > file (overwrite) / >> (append)
+    ├── Stderr to file → cmd 2> file
+    ├── Both → cmd &> file or cmd > file 2>&1
+    └── Discard → cmd > /dev/null 2>&1
+```
+
 ## Related skills
 
 - [bash-scripting](../shell/bash-scripting/SKILL.md) — writing full scripts with functions, loops, error handling.

@@ -222,6 +222,25 @@ Adjust `group_by` in route. Common: `group_by: ['alertname', 'cluster', 'namespa
 - Slack template syntax: https://prometheus.io/docs/alerting/latest/notifications/
 - Related skills: `vmalert-configuration` (for `external.alert.source` Grafana links)
 
+## Decision tree
+
+```
+Alertmanager → Slack problem
+├── Alert not arriving at all?
+│   ├── Check: amtool config routes test <labels> → does it match a route?
+│   ├── Check: is alert silenced or inhibited? (amtool silence query)
+│   └── Check: webhook URL valid? (secret not rotated/expired?)
+├── Wrong channel?
+│   ├── Check: route matchers — most-specific route wins (first match)
+│   └── Check: continue: true causing duplicate delivery?
+├── Template broken (raw Go template in message)?
+│   ├── Check: helmfile triple-escaping (see helmfile-templating skill)
+│   └── Check: missing {{ with .Labels.X }} guard for absent label
+└── Duplicate alerts?
+    ├── Check: group_by labels — too narrow grouping?
+    └── Check: repeat_interval vs group_interval mismatch
+```
+
 ## When NOT to use
 
 - For alert rule authoring (PromQL/MetricsQL expressions) → use `vmalert-configuration`

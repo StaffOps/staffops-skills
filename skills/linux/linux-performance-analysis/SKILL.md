@@ -252,6 +252,33 @@ guess rather than a comparison.
 - **Network latency between hosts** — see [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
 - **Kubernetes pod resource issues** — start with k8s-workload-metrics or kubectl top; this skill is for bare-metal/VM Linux.
 
+
+## Decision tree
+
+```
+Which resource is saturated?
+├── CPU?
+│   ├── Utilization → mpstat -P ALL 1 (per-core)
+│   ├── Saturation → vmstat r column, runqueue length
+│   ├── Errors → dmesg | grep -i mce
+│   └── Who → top/htop sorted by %CPU, pidstat 1
+├── Memory?
+│   ├── Utilization → free -h, /proc/meminfo
+│   ├── Saturation → vmstat si/so (swap in/out), oom-killer in dmesg
+│   ├── Errors → dmesg | grep -i "out of memory"
+│   └── Who → ps aux --sort=-%mem | head, smem
+├── Disk I/O?
+│   ├── Utilization → iostat -xz 1 (%util column)
+│   ├── Saturation → iostat avgqu-sz, await >> svctm
+│   ├── Errors → dmesg | grep -iE "error|fault|reset"
+│   └── Who → iotop -oP, pidstat -d 1
+└── Network?
+    ├── Utilization → sar -n DEV 1, nstat
+    ├── Saturation → netstat -s (retransmits, overflows)
+    ├── Errors → ip -s link, ethtool -S
+    └── Who → ss -tnp, iftop, nethogs
+```
+
 ## Related skills
 
 - [linux-process-management](../linux/linux-process-management/SKILL.md) — cgroups, nice, signals, OOM killer.

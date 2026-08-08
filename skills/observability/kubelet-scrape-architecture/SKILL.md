@@ -173,6 +173,23 @@ job=vmagent            — self-monitoring
 - Local cache: `<workspace>/01-DEVOPS/EXTERNAL-DOCS/VictoriaMetrics/docs`
 - Related: `multicluster-label-strategy`, `streaming-aggregation`
 
+## Decision tree
+
+```
+Kubelet/cadvisor metrics missing?
+├── Which metrics are absent?
+│   ├── container_* (cadvisor) → check /metrics/cadvisor scrape path
+│   ├── kubelet_* (kubelet internal) → check /metrics scrape path
+│   └── node_* (node-exporter) → separate DaemonSet, not kubelet
+├── Scrape target exists but returns 0 series?
+│   ├── Check: RBAC — ServiceAccount needs nodes/metrics, nodes/proxy
+│   ├── Check: Karpenter new node — target discovery delay (up to 60s)
+│   └── Check: metrics_path label rewrite in VMServiceScrape
+└── Only some nodes missing?
+    ├── Check: node label selector in scrape config
+    └── Check: Karpenter node rotation — ephemeral node already gone
+```
+
 ## When NOT to use
 
 - For VictoriaMetrics cluster capacity/scaling → use `victoriametrics-troubleshooting`

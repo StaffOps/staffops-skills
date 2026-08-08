@@ -422,6 +422,34 @@ dependency state, and outdated repository keys in one pass.
 - **Kernel tuning or low-level performance** — see [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
 - **Container image builds** — for minimal images use apko/melange, not apt inside containers.
 
+
+## Decision tree
+
+```
+What admin task?
+├── Install / manage packages?
+│   ├── From official repo → apt install PKG
+│   ├── Specific version → apt install PKG=VERSION
+│   ├── External repo → add-apt-repository / PPA, then apt update
+│   ├── Remove cleanly → apt purge PKG + apt autoremove
+│   └── Broken deps → apt --fix-broken install
+├── Manage users / groups?
+│   ├── New user → adduser NAME (interactive) or useradd -m -s /bin/bash
+│   ├── Add to group → usermod -aG GROUP USER (re-login required)
+│   ├── Disable account → usermod -L USER or passwd -l USER
+│   └── Sudo access → usermod -aG sudo USER or /etc/sudoers.d/
+├── Configure networking?
+│   ├── View current → ip addr, ip route, resolvectl status
+│   ├── Change config → edit /etc/netplan/*.yaml + netplan apply
+│   ├── Temporary → ip addr add/del (lost on reboot)
+│   └── DNS → edit netplan nameservers or systemd-resolved
+└── Security hardening?
+    ├── Firewall → ufw enable, ufw allow 22/tcp, ufw status
+    ├── SSH → disable PasswordAuthentication, disable root login
+    ├── Updates → unattended-upgrades for security patches
+    └── Audit → check /var/log/auth.log, lastlog, faillog
+```
+
 ## Related skills
 
 - [systemd-services](../linux/systemd-services/SKILL.md) — service management, journald.

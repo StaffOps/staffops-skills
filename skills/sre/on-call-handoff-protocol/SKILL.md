@@ -162,6 +162,24 @@ kubectl top nodes --sort-by=memory | head -5
 
 ---
 
+## Decision tree
+
+```
+On-call handoff
+├── Incoming (starting shift)?
+│   ├── Active incident in progress?
+│   │   ├── Yes → join war room, get verbal briefing, confirm IC role transfer
+│   │   └── No → read handoff doc, check open alerts, review recent deploys
+│   └── Recent deploy (< 4h)?
+│       ├── Yes → confirm rollback plan exists, watch error rate closely
+│       └── No → standard monitoring posture
+└── Outgoing (ending shift)?
+    ├── Active incident?
+    │   ├── Yes → DO NOT hand off mid-incident unless shift-length exceeded
+    │   └── No → write handoff notes, flag any flaky alerts or known issues
+    └── Pending action items? → document clearly for successor
+```
+
 ## Anti-patterns
 
 - ❌ "Nothing happened, good luck" — always provide structured handoff

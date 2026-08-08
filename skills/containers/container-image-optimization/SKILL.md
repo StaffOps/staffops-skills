@@ -186,6 +186,29 @@ storage and pull-time benefit beyond any single image's own size.
 - `dockerfile-authoring` — multi-stage builds, layer ordering fundamentals
 - `docker-cli-operations` — `docker history`, `system df`, and cleanup commands
 
+
+## Decision tree
+
+```
+Image too big — where is the bloat?
+├── Base image (>100 MB)
+│   ├── Using ubuntu/debian? → switch to alpine or distroless
+│   ├── Using :latest? → pin slim/alpine variant
+│   └── Need glibc? → alpine with apk add libc6-compat, or distroless
+├── Dependencies layer (>200 MB)
+│   ├── Dev/build deps in final? → multi-stage: build stage + clean runtime
+│   ├── Package cache left? → --no-cache (apk) / rm -rf /var/cache
+│   └── Unused transitive deps? → pip --no-deps + explicit list
+├── Application layer (>50 MB unexplained)
+│   ├── Tests/docs/fixtures copied in? → .dockerignore them
+│   ├── Source + compiled both present? → multi-stage, copy only binary
+│   └── node_modules in image? → prune devDeps or multi-stage
+└── Leftover artifacts
+    ├── .git directory? → add to .dockerignore
+    ├── Build cache dirs? → rm in same RUN layer
+    └── Multiple RUN layers for cleanup? → chain with && in one RUN
+```
+
 ## When NOT to use
 
 - Writing the Dockerfile itself (layer ordering, syntax) — use `dockerfile-authoring`

@@ -219,6 +219,24 @@ Fix: re-check the triple-template escaping chain.
 - vm-operator CRD reference: https://docs.victoriametrics.com/operator/api/
 - Related skills: `alertmanager-slack-config`, `helmfile-templating`
 
+## Decision tree
+
+```
+VMAlert rule problem?
+├── Rule not evaluating at all?
+│   ├── Check: VMRule CR applied? (kubectl get vmrules -A)
+│   ├── Check: vmalert picked it up? (/api/v1/rules shows the group?)
+│   └── Check: selectAllByDefault or ruleSelector matches labels?
+├── Rule evaluates but wrong result?
+│   ├── Check: evalDelay — comparing stale data to fresh thresholds?
+│   ├── Check: queryStep — resolution mismatch with recording rule interval?
+│   └── Check: metric exists? (query it directly in vmselect)
+└── Alert fires in vmalert but doesn't reach Alertmanager?
+    ├── Check: notifiers.url — is it pointing to correct AM instance?
+    ├── Check: external.alert.source — broken template blocks entire group?
+    └── Check: AM is up and accepting? (curl AM /-/healthy)
+```
+
 ## When NOT to use
 
 - For Alertmanager routing/Slack templates → use `alertmanager-slack-config`

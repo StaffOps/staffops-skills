@@ -90,6 +90,25 @@ Map from what you know (pod/namespace/cluster) to the repo:
 
 See `references/domain-repos.md` for the full repository list by domain.
 
+## Decision tree
+
+```
+GitOps environment question?
+├── Which environment?
+│   ├── DEV → bdc-workloads-dev-nv cluster
+│   ├── HML → bdc-workloads-prd-nv cluster (homologation namespace)
+│   ├── PRD → bdc-workloads-prd-nv cluster
+│   └── BTC → bdc-workloads-prd-nv cluster (batch namespace)
+├── Which repo controls deployment?
+│   ├── App values → <domain>-applicationsets/ repo
+│   ├── Cluster add-ons → k8s-setup/ (helmfile)
+│   └── ArgoCD config → argocd-config/ repo
+└── Which values file to edit?
+    ├── Shared across envs → values.yaml (base)
+    ├── Environment-specific → values-<env>.yaml
+    └── Cluster-specific override → values-<cluster>.yaml
+```
+
 ## Related skills
 
 - `argocd-patterns` — sync troubleshooting, ApplicationSet generators

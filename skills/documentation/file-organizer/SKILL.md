@@ -223,6 +223,26 @@ touched by `apply`.
 - **Git repository layout** — see project-specific conventions.
 - **Cloud storage organization** (S3 prefixes, bucket structure) — different concerns.
 
+
+## Decision tree
+
+```
+What do you need?
+├── Scan (understand what's there)?
+│   ├── Quick overview → file-organizer scan PATH (shows tree + stats)
+│   └── Duplicates only → file-organizer scan --duplicates PATH
+├── Plan (see what WOULD change)?
+│   ├── Default rules → file-organizer plan PATH (date/type-based)
+│   ├── Custom rules → file-organizer plan --rules RULES.yaml PATH
+│   └── Review plan → always review before applying (dry-run by default)
+├── Apply (execute the plan)?
+│   ├── With undo log → file-organizer apply PLAN.json (default: writes undo)
+│   ├── Skip confirmation → file-organizer apply --yes PLAN.json
+│   └── Verify after → file-organizer scan PATH (confirm new structure)
+└── Undo (revert a bad apply)?
+    └── file-organizer undo UNDO_LOG.json (reverses all moves)
+```
+
 ## Related skills
 
 - [linux-filesystem](../linux/linux-filesystem/SKILL.md) — permissions, mounts, disk usage.

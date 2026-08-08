@@ -302,6 +302,24 @@ docker run --rm -v $(pwd)/dotnet:/src -w /src \
   mcr.microsoft.com/dotnet/sdk:8.0 dotnet test
 ```
 
+
+## Decision tree
+
+```
+Is the work IO-bound or CPU-bound?
+├── IO-bound (HTTP, DB, file, queue)
+│   ├── Single call, need result? → async/await + Task
+│   ├── Fire-and-forget stream? → Channel<T> (bounded!)
+│   ├── N concurrent with cap? → SemaphoreSlim + Task.WhenAll
+│   └── Request/reply pipeline? → Channel + dedicated reader
+├── CPU-bound (compute, transform)
+│   ├── Collection to process in parallel? → Parallel.ForEachAsync
+│   ├── Short burst, low alloc? → ValueTask (hot path only)
+│   └── Long compute, keep UI alive? → Task.Run (ONLY in UI apps)
+└── Mixed (IO + CPU stages)
+    └── Channel pipeline: stage1 → channel → stage2 → channel → stage3
+```
+
 ## When NOT to use
 
 - Adding OTel tracing to async workers — use `dotnet-otel-patterns`

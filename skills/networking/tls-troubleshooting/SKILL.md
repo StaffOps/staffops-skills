@@ -211,6 +211,30 @@ just the client-side error.
 - `tcp-ip-fundamentals` — confirming the TCP handshake completes before
   blaming a hang on TLS
 
+
+## Decision tree
+
+```
+What is the TLS symptom?
+├── Handshake fails completely
+│   ├── "no protocols available"? → TLS version mismatch — try -tls1_2 / -tls1_3
+│   ├── "no shared cipher"? → cipher suite incompatible — check s_client -cipher
+│   ├── Connection reset before handshake? → port blocked or not TLS at all
+│   └── "certificate unknown"? → client cert required (mTLS) — provide -cert
+├── Certificate expired
+│   ├── Which cert? → openssl s_client + openssl x509 -dates
+│   ├── Intermediate expired? → check full chain with -showcerts
+│   └── Auto-renewal broken? → check cert-manager logs / ACME account
+├── Wrong CN / SAN mismatch
+│   ├── Check what server sends → openssl s_client | openssl x509 -text | grep -A1 "Subject Alternative"
+│   ├── Wildcard needed? → *.example.com covers one level only
+│   └── Multiple domains? → verify all SANs present in the cert
+└── Chain incomplete (verify depth errors)
+    ├── Intermediate missing? → server must send full chain (not just leaf)
+    ├── Self-signed CA? → pass -CAfile with your CA bundle
+    └── Cross-signed confusion? → check which root the chain resolves to
+```
+
 ## When NOT to use
 
 - **Certificate provisioning/lifecycle** (cert-manager, Let's Encrypt, ACME) — that's infra automation, not debugging.

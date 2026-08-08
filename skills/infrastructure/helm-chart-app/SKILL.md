@@ -388,6 +388,24 @@ autoscaling:
   enabled: false
 ```
 
+## Decision tree
+
+```
+Deploying a workload?
+├── Which deployment type?
+│   ├── Stateless API/worker → Rollout (canary/blue-green via Argo Rollouts)
+│   ├── Stateless but no progressive delivery needed → Deployment
+│   └── Needs stable network identity or persistent storage → StatefulSet
+├── Which features to enable?
+│   ├── Event-driven scaling (queue depth, cron, custom metric) → KEDA ScaledObject
+│   ├── Secrets from AWS Secrets Manager → ExternalSecret + SecretStore
+│   ├── Service mesh (mTLS, traffic split) → Istio ambient labels
+│   └── Custom metrics scraping → ServiceMonitor section
+└── Environment specifics?
+    ├── PRD/HML/BTC → mandatory labels (CostCenter, Environment, CostProject)
+    └── DEV → labels recommended, KEDA optional
+```
+
 ## Anti-patterns
 
 - Missing mandatory labels (Kyverno rejects, OTel enrichment fails)

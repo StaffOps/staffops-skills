@@ -259,6 +259,32 @@ cmd | od -c | head            # reveal invisible characters (\r, \t, NUL)
 - **Binary file manipulation** — use dedicated tools (xxd, file, binutils).
 - **Complex data pipelines** where Python/pandas is clearer and more maintainable.
 
+
+## Decision tree
+
+```
+What operation do you need?
+├── Filter lines (keep/remove matching)?
+│   ├── Fixed string → grep -F "pattern"
+│   ├── Regex → grep -E "pattern"
+│   └── Inverted (exclude) → grep -v "pattern"
+├── Transform text (substitute/reformat)?
+│   ├── Simple substitution → sed 's/old/new/g'
+│   ├── Field extraction → awk '{print $N}' or cut -d: -f2
+│   └── Multi-line / complex → awk with BEGIN/END blocks
+├── Aggregate (count/sum/unique)?
+│   ├── Count occurrences → sort | uniq -c | sort -rn
+│   ├── Sum a column → awk '{s+=$1} END{print s}'
+│   └── Top-N → sort | uniq -c | sort -rn | head -N
+├── Join / correlate two files?
+│   ├── Same key field → join (requires sorted input)
+│   └── Side-by-side → paste file1 file2
+└── Structured data (JSON/YAML/CSV)?
+    ├── JSON → jq '.field'
+    ├── YAML → yq '.field'
+    └── CSV → awk -F, or csvkit
+```
+
 ## Related skills
 
 - [linux-command-line](../linux/linux-command-line/SKILL.md) — pipes, redirection, find/xargs.

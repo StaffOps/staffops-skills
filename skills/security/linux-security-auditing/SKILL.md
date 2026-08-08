@@ -207,6 +207,24 @@ review, not a checklist to blindly execute.
 [ ] Log/journal integrity intact, no unusual gaps
 ```
 
+## Decision tree
+
+```
+Security audit task?
+├── CIS benchmark compliance?
+│   ├── Choose profile: Level 1 (minimal disruption) or Level 2 (defense-in-depth)
+│   ├── Run: lynis audit system --profile server OR oscap xccdf eval
+│   └── Generate report, prioritize by severity + exploitability
+├── Custom/targeted audit?
+│   ├── Define scope: network / auth / filesystem / running services
+│   ├── Use specific tools: ss/netstat, last/lastlog, find SUID, systemctl
+│   └── Cross-reference with known attack vectors for the host role
+└── Investigating specific finding?
+    ├── Reproduce: confirm the finding is real (not false positive)
+    ├── Assess impact: what can an attacker do with this?
+    └── Remediate + revalidate: fix → re-scan → confirm resolved
+```
+
 ## Pitfalls
 
 - **Treating a package manager's "up to date" as proof the running system

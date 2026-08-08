@@ -227,6 +227,29 @@ genuinely the smoking gun.
 - **Binary protocol debugging** — logs are text; for packet captures use [network-troubleshooting-tools](../networking/network-troubleshooting-tools/SKILL.md).
 - **Metrics/traces correlation** — use observability platform skills for cross-signal analysis.
 
+
+## Decision tree
+
+```
+Where are the logs?
+├── Systemd service → journalctl -u SERVICE --since "10 min ago"
+├── Traditional file → /var/log/syslog, /var/log/SERVICE/, app-specific path
+├── Container (Docker) → docker logs --since 10m CONTAINER
+├── Kubernetes pod → kubectl logs POD -n NS --since=10m (or --previous)
+└── Multiple sources needed → correlate by timestamp
+Which tool?
+├── Quick search → grep / grep -C3 (context lines)
+├── Structured (JSON) → jq '. | select(.level=="ERROR")'
+├── Time-based filtering → journalctl --since/--until, awk by timestamp
+├── Pattern counting → grep -c, sort | uniq -c | sort -rn
+├── Live tailing → tail -f / journalctl -f / less +F
+└── Correlation across files → paste timestamps side-by-side, grep -h across
+What to look for?
+├── First error (not just any) → grep -m1 or scroll to earliest timestamp
+├── Pattern change → was it working before? diff the timestamps
+└── Upstream cause → error in A caused by timeout from B (follow the chain)
+```
+
 ## Related skills
 
 - [shell-text-processing](../shell/shell-text-processing/SKILL.md) — awk/sed/grep patterns for log parsing.

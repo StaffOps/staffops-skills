@@ -215,6 +215,30 @@ provably in between, not on either host.
 - `tls-troubleshooting` — `openssl s_client` and certificate-layer diagnosis
 - `linux-firewall` — the rules behind a DROP/REJECT a capture confirms
 
+
+## Decision tree
+
+```
+Which network layer is the problem?
+├── L2 (link / ARP)
+│   ├── Can't reach local host? → arping, ip neigh show
+│   └── Duplicate IP? → arping -D (detect), ip link for MAC
+├── L3 (IP / routing)
+│   ├── Can't reach remote? → ping / traceroute (mtr for continuous)
+│   ├── Asymmetric path? → traceroute from both ends
+│   └── Route missing? → ip route show, ip route get <dst>
+├── L4 (TCP/UDP / port)
+│   ├── Port open? → ss -tlnp (local) / nc -zv host port (remote)
+│   ├── Connection refused? → service not listening — check ss
+│   ├── Connection timeout? → firewall or routing — try nc + traceroute
+│   └── Connection reset? → app rejecting — check logs + tcpdump
+└── L7 (application / protocol)
+    ├── HTTP error? → curl -vvv (full request/response cycle)
+    ├── TLS failure? → openssl s_client (see tls-troubleshooting)
+    ├── DNS failure? → dig / nslookup (check resolver + authoritative)
+    └── Need full packet capture? → tcpdump -nn -i <if> port <p> -w file.pcap
+```
+
 ## When NOT to use
 
 - **Application performance profiling** (slow queries, GC pauses) — use APM/profiling tools.

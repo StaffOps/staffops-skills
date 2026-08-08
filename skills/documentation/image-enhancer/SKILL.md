@@ -331,6 +331,29 @@ scale-dependence caveat above).
 - **Video processing** — different toolchain (ffmpeg).
 - **AI image generation** — this skill is for enhancing/processing existing images.
 
+
+## Decision tree
+
+```
+What's wrong with the image?
+├── Too small / low resolution?
+│   ├── 2× upscale → image-enhancer upscale --scale 2 INPUT OUTPUT
+│   ├── Target dimensions → image-enhancer upscale --width 1920 INPUT OUTPUT
+│   └── Check quality → compare Laplacian variance before/after
+├── Blurry / soft?
+│   ├── Light sharpen → image-enhancer sharpen --strength low INPUT OUTPUT
+│   ├── Heavy sharpen → image-enhancer sharpen --strength high INPUT OUTPUT
+│   └── Already noisy? → denoise FIRST, then sharpen
+├── Noisy / grainy?
+│   ├── Uniform noise → image-enhancer denoise INPUT OUTPUT
+│   ├── Preserve edges → image-enhancer denoise --preserve-edges INPUT OUTPUT
+│   └── Extreme noise → multiple passes (diminishing returns after 2)
+└── Need specific dimensions?
+    ├── Downscale (for web) → image-enhancer resize --width 800 INPUT OUTPUT
+    ├── Crop to aspect ratio → image-enhancer resize --crop 16:9 INPUT OUTPUT
+    └── Never upscale via resize → use upscale subcommand instead
+```
+
 ## Related skills
 
 - [pdf-operations](../documentation/pdf-operations/SKILL.md) — images embedded in PDFs.

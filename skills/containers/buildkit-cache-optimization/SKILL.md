@@ -238,6 +238,29 @@ AFTER (optimized):
   Total: ~30 seconds for code-only changes
 ```
 
+
+## Decision tree
+
+```
+Cache miss — why did the layer rebuild?
+├── Layer ordering wrong
+│   ├── COPY . . before dependency install? → split: COPY lockfile → install → COPY source
+│   └── Frequently-changing file early? → move volatile layers LAST
+├── Cache mount not used
+│   ├── Package manager downloads every time? → --mount=type=cache,target=/root/.cache/pip
+│   ├── Go mod download? → --mount=type=cache,target=/go/pkg/mod
+│   └── npm/yarn? → --mount=type=cache,target=/root/.npm
+├── Registry cache not configured
+│   ├── CI rebuilds from scratch? → --cache-from=type=registry,ref=<repo>:cache
+│   ├── Local cache only? → --cache-to=type=registry for CI sharing
+│   └── Multi-stage cache? → --cache-from for EACH stage
+├── Base image changed
+│   ├── Using :latest tag? → pin to digest or specific version
+│   └── Frequent security updates? → accept rebuild, cache layers AFTER FROM
+└── Build args invalidating cache
+    └── ARG with timestamp/commit? → move ARG declaration AFTER expensive layers
+```
+
 ## Anti-patterns
 
 - ❌ `COPY . .` as the first instruction (invalidates everything)

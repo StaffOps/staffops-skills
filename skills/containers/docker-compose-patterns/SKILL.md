@@ -288,6 +288,29 @@ resolved, removing the guesswork about merge order.
 - `docker-cli-operations` — the underlying `docker` commands Compose wraps
 - `dockerfile-authoring` — building the images referenced by `build:`
 
+
+## Decision tree
+
+```
+What kind of compose setup?
+├── Local dev environment
+│   ├── Need hot-reload? → volumes: bind-mount source + watch
+│   ├── Need debugger? → ports: expose debug port + env vars
+│   └── Need backing services? → depends_on + healthcheck (wait for ready)
+├── CI / testing
+│   ├── Ephemeral stack? → docker compose up --abort-on-container-exit
+│   ├── Need build + test? → profiles: [test] or separate compose file
+│   └── Parallel test isolation? → --project-name per run
+├── Production-like (staging, demo)
+│   ├── Secrets? → secrets: (file-based, not env)
+│   ├── Resource limits? → deploy.resources.limits (cpu/memory)
+│   └── Networking? → explicit networks, no links
+└── Multi-file layering
+    ├── Base + overrides → -f compose.yaml -f compose.dev.yaml
+    ├── Env-specific values → .env file per environment
+    └── Optional services → profiles: [debug, monitoring]
+```
+
 ## When NOT to use
 
 - Production Kubernetes deployments — use `helm-chart-app` or `argocd-patterns`

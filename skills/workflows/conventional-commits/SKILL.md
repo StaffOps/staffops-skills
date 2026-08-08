@@ -325,6 +325,28 @@ description: imperative, lowercase, no period, <72 chars
 - **Non-git versioning systems** — the format is git-centric.
 - **Changelog prose** — conventional commits generate changelogs; the writing itself is different.
 
+
+## Decision tree
+
+```
+What did you change?
+├── New feature (user-visible behavior) → feat(scope): description
+├── Bug fix → fix(scope): description
+├── Docs only (no code) → docs(scope): description
+├── Refactor (no behavior change) → refactor(scope): description
+├── Tests only → test(scope): description
+├── CI/CD pipeline → ci(scope): description
+├── Dependencies / tooling → chore(scope): description
+├── Performance improvement → perf(scope): description
+└── Formatting / style → style(scope): description
+Is it a breaking change?
+├── Yes → append ! after type: feat(api)!: rename endpoint
+│         AND add BREAKING CHANGE: footer with migration notes
+└── No → standard format, no special marker
+Multiple changes in one commit?
+└── Don't. Split into atomic commits (one type per commit).
+```
+
 ## Related skills
 
 - [git-advanced](../workflows/git-advanced/SKILL.md) — rebase, bisect, history rewriting.

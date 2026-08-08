@@ -230,6 +230,24 @@ workstation may be actively wrong for a container host or a Kubernetes
 node). Treat scanner output as a checklist to evaluate, not a list of
 commands to run unconditionally.
 
+## Decision tree
+
+```
+Linux hardening task?
+├── New host (fresh provisioning)?
+│   ├── Start with golden AMI (pre-hardened baseline)
+│   ├── Apply CIS Level 1 + org-specific controls
+│   └── Validate with Lynis/OpenSCAP before promoting to prod
+├── Audit existing host?
+│   ├── Run benchmark scan (lynis audit system)
+│   ├── Prioritize: network exposure → auth → filesystem → services
+│   └── Compare against golden AMI delta
+└── Fix specific finding?
+    ├── Identify CIS control ID or CVE
+    ├── Check if fix breaks running services (test in HML first)
+    └── Apply, validate, document in runbook
+```
+
 ## Pitfalls
 
 - **Applying a hardening template without checking the host's actual

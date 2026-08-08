@@ -288,6 +288,27 @@ echo data | ./tool.sh -                # stdin path works
 - **Python CLIs** (click/typer/argparse) — different patterns; this skill is Bash-focused.
 - **Script internals** (loops, arrays, quoting) — see [bash-scripting](../shell/bash-scripting/SKILL.md).
 
+
+## Decision tree
+
+```
+What kind of CLI interface?
+├── Simple flags only (no subcommands)?
+│   ├── ≤5 options → getopts (POSIX, portable)
+│   └── Long options needed → getopt (GNU) or manual while/case
+├── Subcommands (git-style)?
+│   ├── Few (2-4) → case "$1" in dispatch + shift
+│   └── Many or nested → one function per subcommand, auto-dispatch
+├── Interactive prompts needed?
+│   ├── Yes → read -p with defaults, confirm before destructive ops
+│   └── No → pure CLI, support --yes / --force for automation
+├── Piped input expected?
+│   ├── Yes → read from stdin when no file arg: ${1:-/dev/stdin}
+│   └── No → require explicit file arguments
+└── Exit codes matter to callers?
+    └── Always → document them, use distinct codes per failure type
+```
+
 ## Related skills
 
 - [bash-scripting](../shell/bash-scripting/SKILL.md) — script body implementation.

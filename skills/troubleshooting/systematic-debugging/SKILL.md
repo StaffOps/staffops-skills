@@ -471,6 +471,30 @@ most during triage.
 - **Linux-specific operational triage** — see [incident-triage-linux](../troubleshooting/incident-triage-linux/SKILL.md) for that structured procedure.
 - **Performance profiling** — once you know it's a perf issue, jump to [linux-performance-analysis](../linux/linux-performance-analysis/SKILL.md).
 
+
+## Decision tree
+
+```
+What kind of bug?
+├── Reproducible (happens every time)?
+│   ├── Minimal reproduction → strip away until the cause is isolated
+│   ├── Bisect → git bisect / binary search the change that introduced it
+│   └── Debug directly → breakpoint / strace / printf at the boundary
+├── Intermittent (sometimes works)?
+│   ├── Race condition? → add timing, check concurrency, thread sanitizer
+│   ├── Resource-dependent? → memory pressure, disk space, connection limits
+│   ├── Load-dependent? → only under traffic? → stress test + observe
+│   └── Time-dependent? → cron, lease expiry, token rotation, clock skew
+├── Environment-specific (works here, not there)?
+│   ├── Diff the environments → versions, config, env vars, network, DNS
+│   ├── Container vs host → volume mounts, capabilities, user namespace
+│   └── Cloud-specific → IAM, security groups, VPC routing, metadata service
+└── Regression (used to work)?
+    ├── What changed? → git log, deploy history, config diff, dep updates
+    ├── Revert to confirm → if revert fixes, the diff IS the cause
+    └── Narrow to commit → git bisect with a test script
+```
+
 ## Related skills
 
 - [linux-troubleshooting-methodology](../troubleshooting/linux-troubleshooting-methodology/SKILL.md) — Linux-focused troubleshooting framework.

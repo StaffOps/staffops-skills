@@ -221,6 +221,28 @@ isn't what's expected.
 - `network-troubleshooting-tools` — `tcpdump` to confirm what's actually arriving
 - `ubuntu-administration` — `ufw` as a friendlier front end over this same mechanism
 
+
+## Decision tree
+
+```
+What do you need?
+├── Traffic is being blocked
+│   ├── Know which port? → nft list ruleset | grep <port>
+│   ├── Don't know which rule? → nft monitor trace + test traffic
+│   ├── iptables legacy? → iptables -L -n -v --line-numbers
+│   └── Confirmed rule exists → check chain priority and order
+├── Need to add a new rule
+│   ├── Allow inbound port? → nft add rule inet filter input tcp dport X accept
+│   ├── Allow from specific IP? → add saddr condition before accept
+│   ├── Rate limit? → nft add rule ... limit rate 10/second accept
+│   └── Log + drop? → nft add rule ... log prefix "DROP:" drop
+└── Audit existing rules
+    ├── Full ruleset → nft list ruleset (or iptables-save)
+    ├── Which zones active? → firewall-cmd --get-active-zones (firewalld)
+    ├── Persistent vs runtime? → compare nft list vs /etc/nftables.conf
+    └── Count hits → nft list ruleset with counters enabled
+```
+
 ## When NOT to use
 
 - **Cloud security groups / NACLs** (AWS, GCP) — use cloud-native tools; this is host-level iptables/nftables.

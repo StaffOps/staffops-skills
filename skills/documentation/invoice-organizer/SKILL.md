@@ -314,6 +314,28 @@ document as something that stays out of git history.
 - **Expense approval workflows** — use your finance platform, not file manipulation.
 - **Non-invoice documents** — see [file-organizer](../documentation/file-organizer/SKILL.md) for general file management.
 
+
+## Decision tree
+
+```
+What do you need?
+├── Scan a folder of invoices?
+│   ├── Preview what's found → invoice-organizer scan PATH (read-only report)
+│   ├── Specific format → invoice-organizer scan --type pdf|xml|image PATH
+│   └── Check extraction confidence → review low-confidence entries before acting
+├── Rename files consistently?
+│   ├── Standard pattern → invoice-organizer rename --pattern "{date}_{vendor}_{amount}" PATH
+│   ├── Dry-run first → invoice-organizer rename --dry-run PATH (always)
+│   └── Apply → invoice-organizer rename PATH (after confirming dry-run output)
+├── Export structured data?
+│   ├── CSV → invoice-organizer export --format csv PATH > invoices.csv
+│   ├── JSON → invoice-organizer export --format json PATH
+│   └── Filter by date → invoice-organizer export --since 2026-01-01 PATH
+└── Something went wrong?
+    ├── Wrong rename → undo log: invoice-organizer undo UNDO_LOG.json
+    └── Bad extraction → check/fix manually, re-scan with --force
+```
+
 ## Related skills
 
 - [file-organizer](../documentation/file-organizer/SKILL.md) — general file organization patterns.

@@ -95,6 +95,25 @@ Does NOT call any API — no Slack/Teams coupling.
 - **Bolting a chat API onto announce.** Keep it plain-text; wire the
   delivery outside this tool.
 
+
+## Decision tree
+
+```
+What phase of skill sharing?
+├── Scaffold a new skill?
+│   └── skill-share scaffold NAME → creates SKILL.md + metadata template
+├── Validate before publishing?
+│   ├── Format OK? → skill-share validate PATH (checks structure/frontmatter)
+│   ├── Content quality? → run skill-eval-harness for precision + scenario
+│   └── No collisions? → check skill catalog for overlapping triggers
+├── Package for distribution?
+│   ├── Single skill → skill-share package PATH → outputs .tar.gz
+│   └── Batch (category) → skill-share package --category shell
+└── Announce / publish?
+    ├── Internal catalog → skill-share announce --catalog PATH
+    └── Cross-team → PR to shared skills repo + CHANGELOG entry
+```
+
 ## Related skills
 
 - [skill-authoring](../skill-authoring/SKILL.md) — writing the content that scaffold sets up.

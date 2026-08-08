@@ -158,6 +158,27 @@ Reference implementation: `scripts/claude_code_executor.py`
 - **Running full pipeline for a one-line rewording.** Match depth to risk —
   a read-through settles most changes for free.
 
+
+## Decision tree
+
+```
+What are you validating?
+├── Brand-new skill?
+│   ├── Full validation → scenario + precision + collision + format check
+│   ├── Budget-conscious → start with format + collision, then scenario
+│   └── Metric skill → add metric-verification step (names exist in VM?)
+├── Editing an existing skill?
+│   ├── Minor (typo/clarification) → format check only
+│   ├── Added new procedure/section → scenario test the new section
+│   └── Changed routing (When to Use) → collision check + precision test
+├── Collision / overlap check?
+│   ├── New skill → compare "When to Use" against all skills in category
+│   ├── Symptom-router overlap → verify the router picks THIS skill correctly
+│   └── Use grep across SKILL.md files for overlapping trigger phrases
+└── Cost guardrail?
+    └── Estimate token cost BEFORE running full harness (see Budget section)
+```
+
 ## Related skills
 
 - [skill-authoring](../skill-authoring/SKILL.md) — writing well-formed skills that this harness tests.

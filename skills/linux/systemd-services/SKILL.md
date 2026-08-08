@@ -387,6 +387,30 @@ unit and reports exactly where it fails.
 - **One-off commands or cron jobs** that don't need service lifecycle — a simple cron entry or systemd timer suffices.
 - **Process internals** (signals, cgroups, scheduling) — see [linux-process-management](../linux/linux-process-management/SKILL.md).
 
+
+## Decision tree
+
+```
+What's the situation?
+├── Service won't start?
+│   ├── Check logs → journalctl -u name.service -n 50 --no-pager
+│   ├── Check unit file → systemd-analyze verify name.service
+│   ├── Dependency issue → systemctl list-dependencies name.service
+│   └── Permission denied → check User=, paths, SELinux/AppArmor
+├── Service keeps restarting (crash loop)?
+│   ├── Check exit code → systemctl status (Main PID ... code=exited, status=N)
+│   ├── OOM killed → journalctl -k | grep -i oom; adjust MemoryMax=
+│   ├── Too fast → add RestartSec=5, StartLimitIntervalSec/StartLimitBurst
+│   └── Bad config → ExecStartPre= with config validation command
+├── Create a new service?
+│   ├── Long-running daemon → Type=notify (preferred) or Type=simple
+│   ├── One-shot task → Type=oneshot + RemainAfterExit=yes
+│   ├── Needs network → After=network-online.target + Wants=
+│   └── Security → DynamicUser=yes, ProtectSystem=strict, NoNewPrivileges=yes
+└── Reload without restart?
+    └── ExecReload= defined → systemctl reload name.service
+```
+
 ## Related skills
 
 - [linux-process-management](../linux/linux-process-management/SKILL.md) — signals, ps, cgroups.

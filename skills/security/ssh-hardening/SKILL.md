@@ -238,6 +238,27 @@ given login — valuable when several people have their own individual keys
 rather than sharing one, which is itself a hardening practice worth
 adopting for accountability.
 
+## Decision tree
+
+```
+SSH hardening task?
+├── New server setup?
+│   ├── Disable password auth (PasswordAuthentication no)
+│   ├── Disable root login (PermitRootLogin no)
+│   ├── Restrict to key-based + limit AllowUsers/AllowGroups
+│   └── Set idle timeout, max auth tries, restrict ciphers/MACs
+├── Audit existing server?
+│   ├── Review /etc/ssh/sshd_config against CIS SSH benchmarks
+│   ├── Check authorized_keys for stale/unknown keys
+│   ├── Verify: no forwarding unless needed, no empty passwords
+│   └── Run: ssh-audit <host> for cipher/kex/MAC compliance
+└── Incident response (suspected compromise)?
+    ├── Check auth logs: grep sshd /var/log/auth.log | tail -100
+    ├── List active sessions: who / ss -tnp | grep :22
+    ├── Revoke suspected keys immediately
+    └── Rotate host keys if server integrity is in doubt
+```
+
 ## Pitfalls
 
 - **Restarting `sshd` after an edit without `sshd -t` first** — a syntax

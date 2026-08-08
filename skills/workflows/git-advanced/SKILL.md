@@ -424,6 +424,31 @@ Solution: regularly `git fetch --prune` and `git branch -d <merged>`.
 - **Commit message formatting** — see [conventional-commits](../workflows/conventional-commits/SKILL.md).
 - **CI/CD pipeline configuration** — see [pipeline-template-apps](../workflows/pipeline-template-apps/SKILL.md).
 
+
+## Decision tree
+
+```
+Which operation do you need?
+├── Rebase?
+│   ├── Update branch with main → git rebase main (on feature branch)
+│   ├── Squash messy history → git rebase -i HEAD~N (interactive)
+│   ├── Conflict during rebase → fix, git add, git rebase --continue
+│   └── Abort bad rebase → git rebase --abort
+├── Find which commit broke it?
+│   └── git bisect start → git bisect bad → git bisect good <ref> → test
+├── Recover lost work?
+│   ├── Dropped commit → git reflog → git cherry-pick <sha>
+│   ├── Deleted branch → git reflog → git checkout -b branch <sha>
+│   ├── Bad reset --hard → git reflog → git reset --hard <sha>
+│   └── Amended wrongly → git reflog (previous HEAD is there)
+├── Submodules?
+│   ├── Clone with submodules → git clone --recurse-submodules
+│   ├── Update → git submodule update --init --recursive
+│   └── Add new → git submodule add URL path
+└── Hotfix flow?
+    └── Branch from production → fix → merge to production → cherry-pick to dev
+```
+
 ## Related skills
 
 - [conventional-commits](../workflows/conventional-commits/SKILL.md) — commit message format.
